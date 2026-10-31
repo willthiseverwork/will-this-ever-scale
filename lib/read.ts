@@ -74,6 +74,11 @@ export function renderReadDraft(text:string,payload:ReadAggregate):string|null {
  if(found.length!==keys.length||new Set(found).size!==found.length||keys.some(key=>!found.includes(key))||found.some(key=>!Object.hasOwn(values,key)))return null;
  const remainder=text.replace(/\{\{[A-Z_]+\}\}/g,'');
  if(/[{}\d]/.test(remainder)||inspectReadValidation(remainder,a).spelledNumberPattern)return null;
+ // Placeholders supply amounts and counts, never the surrounding labels or units.
+ const near=(key:ReadPlaceholder,label:RegExp)=>text.split(/[.!?\n]/).some(sentence=>sentence.includes(`{{${key}}}`)&&label.test(sentence.replace(/\{\{[A-Z_]+\}\}/g,'')));
+ if(!near('SALES',/\bsales\b/i)||!near('KEPT',/\bkept\b/i))return null;
+ if(values.TOP_MONTHLY&&!near('TOP_MONTHLY',/\b(?:monthly|per\s+month)\b/i))return null;
+ if(values.INVOICES&&!near('INVOICES',/\bunpaid\s+invoices?\b/i))return null;
  const rendered=text.replace(/\{\{([A-Z_]+)\}\}/g,(_,key:ReadPlaceholder)=>values[key]!);
  return validateRead(rendered,a)?rendered:null;
 }
@@ -81,7 +86,7 @@ export function buildReadPrompt(payload:ReadAggregate):string {
  const a=aggregateSchema.parse(payload),values=readPlaceholders(a);
  const topNames:Record<string,string>={one_time_buyers:'buyers who have not returned',refunds_one_item:'refunds on an item',small_order_fees:'small-order fees',cross_border_fees:'cross-border fees',below_cost_items:'items sold below cost',fewer_new_buyers:'fewer new buyers',subscription_failed_payments:'failed subscription payments'};
  const top=a.ranked_leaks[0]?topNames[a.ranked_leaks[0].id]:undefined;
- return `Write exactly 3 short plain-language sentences. No bullets or headings. Use every listed placeholder exactly once and only as written: ${Object.keys(values).map(key=>`{{${key}}}`).join(', ')}. Never write any digits or number words yourself. Placeholders already include currency symbols where needed. {{SALES}} is sales and {{KEPT}} is money kept after included deductions, which may not include all business costs.${top?' {{TOP_MONTHLY}} is an estimated monthly opportunity concerning '+top+'; state clearly it depends on an assumption.':''}${a.quick_win&&a.quick_win.invoices>0?' {{UNPAID}} is cash waiting in {{INVOICES}} unpaid invoices.':''} Do not infer causes, invent advice, or claim an estimate is guaranteed.`;
+ return `Write short, complete, plain-language sentences with no bullets or headings. Use each listed placeholder exactly once and only as written: ${Object.keys(values).map(key=>`{{${key}}}`).join(', ')}. Placeholders are amounts or counts only, not nouns: include the words around them. Never write digits or number words yourself. Currency placeholders already contain symbols. First sentence: state sales of {{SALES}} and money kept of {{KEPT}} after included deductions, which may not include all business costs.${top?' Next sentence: describe the estimated opportunity of {{TOP_MONTHLY}} per month for '+top+' and say it depends on an assumption.':''}${a.quick_win&&a.quick_win.invoices>0?' Final sentence: say {{UNPAID}} is waiting in {{INVOICES}} unpaid invoices.':''} Keep the words sales, kept${top?', per month':''}${a.quick_win&&a.quick_win.invoices>0?', and unpaid invoices':''}. Do not infer causes, invent advice, or claim an estimate is guaranteed.`;
 }
 
 export async function makeReadWithSource(a:ReadAggregate | Analysis, generate?:(prompt:string)=>Promise<string>):Promise<{read:string;read_source:'model'|'template'}> {
