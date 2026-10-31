@@ -1,0 +1,3 @@
+import {clearCookie,revokeSession,sameOrigin} from '../../../../lib/workspace-auth';
+export const runtime='nodejs';
+export async function POST(request:Request){if(!sameOrigin(request))return Response.json({error:'Invalid origin.'},{status:403});let revoked=true;try{await revokeSession(request);}catch{revoked=false;}const headers=new Headers({'Cache-Control':'no-store'});headers.append('Set-Cookie',clearCookie('session'));headers.append('Set-Cookie',clearCookie('refresh'));headers.append('Set-Cookie',clearCookie('flow'));return Response.json(revoked?{ok:true}:{ok:false,error:'Signed out locally; provider session revocation could not be confirmed.'},{status:revoked?200:503,headers});}

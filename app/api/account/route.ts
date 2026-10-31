@@ -1,0 +1,4 @@
+import {config,session} from '../../../lib/workspace-auth';
+import {getWorkspace,storageConfigured} from '../../../lib/workspace-store';
+export const runtime='nodejs';
+export async function GET(request:Request){const configured=!!config()&&storageConfigured();const s=session(request);if(!configured)return Response.json({configured:false,authenticated:false,trial:null},{headers:{'Cache-Control':'no-store'}});if(!s)return Response.json({configured:true,authenticated:false,trial:null},{headers:{'Cache-Control':'no-store'}});try{const w=await getWorkspace(s.userId);return Response.json({configured:true,authenticated:true,trial:w.trialStartedAt?{startedAt:w.trialStartedAt,endsAt:w.trialEndsAt,active:Date.now()<Date.parse(w.trialEndsAt!)}:null},{headers:{'Cache-Control':'no-store'}});}catch{return Response.json({configured:true,authenticated:true,error:'Workspace unavailable.'},{status:503,headers:{'Cache-Control':'no-store'}});}}

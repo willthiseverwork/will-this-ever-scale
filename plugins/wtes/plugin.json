@@ -1,0 +1,8 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "will-this-ever-scale",
+  "version": "0.1.0",
+  "description": "Read synthetic demo and authorized saved business summaries, product rankings, comparisons, reminders and diagnostic questions.",
+  "author": {"name": "Will This Ever Scale"},
+  "extensions": {"com.openai": {"interface": {"displayName": "Will This Ever Scale", "shortDescription": "Read your business data", "longDescription": "Explore the synthetic demo or, once account access is configured, read your saved workspace. All tools are read-only.", "developerName": "Will This Ever Scale", "category": "Productivity", "capabilities": [], "defaultPrompt": "Show me the sample business summary."}}}
+}

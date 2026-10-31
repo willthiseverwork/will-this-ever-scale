@@ -1,0 +1,3 @@
+import {NoRefreshSession,refreshSession,sameOrigin} from '../../../../lib/workspace-auth';
+export const runtime='nodejs';
+export async function POST(request:Request){if(!sameOrigin(request))return Response.json({error:'Invalid origin.'},{status:403,headers:{'Cache-Control':'no-store'}});try{const cookies=await refreshSession(request),headers=new Headers({'Cache-Control':'no-store'});for(const cookie of cookies)headers.append('Set-Cookie',cookie);return Response.json({ok:true},{headers});}catch(e){const signedOut=e instanceof NoRefreshSession;return Response.json({error:signedOut?'Sign in required.':'Session refresh is temporarily unavailable.'},{status:signedOut?401:503,headers:{'Cache-Control':'no-store'}});}}
