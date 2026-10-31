@@ -1,0 +1,48 @@
+# Calculation reference
+
+This describes the current deterministic engine, not a forecast or a complete PayPal ledger. The seller's source data and optional inputs determine what can be calculated. Amounts are rounded to two decimal places for output; intermediate calculations generally use unrounded values.
+
+## Coverage and period
+
+The engine selects the currency with the largest total gross from eligible sales. Other currencies are listed with their eligible gross sales and excluded; no currency conversion is performed. It requires at least one eligible sale. An eligible sale is a positive sale, invoice payment, or subscription payment without a pending, failed, denied, refused, declined, cancelled, or unpaid status. The same exclusion applies to refund, reversal, and dispute rows. A sale marked refunded can still be counted as gross sales; its separate eligible refund is subtracted.
+
+Rows are deduplicated by transaction ID, kind, calendar date, currency, and gross amount. For otherwise matching events, a settled record is preferred to an unsettled one. This preserves a sale and refund that share an ID. The source must still contain enough detail to distinguish genuinely different events with matching fields.
+
+The reported period runs from the first through the last month containing an eligible sale, refund, reversal, dispute, or settled separate fee row in the selected currency. It includes intervening calendar months even when they have no activity. Invoice records do not extend this period. The last three months and the prior three months are consecutive slices of that period, including the end month even if it is still in progress. The engine does not infer missing months beyond the supplied records.
+
+CSV parsing drops withdrawals, payouts, transfers, currency conversions and holds. Rows with unusable dates or currencies are skipped. Slash-formatted dates are read as month/day/year unless the first component is greater than 12, in which case it is read as day/month/year. Quantity must be a positive whole number and defaults to one when absent. A row is one order even when it contains more than one unit; mixed-item cart allocation is not established by this representation.
+
+## Money map and buyers
+
+For each month, and then summed over the period:
+
+- **Came in** = gross eligible sales.
+- **PayPal fees** = absolute fee amounts on eligible sales. Separate fee rows are excluded when their relationship to sales fees is unknown, to avoid counting the same fee twice. A coverage gap is shown; the total cannot be assumed to include every fee.
+- **Refunds and reversals** = absolute gross of eligible refund, reversal and dispute rows, using absolute net when gross is zero. They are recorded in the event month, including months after the last sale.
+- **Item costs** = supplied per-item cost × quantity for each eligible sale. A named item-specific cost takes priority over the supplied average. Missing costs contribute zero to the arithmetic and are identified as missing, not established as zero.
+- **Ad spend** = supplied monthly amount for each month in the period. If not supplied, it is excluded and a gap is noted. The interface normally starts it at zero.
+- **Kept** = came in − sale fees − refunds and reversals − included item costs − included ad spend. It is not a complete profit figure when any cost or fee is missing.
+
+An identified buyer is one with a buyer key. Overall returning buyers are identified buyers with more than one sale in the supplied data; the overall returning share is their count divided by identified buyers. Orders per buyer is identified sales divided by identified buyers. Average order is all eligible sales gross divided by eligible sale rows. Top-item share is the largest item group's gross divided by gross sales; top-buyer share is the largest identified buyer's gross divided by gross sales. Missing buyer identifiers make these buyer figures incomplete.
+
+For a three-month window, the engine counts distinct identified buyers who bought in the window. A buyer is returning if they bought earlier in the data or bought more than once within that window. The window share is returning buyers divided by identified buyers in that window. Best share is the maximum over consecutive three-month windows in the observed period. `month_buyers` is distinct identified buyers in the final month; `past_buyers` is distinct identified buyers before that month. A first-seen buyer is new only relative to the supplied data, not necessarily new to the business.
+
+## Findings
+
+Monthly findings are ordered by their estimated monthly amount. A finding below 2% of average monthly gross sales is labelled “small, leave it for now.” These are what-if calculations, not proof of the cause or of recoverable revenue.
+
+- **Returning buyers (L1):** With at least three months and identified buyers, use the best observed three-month returning share when it exceeds the latest three-month share. Otherwise use a hypothetical increase of five percentage points, capped at 99%. Hold the latest window's new-buyer count fixed. Target returning buyers = new buyers × target share ÷ (1 − target share); extra orders = max(0, target returning buyers − current returning buyers). Monthly estimate = extra orders × whole-period average order × whole-period kept share ÷ 3, assuming one average order per extra returning buyer. It is omitted if the kept share is not positive.
+- **Unpaid invoices (L2):** A separate quick win, not a monthly estimate. In supplied transaction records, the engine uses explicit invoice IDs and recognized invoice statuses, retaining the latest observed state per invoice. It sums the absolute gross, or absolute net if gross is zero, of observed open invoices whose recorded date is at least 14 days before the analysis time. A later observed paid state prevents an earlier open state from being counted. Counts and age describe supplied observations, not necessarily all invoices; the latest record's date may not be the original issue date. Average time to payment is not calculated. The sandbox invoice-list route can supply its own separately sourced quick win using sent invoices and their outstanding balances.
+- **Refunds on one item (L3):** For named item groups, total eligible refunds in the last three months; choose the largest group and divide its total by 3 and by 2. This models a 50% reduction. An item refund *rate* is not inferred from unlinked refund rows.
+- **Small-order fees (L4):** In the last three months, count eligible sale rows below the supplied threshold, default 20. If a fixed fee per payment is explicitly supplied, the estimate is `floor(small orders / 4) × fixed fee / 3`: half the small orders are paired, saving one fixed fee per pair. Without a fixed fee the engine reports a gap and does not estimate savings. The threshold is on total order gross, not unit price.
+- **Cross-border fees (L5):** No estimate is produced: the normalized data does not establish the extra cross-border portion of fees. Country alone does not establish it.
+- **One-item dependence (L6):** A named top group is a risk if its whole-period gross exceeds 50% of gross sales. It has no monthly money figure.
+- **Below-cost items (L7):** For each named group with supplied item cost, add `max(0, item cost × units + sale fee − sale gross)` for each sale, then divide by the number of months in the observed period. This is the observed shortfall, not a price recommendation. A break-even price at a new price is not calculated without a fee schedule that supports it.
+- **Fewer first-seen buyers (L8):** With at least six months, compare counts of distinct first-seen buyers in the last three months and the three before. If the latter is larger, estimate `(previous count − recent count) × whole-period average order × max(0, kept share) / 3`. This is relative to the available history and assumes one average order per buyer.
+- **Failed subscription payments (L9):** Only explicitly marked failed subscription-payment rows in the last three months are included. Their absolute gross amounts are summed and divided by three. This is observed failed payment value, not verified permanent loss or recovery. Payment rows alone do not establish the number of active, cancelled, or suspended subscriptions; the engine reports that gap.
+
+A finding requiring unavailable data or a playbook target is not made up. In particular, item refund rates, a price-dependent break-even price, complete invoice history, cross-border fee differences, and subscription status totals require additional evidence.
+
+## Synthetic sample and checks
+
+The downloadable `public/sample-paypal-activity.csv` is fictional. Regenerate it from the deterministic demo with `node --import tsx scripts/generate-sample-csv.ts`. The demo uses a fixed analysis time of 31 October 2026. To run the tests, use `npm test`. The tests include hand-calculated money-map, returning-buyer, quantity, refund-period, duplicate-event, and invoice-state examples.

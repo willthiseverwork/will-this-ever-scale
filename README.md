@@ -1,14 +1,16 @@
 # Will This Ever Scale
 
-A plain-language money map for hobby sellers using PayPal. It reads sample or uploaded PayPal activity, keeps raw files in the browser, and sends only calculated totals to Claude when AI wording is enabled.
+A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. If the seller requests an AI read, only a strict set of numeric totals and fixed finding IDs is sent; no transaction rows or item names are sent in that request.
 
-## Judge path
+## Try it
 
-1. Open the hosted app and select **Try the demo shop**.
-2. Read the money map, the ranked monthly leaks, and the unpaid-invoice quick win.
-3. Upload `public/sample-paypal-activity.csv` to see the same client-side parser path.
+Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). The plain interface is for testing the pipeline; the approved visual design follows separately.
 
-## Local setup
+1. Select **Try the demo shop** and inspect the money map and ranked findings.
+2. Answer the questions for the top finding and choose a test. Some tests cannot be filled when the source data lacks the required evidence; the app reports that gap.
+3. In Sandbox actions, use sample invoice ID `INV-0`, select **Review action**, then explicitly approve the reminder. The server maps it to a real sandbox invoice and shows the response. The three demo invoices total USD 540. No sign-in is needed for this demo action. Download and upload the sample CSV to exercise the browser parser; the optional sandbox connection lets developers use their own credentials.
+
+## Run locally
 
 ```bash
 npm install
@@ -17,16 +19,34 @@ npm test
 npm run dev
 ```
 
-`ANTHROPIC_API_KEY` is optional. Without it, the app uses a deterministic, number-traceable read. PayPal sandbox credentials are server-only and are not committed. The live sandbox adapter is intentionally held behind those credentials; no live account is connected in this repository.
+The app uses deterministic wording when the configured AI provider is unavailable. Amazon Bedrock is the default (`AI_PROVIDER=bedrock`); set `AI_PROVIDER=anthropic` only if direct Anthropic access is intended. For Bedrock, set `AWS_BEDROCK_REGION` and the exact `AWS_BEDROCK_MODEL` or inference profile supported in that region. Supply either `WTES_BEDROCK_API_KEY`, or `WTES_BEDROCK_ACCESS_KEY_ID` and `WTES_BEDROCK_SECRET_ACCESS_KEY` with optional `WTES_BEDROCK_SESSION_TOKEN`, as server-only secrets. Do not set both credential types. The provider does not use ambient AWS credentials or endpoints. Short-lived role credentials are preferable; role and OIDC setup require separate AWS permissions and are not configured here. No model access, entitlement, pricing, or credit use has been verified. `ANTHROPIC_API_KEY` is optional for direct Anthropic; `ANTHROPIC_MODEL` defaults to `claude-sonnet-5-5`. The currently documented Anthropic model list does not establish that this model ID is available, so an unsupported model falls back to the template. Demo wording never calls the model. Output is checked against the numeric aggregate, retried once if invalid, and then falls back to the template. Local requests share an in-process limit; it does not enforce a distributed production limit. Production remains on the template unless a verified external limit is in place and `AI_RATE_LIMIT_ENFORCED=true` is explicitly configured. A flag by itself does not provide protection.
 
-## How the math works
+## Data and APIs
 
-The engine is shared TypeScript (`lib/engine.ts`). Gross sales minus exact payment fees, refunds/reversals/disputes, optional per-item costs, and optional monthly ad spend equals “you kept.” It uses the dominant currency only, lists other currencies as excluded, and never lets the model compute a displayed number. The tests include a three-month fixture calculated by hand and reject an AI sentence containing a number not present in the engine JSON.
+- `POST /api/analyze`: accepts only `{source:"demo"}` or `{source:"aggregate", aggregate:...}` validated by `aggregateSchema` in `lib/read.ts`. It returns `{read}`. CSVs, rows, names and free-text item labels are rejected. The browser owns CSV calculation and retains the full analysis locally.
+- `POST /api/questions`: accepts a fixed `leakId` and returns questions from the bundled playbook. The browser evaluates the selected test using `questionsFor`, `contextFor`, and `testFor`; the retired `POST /api/test` returns 410. A missing target is an explicit gap, not a guessed answer.
+- `POST /api/sandbox/connect` and `/api/sandbox/analyze`: connect and read a PayPal sandbox. Credentials are held in server memory for the session and can be lost on instance changes. Sandbox coverage and unavailable endpoints are returned separately. The app does not connect a live PayPal account.
+- `POST /api/actions/propose` and `/api/actions/execute`: sandbox-only actions require a review and separate approval. Approved actions can send sandbox invoice notifications. A signing secret and sandbox credentials are required; never commit them.
+- `POST /api/reminders`: validates an email, date and playbook ID, then stores them in a private Blob when configured. **Email delivery is not configured**; a saved record is not a sent reminder. The browser can instead generate a local calendar file without providing an email.
 
-## PayPal sandbox setup
+Opt-in Google Analytics is restricted to the canonical production host, using fixed control IDs and sanitized origin/path. Values entered into forms and uploaded data are not sent as event parameters. Live analytics receipt and search indexing require separate production verification.
 
-Create a sandbox REST app in [PayPal Developer](https://developer.paypal.com/), enable Transaction Search and Invoicing, and set `PAYPAL_SANDBOX_CLIENT_ID` and `PAYPAL_SANDBOX_CLIENT_SECRET` in the Vercel project. These values must be Production environment variables, server-only, and must never be copied to the browser or repo. New sandbox transactions can take time to reach Transaction Search.
+## Calculation boundaries
+
+See [the formula reference](docs/calculations.md) for every finding, its evidence, and the hand-checked fixtures. Regenerate the synthetic CSV with `node --import tsx scripts/generate-sample-csv.ts`.
+
+The engine selects the dominant sales currency and reports excluded currencies. It calculates gross sales, known payment fees, refunds and supplied costs and ad spend. Missing costs and other coverage gaps are shown separately. Findings are estimates based on explicit assumptions, not verified causes. Unpaid invoice results cover only invoice records supplied or returned by the sandbox; an absence of such records is not proof that no unpaid invoices exist. The playbook retains the supplied source text; target calculations are deterministic and fail when supporting values are missing.
+
+## Sandbox setup
+
+Create a sandbox REST app in [PayPal Developer](https://developer.paypal.com/), enable the required sandbox APIs, and configure server-only `PAYPAL_SANDBOX_CLIENT_ID`, `PAYPAL_SANDBOX_CLIENT_SECRET`, and `PAYPAL_ACTION_SIGNING_SECRET`. Use sandbox credentials only. Transaction Search may have reporting delays. The integration and any sandbox action must be verified against the intended sandbox account before claiming a successful action.
+
+For a new installation, seed products and invoices with `scripts/seed-sandbox.ts` using the explicit confirmation flag documented in that script. Keep its durable receipt outside the public repository and inspect ambiguous outcomes before retrying. Set `PAYPAL_SANDBOX_DEMO_INVOICE_IDS` to the three verified invoice IDs in receipt order. The private loopback console in `scripts/seed-console.ts` is for local setup only and is not a deployed route. Captured orders require a separate sandbox buyer approval; the script does not claim to create payment history. PayPal Merchant Insights is not supported in sandbox by the installed Toolkit.
+
+## Current limitations
+
+Live AI is off until AWS model access, credit eligibility and the production limiter are verified. Item grouping is currently deterministic; Claude grouping and Claude-proposed action selection are not implemented. Every PayPal action still requires an explicit approval. Browser/server processes can lose in-memory sandbox sessions or proposals; reconnect or prepare the action again if it expires. No email reminder is sent. Separate fee-only rows, unlinked item refund rates, and complete subscription state need more evidence and are disclosed in the app. See [dependency security](dependencies-security.md) for outstanding upstream advisories and mitigations.
 
 ## License
 
-MIT. Add the repository topic/license/About details on GitHub after creating the public repository.
+MIT; see [LICENSE](LICENSE).

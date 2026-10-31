@@ -1,1 +1,176 @@
-{"leaks":[{"id":"one_time_buyers","questions":[{"id":"reach","text":"Can you reach people who bought before?","answers":[{"id":"list","text":"Yes, they follow me or joined my list"},{"id":"some","text":"Only some of them"},{"id":"none","text":"No way to reach them"}]},{"id":"new","text":"How often do you have something new?","answers":[{"id":"often","text":"New pieces most months"},{"id":"rarely","text":"Rarely"},{"id":"never","text":"Same items since I started"}]}],"tests":[{"when":{"reach":["list","some"],"new":["often"]},"do":"Show your newest {top_group} to past buyers with a small thank-you for returning.","success":"{target_orders} orders from past buyers within 14 days"},{"do":"Put a small card in every order inviting buyers to follow you for new pieces.","success":"Half of this month's buyers can be reached again"}],"who":"you"},{"id":"unpaid_invoices","questions":[],"tests":[{"do":"Send a reminder for the {n_unpaid} invoices unpaid for 14 days or more.","success":"{target_paid} paid within 7 days"}],"who":"claude_in_paypal"},{"id":"refunds_one_item","questions":[{"id":"reason","text":"Why do people send back this item?","answers":[{"id":"size","text":"Wrong size"},{"id":"photos","text":"Looks different from the photos"},{"id":"damage","text":"Arrives damaged"},{"id":"unknown","text":"I don't know"}]}],"tests":[{"do":"Ask the next 3 people who send it back what was wrong.","success":"3 answers by next month"}],"who":"you"},{"id":"small_order_fees","questions":[{"id":"sets","text":"Could your cheapest items sell as a set?","answers":[{"id":"yes","text":"Yes"},{"id":"no","text":"Not really"}]}],"tests":[{"do":"Offer the cheapest item as a set of two at a small discount.","success":"Fewer orders below {threshold} next month"}],"who":"you"}]}
+{
+  "version": 1,
+  "status": "Draft written by Claude from Dasha's method; Dasha edits it. The app's AI picks and personalizes entries from this file and never invents advice outside it in v1.",
+  "principles": [
+    "The data shows where money leaks, not why. Never state a cause: ask, then propose a test.",
+    "Plain words only. No LTV, CAC, churn, AOV or conversion rate in anything the seller reads.",
+    "Every concept gets one line on why it matters: teach by doing.",
+    "One test at a time, with a number that says whether it worked.",
+    "Say what is fine and can be left alone, so the seller stops spending time there."
+  ],
+  "placeholders": "Filled by the engine, never by the model: {past_buyers}, {month_buyers}, {top_group}, {item}, {small_group}, {n_unpaid}, {unpaid_total}, {threshold}, {small_share}, {target_share}, {target_orders}, {target_paid}, {target_rate}, {new_share}, {last_new}, {target_new}, {break_even_price}, {n_failed}, {target}",
+  "fine_rule": "A monthly leak under 2% of average monthly sales is shown as: small, leave it for now.",
+  "leaks": [
+    {
+      "id": "one_time_buyers",
+      "kind": "monthly",
+      "name": "Most buyers buy once",
+      "why": "Someone who already bought from you trusts you. Selling to them again needs no ads and no searching, so it is the cheapest sale you can make.",
+      "questions": [
+        {"id": "reach", "text": "Can you reach people who bought before?", "answers": [
+          {"id": "list", "text": "Yes, they follow me or joined my list"},
+          {"id": "some", "text": "Only some of them"},
+          {"id": "none", "text": "No way to reach them"}
+        ]},
+        {"id": "new", "text": "How often do you have something new?", "answers": [
+          {"id": "often", "text": "New pieces most months"},
+          {"id": "rarely", "text": "Rarely"},
+          {"id": "never", "text": "Same items since I started"}
+        ]}
+      ],
+      "tests": [
+        {"when": {"reach": ["list", "some"], "new": ["often"]}, "do": "Show your newest {top_group} to the past buyers who follow you, with a small thank-you for returning buyers (for example free shipping).", "success": "{target_orders} orders from past buyers within 14 days", "target_rule": "max(1, round(past_buyers * 0.03)); halve it for answer 'some'", "can_hand_off": false},
+        {"when": {"reach": ["list", "some"], "new": ["rarely", "never"]}, "do": "Make one add-on that goes with your best seller ({top_group}) and offer it first to past buyers who follow you.", "success": "{target_orders} orders within 14 days", "target_rule": "max(1, round(past_buyers * 0.03)); halve it for answer 'some'", "can_hand_off": false},
+        {"when": {"reach": ["none"]}, "do": "From today, put a small card in every order inviting buyers to follow you or join your list for new pieces.", "success": "Half of this month's {month_buyers} buyers can be reached again", "target_rule": "ceil(month_buyers * 0.5)", "can_hand_off": true}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "unpaid_invoices",
+      "kind": "quick_win",
+      "name": "Money waiting in unpaid invoices",
+      "why": "An invoice nobody chases often just sits there. A polite reminder is the easiest money you can make this month.",
+      "questions": [],
+      "tests": [
+        {"do": "Send a reminder for the {n_unpaid} invoices unpaid for 14+ days. On your next custom order, ask for a deposit up front.", "success": "{target_paid} of {n_unpaid} paid within 7 days", "target_rule": "ceil(n_unpaid * 0.5)", "can_hand_off": false}
+      ],
+      "who": "claude_in_paypal",
+      "paypal_action": [
+        {"tool": "send_invoice_reminder", "label": "Send reminders in PayPal", "approval": "one Approve per invoice, or one Approve for the listed set"},
+        {"tool": "create_invoice + send_invoice", "label": "Ask for a deposit on a custom order", "inputs": ["buyer email (the seller types it)", "amount", "deposit %"]}
+      ]
+    },
+    {
+      "id": "refunds_one_item",
+      "kind": "monthly",
+      "name": "One item keeps coming back",
+      "why": "A refund loses the sale and usually costs you more on top: fees, shipping and your time.",
+      "questions": [
+        {"id": "reason", "text": "Why do people send back your {item}?", "answers": [
+          {"id": "size", "text": "Wrong size"},
+          {"id": "photos", "text": "Looks different from the photos"},
+          {"id": "damage", "text": "Arrives damaged"},
+          {"id": "unknown", "text": "I don't know"}
+        ]}
+      ],
+      "tests": [
+        {"when": {"reason": ["size"]}, "do": "Add a simple size guide to the {item} listing and confirm the size with the buyer before you ship.", "success": "Refunds on {item} under {target_rate}% next month", "target_rule": "current refund rate / 2", "can_hand_off": false},
+        {"when": {"reason": ["photos"]}, "do": "Reshoot the {item} in daylight and add one photo of it being worn.", "success": "Refunds on {item} under {target_rate}% next month", "target_rule": "current refund rate / 2", "can_hand_off": true},
+        {"when": {"reason": ["damage"]}, "do": "Change how you pack the {item} for the next 10 orders.", "success": "No damaged {item} in the next 10 orders", "target_rule": "0 damaged of 10", "can_hand_off": true},
+        {"when": {"reason": ["unknown"]}, "do": "Ask the next 3 people who send back the {item} one question: what was wrong?", "success": "3 answers by next month", "target_rule": "3", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "small_order_fees",
+      "kind": "monthly",
+      "name": "Fees eat your small orders",
+      "why": "PayPal takes a fixed amount on every payment, on top of a percentage. On a cheap item that fixed part is a big slice.",
+      "questions": [
+        {"id": "sets", "text": "Could your cheapest items sell as a set?", "answers": [
+          {"id": "yes", "text": "Yes"},
+          {"id": "no", "text": "Not really"}
+        ]}
+      ],
+      "tests": [
+        {"when": {"sets": ["yes"]}, "do": "Offer {small_group} as a set of two at a small discount.", "success": "Orders under {threshold}: from {small_share}% to {target_share}% of orders", "target_rule": "small_share / 2", "can_hand_off": false},
+        {"when": {"sets": ["no"]}, "do": "Set a minimum order of {threshold}, or add a small handling fee to orders below it.", "success": "Orders under {threshold}: from {small_share}% to {target_share}% of orders", "target_rule": "small_share / 2", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "cross_border_fees",
+      "kind": "monthly",
+      "only_if": "extra cross-border fees can be derived from the fee data; otherwise skip this leak",
+      "name": "Orders from abroad cost you more",
+      "why": "Payments from other countries usually carry extra fees, so the same item earns you less.",
+      "questions": [
+        {"id": "price", "text": "Do buyers abroad pay the same as buyers at home?", "answers": [
+          {"id": "same", "text": "Yes, same price"},
+          {"id": "shipping", "text": "Only shipping is different"},
+          {"id": "different", "text": "No, I price them differently"}
+        ]}
+      ],
+      "tests": [
+        {"when": {"price": ["same", "shipping"]}, "do": "Build the extra fee into the price or the shipping for orders from abroad.", "success": "You keep as much per order from abroad as from home", "target_rule": "kept share abroad >= kept share at home", "can_hand_off": false},
+        {"when": {"price": ["different"]}, "do": "Check that your price for buyers abroad covers the extra fee shown here.", "success": "You keep as much per order from abroad as from home", "target_rule": "kept share abroad >= kept share at home", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "one_item_dependence",
+      "kind": "risk",
+      "name": "One item makes almost half your money",
+      "why": "If it stops selling, half your income goes with it.",
+      "questions": [],
+      "tests": [
+        {"do": "Make one new variation of {top_group} this month.", "success": "{top_group} under {target_share}% of sales within 3 months", "target_rule": "current share - 10 points", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "below_cost_items",
+      "kind": "monthly",
+      "only_if": "the seller gave costs",
+      "name": "This item loses money",
+      "why": "After materials, shipping and fees, each sale of {item} leaves you with less than you put in.",
+      "questions": [],
+      "tests": [
+        {"do": "Raise the price of {item} to at least {break_even_price}, or stop making it.", "success": "Every item keeps money after costs", "target_rule": "break-even price from the engine", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "fewer_new_buyers",
+      "kind": "monthly",
+      "only_if": "new buyers are falling",
+      "name": "Fewer new people find you",
+      "why": "{new_share}% of your sales come from first-time buyers. When fewer arrive, everything shrinks.",
+      "questions": [
+        {"id": "source", "text": "Where do new buyers usually find you?", "answers": [
+          {"id": "social", "text": "Instagram or TikTok"},
+          {"id": "marketplace", "text": "A marketplace"},
+          {"id": "people", "text": "Friends and word of mouth"},
+          {"id": "unknown", "text": "I don't know"}
+        ]}
+      ],
+      "tests": [
+        {"when": {"source": ["social"]}, "do": "Post your best seller 3 times this week, each with a different first line, and note which one brings orders.", "success": "{target_new} new buyers this month (last month: {last_new})", "target_rule": "ceil(last_new * 1.1)", "can_hand_off": true},
+        {"when": {"source": ["marketplace"]}, "do": "Refresh the photos and titles of your 3 best items.", "success": "{target_new} new buyers this month (last month: {last_new})", "target_rule": "ceil(last_new * 1.1)", "can_hand_off": true},
+        {"when": {"source": ["people"]}, "do": "Ask your last 5 happy buyers to send your link to one friend.", "success": "{target_new} new buyers this month (last month: {last_new})", "target_rule": "ceil(last_new * 1.1)", "can_hand_off": false},
+        {"when": {"source": ["unknown"]}, "do": "Ask every buyer this month one question: where did you find me?", "success": "An answer from most of this month's buyers", "target_rule": "ceil(month_buyers * 0.6)", "can_hand_off": false}
+      ],
+      "who": "you",
+      "paypal_action": null
+    },
+    {
+      "id": "subscription_failed_payments",
+      "kind": "monthly",
+      "only_if": "subscriptions exist in the data",
+      "name": "Subscription payments fail quietly",
+      "why": "When a payment fails, the subscription can stop without anyone noticing. A short message often brings people back.",
+      "questions": [],
+      "tests": [
+        {"do": "Message the {n_failed} subscribers whose payment failed, with a link to update their payment.", "success": "{target} of {n_failed} paying again within 14 days", "target_rule": "ceil(n_failed * 0.3)", "can_hand_off": true}
+      ],
+      "who": "you",
+      "paypal_action": null
+    }
+  ]
+}

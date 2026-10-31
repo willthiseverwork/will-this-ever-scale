@@ -1,3 +1,17 @@
 import type { Txn } from './types';
-const items=[['Stud earrings',18],['Silver hoops',28],['Stacking rings',35],['Necklaces',55]] as const;
- export function demoTransactions():Txn[] { const out:Txn[]=[]; let id=0; for(let mi=0;mi<12;mi++){const date=new Date(Date.UTC(2025,10+mi,1)); const count=(mi===0||mi===1)?88:66; for(let j=0;j<count;j++){const group=j%10<5?'Silver hoops':items[j%items.length][0]; const price=group==='Silver hoops'?28:items.find(x=>x[0]===group)![1]; let buyer:string|undefined; if(mi<3) buyer=j<15?`best-repeat-${j}`:j<38?`early-${mi}-${j}`:undefined; else if(mi>=9) buyer=j<11?`past-${j}`:j<48?`recent-${mi}-${j}`:undefined; else buyer=j<11?`past-${j}`:`middle-${mi}-${j}`; const d=new Date(date);d.setUTCDate(1+(j%27)); const fee=Number((price*.035+.49).toFixed(2));out.push({id:`s${++id}`,date:d.toISOString(),kind:'sale',gross:price,fee,net:price-fee,currency:'USD',buyer_key:buyer,item_title:group,item_group:group,country:j%3?'US':'CA',status:'Completed'}); if(group==='Stacking rings'&&j%9===0)out.push({id:`r${id}`,date:d.toISOString(),kind:'refund',gross:price,fee:0,net:-price,currency:'USD',buyer_key:buyer,item_title:group,item_group:group,status:'Refunded'}); }} const now=new Date('2026-10-31T12:00:00Z'); [180,180,180].forEach((amount,i)=>{const d=new Date(now);d.setUTCDate(d.getUTCDate()-20-i);out.push({id:`invoice-${i+1}`,date:d.toISOString(),kind:'other',gross:amount,fee:0,net:amount,currency:'USD',invoice_id:`INV-${i+1}`,status:'Unpaid',item_title:'Custom piece',item_group:'Custom pieces'});}); return out; }
+export const DEMO_AS_OF='2026-10-31T12:00:00Z';
+export function demoTransactions():Txn[] {
+  const out:Txn[]=[], previous:string[][]=[];let id=0;
+  for(let mi=0;mi<12;mi++){
+    const buyers:string[]=[], count=mi<2?90:80, repeat=mi===0?0:mi<7?13:7;
+    for(let j=0;j<count;j++){
+      const buyer=j<repeat?previous[mi-1][previous[mi-1].length-1-j]:`buyer-${mi}-${j}`;buyers.push(buyer);
+      const group=j<count*.3?'Stud earrings':j<count*.76?'Silver hoops':j<count*.92?'Stacking rings':'Necklaces';const price=group==='Stud earrings'?18:group==='Silver hoops'?28:group==='Stacking rings'?35:55;const fee=Math.round((price*.035+.49)*100)/100;
+      const date=new Date(Date.UTC(2025,10+mi,1+j%27)).toISOString().slice(0,10);
+      out.push({id:`sale-${++id}`,date,kind:'sale',gross:price,fee,net:price-fee,currency:'USD',buyer_key:buyer,item_title:group,item_group:group,country:j<count*.35?'CA':'US',status:'Completed'});
+      if(group==='Stacking rings'&&j<Math.ceil(count*.76)+3)out.push({id:`refund-${id}`,date,kind:'refund',gross:-price,fee:0,net:-price,currency:'USD',item_group:group,status:'Refunded'});
+    }previous.push(buyers);
+  }
+  for(let i=0;i<3;i++)out.push({id:`invoice-${i}`,date:`2026-10-0${i+1}`,kind:'other',gross:180,fee:0,net:180,currency:'USD',invoice_id:`INV-${i}`,status:'Unpaid'});
+  return out;
+}
