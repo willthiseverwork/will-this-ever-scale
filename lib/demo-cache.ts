@@ -5,6 +5,6 @@ export type DemoModelCache={aggregate:ReadAggregate;read:string;model:string};
 export function getDemoCache():DemoModelCache|null{return null;}
 export function demoReadWithSource(a:Analysis):{read:string;read_source:'cached_model'|'template'}{
  const aggregate=readAggregate(a),cache=getDemoCache();
- if(cache&&JSON.stringify(cache.aggregate)===JSON.stringify(aggregate)&&validateRead(cache.read,aggregate))return {read:cache.read,read_source:'cached_model'};
- return {read:templateRead(aggregate),read_source:'template'};
+ if(cache&&JSON.stringify(cache.aggregate)===JSON.stringify(aggregate)&&validateRead(cache.read,aggregate))return {read:`For this sample shop: ${cache.read}`,read_source:'cached_model'};
+ return {read:`For this sample shop: ${templateRead(aggregate)}`,read_source:'template'};
 }
