@@ -34,10 +34,11 @@ export async function POST(request:Request){
     const id=created?.id;if(typeof id!=='string'||!/^[A-Z0-9]{1,36}$/.test(id))throw new Error('Missing order ID.');phase='create_readback';const detail=await api(access,`/v2/checkout/orders/${id}`);phase='fixture';const verified=inspect(detail,id,body.slot).result;const link=approval(created.links)||verified.approvalUrl;return reply({...verified,...(link?{approvalUrl:link}:{})});
    }catch(e){return reply({error:'Create outcome is unknown. Inspect the order before any retry.',...diagnostic(phase,e)},502);}
   }
-  const id=body.slot===0?'51X40929L3261221T':body.orderId!;phase='order_get';const order=await api(access,`/v2/checkout/orders/${id}?fields=payment_source`);phase='fixture';const checked=inspect(order,id,body.slot);
+  const id=body.slot===0?'51X40929L3261221T':body.orderId!;phase='order_get';const order=await api(access,`/v2/checkout/orders/${id}`);phase='fixture';const checked=inspect(order,id,body.slot);
   if(body.action==='status')return reply(checked.result);
   if(checked.captures.length>0)return reply({error:'Capture already present; inspect status before any further action.'},409);
+  if(checked.result.status==='APPROVED'&&!checked.buyer){phase='buyer_get';const extra=await api(access,`/v2/checkout/orders/${id}?fields=payment_source`);if(extra?.id!==id)throw new FixtureError('id');checked.buyer=extra?.payment_source?.paypal?.email_address||extra?.payer?.email_address;}
   if(checked.result.status!=='APPROVED'||typeof checked.buyer!=='string'||checked.buyer.toLowerCase()!==BUYER)return reply({error:'Capture blocked: buyer approval or buyer identity is not verified.'},409);
-  try{phase='capture';await api(access,`/v2/checkout/orders/${id}/capture`,fetch,{method:'POST',headers:{'PayPal-Request-Id':requestId('capture',body.slot),Prefer:'return=representation'},body:'{}'});phase='capture_readback';const verified=await api(access,`/v2/checkout/orders/${id}?fields=payment_source`);phase='fixture';return reply(inspect(verified,id,body.slot).result);}catch(e){return reply({error:'Capture outcome is unknown. Inspect the order before any retry.',...diagnostic(phase,e)},502);}
+  try{phase='capture';await api(access,`/v2/checkout/orders/${id}/capture`,fetch,{method:'POST',headers:{'PayPal-Request-Id':requestId('capture',body.slot),Prefer:'return=representation'},body:'{}'});phase='capture_readback';const verified=await api(access,`/v2/checkout/orders/${id}`);phase='fixture';return reply(inspect(verified,id,body.slot).result);}catch(e){return reply({error:'Capture outcome is unknown. Inspect the order before any retry.',...diagnostic(phase,e)},502);}
  }catch(e){return reply({error:'Could not verify the selected sandbox order.',...diagnostic(phase,e)},502);}
 }
