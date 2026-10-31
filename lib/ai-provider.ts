@@ -19,7 +19,8 @@ export async function selectModel(env:Environment=process.env):Promise<LanguageM
   if(env.VERCEL_ENV!=='production'||region!=='us-east-1'||model!=='us.amazon.nova-2-lite-v1:0'||!roleArn||!/^arn:aws:iam::\d{12}:role\/wtes-bedrock-production$/.test(roleArn)||bearer||accessKeyId||secretAccessKey||sessionToken)return null;
   const {awsCredentialsProvider}=await import('@vercel/oidc-aws-credentials-provider');
   const {createAmazonBedrock}=await import('@ai-sdk/amazon-bedrock');
-  return createAmazonBedrock({region,baseURL:`https://bedrock-runtime.${region}.amazonaws.com`,apiKey:'',credentialProvider:awsCredentialsProvider({roleArn,clientConfig:{region:'us-east-1'}})})(model);
+  const {budgetedNovaFetch}=await import('./ai-fetch');
+  return createAmazonBedrock({region,baseURL:`https://bedrock-runtime.${region}.amazonaws.com`,apiKey:'',fetch:budgetedNovaFetch(),credentialProvider:awsCredentialsProvider({roleArn,clientConfig:{region:'us-east-1'}})})(model);
  }
  if(auth&&auth!=='static')return null;
  if(bearer&&(accessKeyId||secretAccessKey||sessionToken))return null;
