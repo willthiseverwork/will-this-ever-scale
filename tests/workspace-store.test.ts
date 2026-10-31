@@ -9,3 +9,21 @@ test('separates users, detects stale writes and preserves trial after deletion',
 test('empty saves do not start a trial',async()=>{const previous=process.env.WTES_WORKSPACE_SECRET;process.env.WTES_WORKSPACE_SECRET='x'.repeat(40);setWorkspaceStoreForTests(memoryStore());try{const saved=await saveWorkspace('user_C',input(emptyWorkspace()));assert.equal(saved.trialStartedAt,null);assert.equal(saved.trialEndsAt,null);}finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}});
 
 test('simultaneous writes using one revision allow only one winner',async()=>{const previous=process.env.WTES_WORKSPACE_SECRET;process.env.WTES_WORKSPACE_SECRET='y'.repeat(40);setWorkspaceStoreForTests(memoryStore());try{const payload=input(emptyWorkspace());const outcomes=await Promise.allSettled([saveWorkspace('user_D',payload),saveWorkspace('user_D',payload)]);assert.equal(outcomes.filter(x=>x.status==='fulfilled').length,1);assert.equal(outcomes.filter(x=>x.status==='rejected'&&x.reason instanceof WorkspaceConflict).length,1);}finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}});
+
+test('workspace storage requires an explicit valid store selection and fails closed on unavailable OIDC',async()=>{
+ const {storageConfigured,workspaceBlobCredentials}=await import('../lib/workspace-store');
+ const names=['WTES_WORKSPACE_SECRET','WTES_WORKSPACE_STORE_ID','WTES_WORKSPACE_BLOB_TOKEN','BLOB_READ_WRITE_TOKEN'] as const;
+ const old=names.map(name=>process.env[name]);
+ try{
+  process.env.WTES_WORKSPACE_SECRET='s'.repeat(40);process.env.BLOB_READ_WRITE_TOKEN='unrelated';
+  delete process.env.WTES_WORKSPACE_STORE_ID;delete process.env.WTES_WORKSPACE_BLOB_TOKEN;
+  assert.equal(storageConfigured(),false);
+  process.env.WTES_WORKSPACE_BLOB_TOKEN='explicit-workspace-token';assert.equal(storageConfigured(),true);
+  process.env.WTES_WORKSPACE_STORE_ID='bad';assert.equal(storageConfigured(),false);
+  process.env.WTES_WORKSPACE_STORE_ID='store_abc123';assert.equal(storageConfigured(),true);
+  assert.deepEqual(await workspaceBlobCredentials({storeId:'store_abc123'},async()=>' oidc-value '),{storeId:'store_abc123',oidcToken:'oidc-value'});
+  await assert.rejects(()=>workspaceBlobCredentials({storeId:'store_abc123'},async()=>''));
+  await assert.rejects(()=>workspaceBlobCredentials({storeId:'store_abc123'},async()=>{throw new Error('OIDC unavailable')}));
+  assert.deepEqual(await workspaceBlobCredentials({token:'explicit-workspace-token'},async()=>{throw new Error('must not request OIDC')}),{token:'explicit-workspace-token'});
+ }finally{names.forEach((name,i)=>{if(old[i]===undefined)delete process.env[name];else process.env[name]=old[i];});}
+});
