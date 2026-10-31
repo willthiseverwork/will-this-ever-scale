@@ -19,3 +19,4 @@ a,a:visited{color:inherit}.lock-icon{width:18px;height:18px;vertical-align:middl
 @media(max-width:899px){.start .steps li{display:block}}
 .math-grid .math-label{font-family:Geist,sans-serif}
 @media(max-width:359px){.math-grid .ag-cell,.math-grid .ag-header-cell{font-size:11px;padding-left:2px;padding-right:2px}}
+.math-grid .ag-cell-wrap-text{overflow-wrap:anywhere}
