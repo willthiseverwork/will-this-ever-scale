@@ -1,0 +1,12 @@
+import { api,PayPalError } from './paypal';
+
+/** Only subscriptions explicitly referenced as SUB in returned Transaction Search records. */
+export type SubscriptionObservation={coverage:'observed_only';identified:number;attempted:number;retrieved:number;failed:number;notQueried:number;statusReports:number;active:number|null;cancelled:number|null;suspended:number|null;otherStatus:number|null;unknownStatus:number;withFailedPaymentCount:number;consecutiveFailedPayments:number|null;coverageNote:string};
+export function explicitSubscriptionIds(rows:unknown[]):string[]{const ids=new Set<string>();for(const row of rows){const info=(row as any)?.transaction_info;if(info?.paypal_reference_id_type!=='SUB')continue;const id=info?.paypal_reference_id;if(typeof id==='string'&&/^I-[A-Za-z0-9]{1,48}$/.test(id))ids.add(id);}return [...ids];}
+/** Direct sandbox REST is intentional: the installed toolkit logs full API errors on this tool. */
+export async function observeSubscriptions(access:string,rows:unknown[],fetcher:typeof fetch=fetch):Promise<SubscriptionObservation|null>{
+ const ids=explicitSubscriptionIds(rows);if(!ids.length)return null;
+ const out:SubscriptionObservation={coverage:'observed_only',identified:ids.length,attempted:0,retrieved:0,failed:0,notQueried:0,statusReports:0,active:null,cancelled:null,suspended:null,otherStatus:null,unknownStatus:0,withFailedPaymentCount:0,consecutiveFailedPayments:null,coverageNote:'Only subscriptions explicitly referenced by these transaction records were inspected; account-wide subscription coverage is unknown. Failed payment counts are consecutive failures, not a complete failure history.'};
+ for(const id of ids.slice(0,50)){out.attempted++;try{const d=await api(access,'/v1/billing/subscriptions/'+encodeURIComponent(id),fetcher);if(d?.id!==id)throw new Error('Invalid subscription response');out.retrieved++;if(typeof d.status==='string'&&d.status){out.statusReports++;out.active??=0;out.cancelled??=0;out.suspended??=0;out.otherStatus??=0;if(d.status==='ACTIVE')out.active++;else if(d.status==='CANCELLED')out.cancelled++;else if(d.status==='SUSPENDED')out.suspended++;else out.otherStatus++;}else out.unknownStatus++;const count=d.billing_info?.failed_payments_count;if(Number.isInteger(count)&&count>=0&&count<=999){out.withFailedPaymentCount++;out.consecutiveFailedPayments=(out.consecutiveFailedPayments??0)+count;}}catch(e){out.failed++;if(e instanceof PayPalError&&[401,403,429].includes(e.status))break;}}
+ out.notQueried=out.identified-out.attempted;return out;
+}
