@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { analyze } from '../lib/engine';
 import { demoTransactions, DEMO_AS_OF } from '../lib/demo';
-import { calculationLines, displayMonth, displayedMoneyMap, headlineMonth, money, reconciledMoney, titleLowercase, verifiedInvoicesMatch } from '../lib/display';
+import { calculationLines, displayMonth, displayedMoneyMap, feeRateNote, headlineMonth, money, reconciledMoney, titleLowercase, verifiedInvoicesMatch } from '../lib/display';
 
 test('displayed headline parts reconcile after rounding',()=>{
  const a=analyze(demoTransactions(),{asOf:DEMO_AS_OF,fixedFee:.49});
@@ -14,6 +14,10 @@ test('currency and mid-sentence item formatting',()=>{
  assert.equal(money(2.94,'USD'),'$2.94');
  assert.equal(money(-41,'USD',true),'−$41');
  assert.equal(titleLowercase('Stacking rings'),'stacking rings');
+});
+test('fee rate note displays whole dollars per $100 without cents',()=>{
+ assert.equal(feeRateNote(6,'USD',true),'Normal, $6 of every $100. Leave it.');
+ assert.equal(feeRateNote(6,'USD'),'$6 of every $100.');
 });
 test('demo month-end is complete while seller current month remains in progress',()=>{
  const fixture=analyze(demoTransactions(),{asOf:DEMO_AS_OF});

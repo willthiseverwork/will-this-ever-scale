@@ -13,6 +13,13 @@ export function money(value:number, currency:string, signed=false) {
   return signed&&value<0?`−${formatted}`:formatted;
 }
 
+/** The fee-rate note is a whole-number amount per $100, never a currency total. */
+export function feeRateNote(rate:number,currency:string,normal=false) {
+  const amount=new Intl.NumberFormat('en-US',{style:'currency',currency,minimumFractionDigits:0,maximumFractionDigits:0}).format(Math.round(rate));
+  const perHundred=new Intl.NumberFormat('en-US',{style:'currency',currency,minimumFractionDigits:0,maximumFractionDigits:0}).format(100);
+  return `${normal?'Normal, ':''}${amount} of every ${perHundred}.${normal?' Leave it.':''}`;
+}
+
 /** Preserve cents when rounding individual displayed parts leaves a fractional total. */
 export function reconciledMoney(value:number,currency:string,signed=false) {
   const v=Math.round(Math.abs(value)*100)/100;
