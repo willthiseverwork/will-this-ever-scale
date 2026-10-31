@@ -66,3 +66,14 @@ The new lesson-backed cards cover repeat buyers, refunds, small-payment fees, se
 ## License
 
 MIT; see [LICENSE](LICENSE).
+
+
+## Chat, workspace and connections
+
+- `/chat` answers sales, refund, fee and monthly comparison questions from the browser analysis. Calculations stay local. The optional model intent helper accepts only fixed tokens and month IDs; it never receives the question text or product names.
+- `/workspace` keeps local reminders without sign-in. Account storage requires dedicated WorkOS and private storage configuration. Saving a CSV summary is explicit; raw CSV rows are not stored. Reviewed product labels and assistant sharing both default off.
+- `/connect` offers a downloadable plugin package and a public synthetic sample at `/mcp`. Authenticated workspace tools are unavailable until verified OAuth configuration is present. A package download is not an installed or connected client.
+- `/billing` exposes the planned $14.99/month offer after a 30-day no-card trial. Billing remains off by default; no payment is collected without a configured provider and explicit checkout. The free demo remains unrestricted for judges.
+- Live merchant PayPal access and daily refresh are not activated. The read-only transport and atomic snapshot orchestration are prepared, but require an approved merchant grant, secure storage and a configured daily job. CSV upload remains the current own-data entry point.
+
+See `docs/workspace.md`, `docs/data-chat.md`, `docs/plugin.md`, `docs/live-paypal.md` and `docs/billing.md` for exact configuration and verification boundaries. Never reuse another product's provider credentials.
