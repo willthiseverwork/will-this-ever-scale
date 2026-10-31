@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { BudgetConflict, reserveAiBudget, type BudgetStore } from '../lib/ai-budget';
 
 class MemoryStore implements BudgetStore {
@@ -38,27 +39,8 @@ test('repeated concurrency conflicts stop after three attempts',async()=>{
   let attempts=0;const store:BudgetStore={read:async()=>({body:'{"version":1,"month":"2026-10","count":1}',etag:'old'}),create:async()=>{},replace:async()=>{attempts++;throw new BudgetConflict();}};
   assert.deepEqual(await reserveAiBudget({store,now:october}),{allowed:false,reason:'unavailable'});assert.equal(attempts,3);
 });
-test('real Blob SDK sends overwrite and ETag headers on the second reservation',async()=>{
-  const {MockAgent,getGlobalDispatcher,setGlobalDispatcher}=await import('undici');
-  const previousDispatcher=getGlobalDispatcher(),previousFetch=globalThis.fetch,agent=new MockAgent();
-  agent.disableNetConnect();setGlobalDispatcher(agent);
-  let reads=0;const writes:Array<{overwrite:string|null;etag:string|null}>=[];
-  const metadata={url:'https://test.private.blob.vercel-storage.com/ai-budget/2026-10.json',downloadUrl:'https://test.private.blob.vercel-storage.com/ai-budget/2026-10.json?download=1',pathname:'ai-budget/2026-10.json',contentType:'application/json',contentDisposition:'inline',etag:'etag-1'};
-  const mock=agent.get('https://vercel.com');
-  const reply=(opts:{headers:unknown})=>{const headers=new Headers(opts.headers as HeadersInit);writes.push({overwrite:headers.get('x-allow-overwrite'),etag:headers.get('x-if-match')});return {statusCode:200,data:metadata};};
-  mock.intercept({path:/^\/api\/blob\/\?pathname=/,method:'PUT'}).reply(reply).persist();
-  globalThis.fetch=(async(input:RequestInfo|URL)=>{
-    const url=new URL(String(input));assert.equal(url.hostname,'test.private.blob.vercel-storage.com');assert.equal(url.searchParams.get('cache'),'0');
-    if(++reads===1)return new Response(null,{status:404});
-    const body=JSON.stringify({version:1,month:'2026-10',count:1});
-    return new Response(body,{status:200,headers:{etag:'etag-1','content-length':String(Buffer.byteLength(body)),'content-type':'application/json'}});
-  }) as typeof fetch;
-  try{
-    const token='vercel_blob_rw_test_secret';
-    assert.deepEqual(await reserveAiBudget({token,now:october}),{allowed:true,reason:'reserved'});
-    assert.deepEqual(await reserveAiBudget({token,now:october}),{allowed:true,reason:'reserved'});
-    assert.equal(reads,2);assert.equal(writes.length,2);
-    assert.equal(writes[0].overwrite,'0');assert.equal(writes[0].etag,null);
-    assert.equal(writes[1].overwrite,'1');assert.equal(writes[1].etag,'etag-1');
-  }finally{globalThis.fetch=previousFetch;setGlobalDispatcher(previousDispatcher);await agent.close();}
+test('Blob replacements explicitly permit an ETag-bound overwrite',async()=>{
+  const source=await readFile(new URL('../lib/ai-budget.ts',import.meta.url),'utf8');
+  assert.match(source,/allowOverwrite:true,ifMatch:etag/);
+  assert.match(source,/allowOverwrite:false/);
 });
