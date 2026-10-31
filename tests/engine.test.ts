@@ -22,3 +22,34 @@ test('period summaries and monthly buyers reconcile across six calendar months',
 test('invoice payment timing requires observed open and paid dates for the same invoice',()=>{const a=analyze([tx('s','2026-01-01','a'),tx('i1','2026-01-01','',100,'other',{invoice_id:'I',status:'Sent'}),tx('i2','2026-01-11','',100,'invoice_payment',{invoice_id:'I',status:'Completed'}),tx('i3','2026-01-20','',100,'invoice_payment',{invoice_id:'J',status:'Completed'})]);assert.equal(a.invoice_observations?.average_days_to_pay,10);assert.equal(a.invoice_observations?.paid_with_timing,1);});
 test('linked refunds inherit item and give an observed order rate only when all refunds link to same-window orders',()=>{const base=[tx('1','2026-01-01','a',100,'sale',{item_group:'Ring'}),tx('2','2026-03-01','b',100,'sale',{item_group:'Ring'}),tx('r','2026-03-02','',-100,'refund',{item_group:undefined,reference_id:'1'})];const a=analyze(base);const l=a.ranked_leaks.find(x=>x.id==='refunds_one_item')!;assert.equal(l.evidence.item,'Ring');assert.equal(l.evidence.refund_rate,50);assert.equal(base[2].item_group,undefined);const b=analyze([...base,tx('r2','2026-03-03','',-10,'refund',{item_group:'Ring'})]);assert.equal(b.ranked_leaks.find(x=>x.id==='refunds_one_item')?.evidence.refund_rate,undefined);});
 test('demo refund story is close to four percent of gross and twelve percent of ring orders',()=>{const rows=demoTransactions(),sales=rows.filter(x=>x.kind==='sale'),refunds=rows.filter(x=>x.kind==='refund'),rings=sales.filter(x=>x.item_group==='Stacking rings'),gross=sales.reduce((a,x)=>a+x.gross,0),returned=refunds.reduce((a,x)=>a+Math.abs(x.gross),0);assert.ok(returned/gross>.035&&returned/gross<.045);assert.ok(refunds.length/rings.length>.10&&refunds.length/rings.length<.15);assert.ok(refunds.every(x=>x.reference_id&&x.item_group==='Stacking rings'));const a=analyze(rows,{asOf:DEMO_AS_OF,fixedFee:.49,monthlyAdSpend:0});assert.equal(a.ranked_leaks[0].id,'one_time_buyers');assert.equal(a.quick_win?.one_off_amount,540);});
+
+const assumptionFixture:Txn[]=[
+  tx('a','2026-01-01','a',100,'sale',{fee:0}),
+  tx('b','2026-02-01','b',100,'sale',{fee:0}),
+  tx('c','2026-03-01','c',100,'sale',{fee:0}),
+  tx('refund','2026-03-02','',-60,'refund',{fee:0,net:-60})
+];
+test('editable assumptions preserve defaults and change estimates without changing recorded money',()=>{
+  const defaults=analyze(assumptionFixture), changed=analyze(assumptionFixture,{returningBuyerTargetPercent:0,refundReductionPercent:100});
+  const find=(a:typeof defaults,id:string)=>a.ranked_leaks.find(l=>l.id===id)!;
+  assert.equal(find(defaults,'one_time_buyers').assumption?.value,5);
+  assert.equal(find(defaults,'one_time_buyers').money_per_month,4.21);
+  assert.equal(find(defaults,'refunds_one_item').assumption?.value,50);
+  assert.equal(find(defaults,'refunds_one_item').money_per_month,10);
+  assert.equal(find(changed,'one_time_buyers').money_per_month,0);
+  assert.equal(find(changed,'one_time_buyers').evidence.target_share,0);
+  assert.equal(find(changed,'refunds_one_item').assumption?.value,100);
+  assert.equal(find(changed,'refunds_one_item').money_per_month,20);
+  assert.deepEqual(changed.money_map,defaults.money_map);
+});
+test('assumption inputs reject out-of-range and non-finite values',()=>{
+  for(const value of [-1,100,NaN,Infinity])assert.throws(()=>analyze(assumptionFixture,{returningBuyerTargetPercent:value}),/between 0 and 99/);
+  for(const value of [-1,101,NaN,Infinity])assert.throws(()=>analyze(assumptionFixture,{refundReductionPercent:value}),/between 0 and 100/);
+});
+test('equal monthly values put the direct subscription follow-up before the refund finding',()=>{
+  const failed=tx('failed','2026-03-03','',30,'subscription_payment',{fee:0,status:'Failed'});
+  const a=analyze([...assumptionFixture,failed]);
+  assert.equal(a.ranked_leaks[0].money_per_month,10);
+  assert.equal(a.ranked_leaks[1].money_per_month,10);
+  assert.deepEqual(a.ranked_leaks.slice(0,2).map(l=>l.id),['subscription_failed_payments','refunds_one_item']);
+});
