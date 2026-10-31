@@ -52,3 +52,9 @@ A finding requiring unavailable data or a playbook target is not made up. In par
 ## Synthetic sample and checks
 
 The downloadable `public/sample-paypal-activity.csv` is fictional. Regenerate it from the deterministic demo with `node --import tsx scripts/generate-sample-csv.ts`. The demo uses a fixed analysis time of 31 October 2026. To run the tests, use `npm test`. The tests include hand-calculated money-map, returning-buyer, quantity, refund-period, duplicate-event, and invoice-state examples.
+
+## Editable what-if assumptions
+
+`returningBuyerTargetPercent` optionally replaces the returning-buyer share target (0–99 inclusive); lower targets produce zero extra estimated orders. `refundReductionPercent` optionally replaces the 50% refund reduction assumption (0–100 inclusive). Both reject non-finite and out-of-range values. Empty values retain the original defaults. The browser and sandbox input route use the same bounds. These assumptions change estimated opportunities, not observed sales or money kept.
+
+Equal-money monthly findings use a fixed ease approximation because the playbook has no effort scores: failed subscription payments, item refunds, small-order fees, one-time buyers, below-cost items, fewer new buyers. This order is an implementation judgment, not measured seller effort. Unknown finding IDs sort after these, alphabetically.

@@ -7,7 +7,7 @@ import { sandboxAnalysis } from '../../../../lib/paypal-analysis';
 import { observeSubscriptions } from '../../../../lib/paypal-subscriptions';
 import { toolkitInvoices,toolkitTransactions,sandboxInsightsGap } from '../../../../lib/paypal-toolkit';
 export const runtime='nodejs';
-const schema=z.object({inputs:z.object({costPerItem:z.number().nonnegative().optional(),costsByItem:z.record(z.number().nonnegative()).optional(),fixedFee:z.number().nonnegative().optional(),monthlyAdSpend:z.number().nonnegative().optional(),smallOrderThreshold:z.number().positive().optional(),homeCountry:z.string().optional()}).optional()}).strict();
+const schema=z.object({inputs:z.object({costPerItem:z.number().nonnegative().optional(),costsByItem:z.record(z.number().nonnegative()).optional(),fixedFee:z.number().nonnegative().optional(),returningBuyerTargetPercent:z.number().finite().min(0).max(99).optional(),refundReductionPercent:z.number().finite().min(0).max(100).optional(),monthlyAdSpend:z.number().nonnegative().optional(),smallOrderThreshold:z.number().positive().optional(),homeCountry:z.string().optional()}).optional()}).strict();
 export async function POST(r:Request){
  if(!sameOrigin(r))return NextResponse.json({error:'Invalid request origin.'},{status:403});const c=getSession(sessionId(r));if(!c)return NextResponse.json({error:'Sandbox session expired. Connect again.'},{status:401});
  try{const {inputs}=schema.parse(await readLimitedJson(r,65536));const access=await token(c);let transactionSource='PayPal AI SDK';

@@ -1,6 +1,6 @@
 export type Kind = 'sale'|'refund'|'reversal'|'dispute'|'invoice_payment'|'subscription_payment'|'fee'|'payout'|'transfer'|'other';
 export type Txn = { id:string; date:string; kind:Kind; gross:number; fee:number; net:number; quantity?:number; currency:string; buyer_key?:string; reference_id?:string; item_title?:string; item_group?:string; country?:string; invoice_id?:string; status?:string };
-export type Inputs = { costPerItem?:number; costsByItem?:Record<string,number>; monthlyAdSpend?:number; smallOrderThreshold?:number; homeCountry?:string; fixedFee?:number; asOf?:string };
+export type Inputs = { costPerItem?:number; costsByItem?:Record<string,number>; monthlyAdSpend?:number; smallOrderThreshold?:number; homeCountry?:string; fixedFee?:number; returningBuyerTargetPercent?:number; refundReductionPercent?:number; asOf?:string };
 export type Leak = { id:string; kind:'monthly'|'quick_win'|'risk'; money_per_month?:number; one_off_amount?:number; method:string; assumption?:{label:string; value:number}; evidence:Record<string,number|string>; label?:string };
 export type InvoiceRecord = { id:string; date:string; status:string; currency:string; amount:number; age_days?:number };
 export type ItemGroupSummary = {name:string;gross:number;orders:number;refunds:number};
