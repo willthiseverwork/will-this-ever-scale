@@ -4,3 +4,5 @@
 .ws-label-review{display:grid;gap:12px;width:100%;padding:16px;border:1px solid var(--border);border-radius:10px}.ws-label-review>label:not(.ws-check){display:grid;gap:6px;font-size:13px;color:var(--muted)}.ws-label-review input:not([type=checkbox]){width:100%;min-height:48px;padding:10px 12px;border:1px solid var(--field);border-radius:9px;background:var(--inset);color:var(--text);font:inherit}.ws-label-review .ws-check{color:var(--text)}
 
 .ws-footer{max-width:1120px;margin:0 auto;padding:0 16px 32px;display:flex;gap:8px 24px;flex-wrap:wrap}.ws-footer a{display:inline-flex;align-items:center;min-height:44px;font-size:13px;color:var(--muted);text-underline-offset:4px}.ws-footer a:focus-visible{outline:2px solid var(--lime);outline-offset:3px}.ws-card code{overflow-wrap:anywhere;word-break:break-word}.ws-header{flex-wrap:wrap}.ws-header .brand-logo{flex-shrink:0}
+
+.ws-header .brand{min-height:44px}
