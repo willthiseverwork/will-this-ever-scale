@@ -133,6 +133,20 @@
           "kind": "draft",
           "label": "Draft my parcel card and first message"
         },
+        "drafts": [
+          {
+            "id": "parcel_card",
+            "title": "Parcel card",
+            "text": "Thank you for your order. Want an early look at new pieces? Join my list: {sign_up_link}. Signing up is your choice.",
+            "placeholders": ["sign_up_link"]
+          },
+          {
+            "id": "opt_in_welcome",
+            "title": "First message to people who joined your list",
+            "text": "Thanks for joining my list. I will share new pieces here when they are ready. Here is a first look at what is new: {shop_link}. You can unsubscribe at any time.",
+            "placeholders": ["shop_link"]
+          }
+        ],
         "check": "How many people joined the list, and how many orders came from returning buyers.",
         "sources": [
           {
@@ -611,6 +625,26 @@
           "kind": "draft",
           "label": "Draft my sets"
         },
+        "drafts": [
+          {
+            "id": "set_name",
+            "title": "Set name",
+            "text": "The {item_one} + {item_two} set",
+            "placeholders": ["item_one", "item_two"]
+          },
+          {
+            "id": "set_description",
+            "title": "Set description",
+            "text": "{item_one} and {item_two}, together in one set. Choose this pair if you would like both pieces in one order.",
+            "placeholders": ["item_one", "item_two"]
+          },
+          {
+            "id": "set_listing",
+            "title": "Line for each single piece's page",
+            "text": "Pair this piece with {item_two}. Find them together here: {set_link}.",
+            "placeholders": ["item_two", "set_link"]
+          }
+        ],
         "check": "Average order value and items per order.",
         "sources": [
           {

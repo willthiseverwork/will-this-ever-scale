@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {buildReminderPrompt,draftReminder,validReminderNote,signReminderNote,verifyReminderNote} from '../lib/reminder-draft';
+import {reminderNote} from '../lib/paypal-actions';
+import {POST as reminderRoute} from '../app/api/drafts/reminder/route';
+import {POST as cardRoute} from '../app/api/cards/[id]/drafts/route';
+import {cardDrafts,fillCardDraft} from '../lib/card-drafts';
+import raw from '../playbook.json';
+const secret='mock-note-signing-secret-'.repeat(2);
+test('demo note never uses model; connected accepts only bounded safe output',async()=>{
+ let calls=0;const generate=async(prompt:string)=>{calls++;assert.equal(prompt,buildReminderPrompt());assert.doesNotMatch(prompt,/PRIVATE_NAME|private@example|Silver hoops|INV2-/);return reminderNote('connected');};
+ assert.deepEqual(await draftReminder('demo',generate),{source:'template',note:reminderNote('demo')});assert.equal(calls,0);
+ assert.deepEqual(await draftReminder('connected',generate),{source:'ai',note:reminderNote('connected')});assert.equal(calls,1);
+ for(const text of ['Hi Alex, pay your order with the link in this email.', 'Reminder: pay $20 at https://example.com', 'A reminder to pay now or lose your order.', 'Hi, a reminder to pay with the link in this email 💸','A reminder. Your order has already shipped.'])assert.equal(validReminderNote(text),false);
+});
+test('invalid model output gets one retry then fixed text; provider failure also falls back',async()=>{let calls=0;const result=await draftReminder('connected',async()=>{calls++;return 'New invented pressure';});assert.equal(calls,2);assert.equal(result.source,'template');assert.equal(result.note,reminderNote('connected'));assert.equal((await draftReminder('connected',async()=>{throw new Error('mock error');})).source,'template');});
+test('draft tokens bind exact note, source, purpose and expiry',()=>{const note=reminderNote('connected'),token=signReminderNote(note,'connected',secret,10000);assert.equal(verifyReminderNote(token,'connected',secret,10000),note);assert.equal(verifyReminderNote(token,'demo',secret,10000),undefined);assert.equal(verifyReminderNote(token+'x','connected',secret,10000),undefined);assert.equal(verifyReminderNote(token,'connected',secret,310001),undefined);assert.equal(verifyReminderNote(token,'connected','different-secret'.repeat(3),10000),undefined);});
+test('draft API admits only fixed source; no titles, rows, names or emails',async()=>{const req=(body:unknown)=>new Request('https://example.com/api/drafts/reminder',{method:'POST',headers:{origin:'https://example.com','content-type':'application/json'},body:JSON.stringify(body)});assert.equal((await reminderRoute(req({source:'demo'}))).status,200);for(const privateField of ['rows','name','email','item_title','invoiceId'])assert.equal((await reminderRoute(req({source:'demo',[privateField]:'private'}))).status,400);assert.equal((await reminderRoute(new Request('https://example.com',{method:'POST',headers:{origin:'https://elsewhere.com'},body:'{}'}))).status,403);});
+test('repeat and sets provide usable separate drafts without rewriting steps or transmitting examples',async()=>{const before=raw.leaks.filter(x=>['one_time_buyers','sets'].includes(x.id)).map(x=>x.lesson?.steps);for(const id of ['one_time_buyers','sets']){const response=await cardRoute(new Request('https://example.com/api/cards/'+id+'/drafts',{method:'POST',headers:{origin:'https://example.com','content-type':'application/json'},body:JSON.stringify({source:'demo'})}),{params:Promise.resolve({id})});assert.equal(response.status,200);const data=await response.json();assert.ok(data.drafts.length>=2);assert.equal(data.source,'template');}
+ const draft=cardDrafts('sets').find(x=>x.id==='set_description')!;const rendered=fillCardDraft(draft,{item_one:'Private silver item',item_two:'Private gold item'});assert.ok(rendered.includes('Private silver item and Private gold item'));assert.equal(fillCardDraft(draft,{}),draft.text);assert.deepEqual(raw.leaks.filter(x=>['one_time_buyers','sets'].includes(x.id)).map(x=>x.lesson?.steps),before);
+ const rejected=await cardRoute(new Request('https://example.com',{method:'POST',headers:{origin:'https://example.com','content-type':'application/json'},body:JSON.stringify({source:'demo',item_one:'PRIVATE'})}),{params:Promise.resolve({id:'sets'})});assert.equal(rejected.status,400);
+});

@@ -8,21 +8,24 @@ import {reserveSandboxRequest} from '../../../../lib/action-store';
 import {sameOrigin,sessionId,getSession} from '../../../../lib/paypal-session';
 import {actionCredentials,ActionRequestError} from '../../../../lib/action-request';
 import {api,token} from '../../../../lib/paypal';
+import {verifyReminderNote} from '../../../../lib/reminder-draft';
 export const runtime='nodejs';
 export async function POST(r:Request){
  if(!sameOrigin(r))return NextResponse.json({error:'Invalid request origin.'},{status:403});
  const secret=process.env.PAYPAL_ACTION_SIGNING_SECRET;if(!secret||Buffer.byteLength(secret)<32)return NextResponse.json({error:'Sandbox action signing is not configured.'},{status:503});
  try{
-  const body=z.object({source:z.enum(['connected','demo']),review:z.array(z.object({id:z.string().max(100),currency:z.string().regex(/^[A-Z]{3}$/),amount:z.number().finite().positive()}).strict()).max(20).optional()}).passthrough().parse(await readLimitedJson(r,8192));const source=body.source,session=source==='connected'?sessionId(r)||'':'';
+  const body=z.object({source:z.enum(['connected','demo']),noteToken:z.string().max(4096).optional(),review:z.array(z.object({id:z.string().max(100),currency:z.string().regex(/^[A-Z]{3}$/),amount:z.number().finite().positive()}).strict()).max(20).optional()}).passthrough().parse(await readLimitedJson(r,8192));const source=body.source,session=source==='connected'?sessionId(r)||'':'';
   if(source==='connected'&&!getSession(session))return NextResponse.json({error:'Sandbox session expired. Connect again.'},{status:401});
-  const {source:_,review,...action}=body;let p=proposalSchema.parse(action);const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
+  const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
   if(source==='demo'&&(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')){
    const mapped=(process.env.PAYPAL_SANDBOX_DEMO_INVOICE_IDS||'').split(',').map(x=>x.trim()).filter(Boolean);
    if(mapped.length!==3||new Set(mapped).size!==3||mapped.some(x=>!/^INV2-[A-Z0-9-]+$/.test(x)))return NextResponse.json({error:'Demo invoice mapping is not configured. The sample invoice IDs are fictional.'},{status:503});
    const resolve=(invoiceId:string)=>{const index=/^INV-([0-2])$/.exec(invoiceId);const id=index?mapped[Number(index[1])]:invoiceId;if(!mapped.includes(id))throw new Error('Invalid demo invoice');return id;};
    p=p.action==='send_invoice_reminder'?{...p,input:{...p.input,invoiceId:resolve(p.input.invoiceId)}}:{...p,input:{...p.input,invoiceIds:p.input.invoiceIds.map(resolve)}};
   }
-  if(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')p={...p,input:{...p.input,note:reminderNote(source),subject:REMINDER_SUBJECT}};
+  const selectedNote=noteToken?verifyReminderNote(noteToken,source,secret):undefined;
+  if(noteToken&&!selectedNote)return NextResponse.json({error:'This reminder draft expired. Review the reminder again.'},{status:400});
+  if(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')p=proposalSchema.parse({...p,input:{...p.input,note:selectedNote||reminderNote(source),subject:REMINDER_SUBJECT}});
   if(!await reserveSandboxRequest(r,'proposal',secret))return NextResponse.json({error:'Too many sandbox requests. Please try again in a minute.'},{status:429});
   const invoices=[];
   if(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders'){
@@ -36,7 +39,7 @@ export async function POST(r:Request){
    }
   }
   const owner=randomBytes(32).toString('hex'),proposal=await createAction(owner,p,source,session,secret,undefined,invoices);
-  const res=NextResponse.json({...proposal,source,invoices},{headers:{'Cache-Control':'no-store'}});
+  const res=NextResponse.json({...proposal,source,invoices,noteSource:selectedNote?'ai':'template'},{headers:{'Cache-Control':'no-store'}});
   res.cookies.set('paypal_action_approval',signedApproval(proposal.proposalId,owner,p,proposal.expiresAt,secret,source,session),{httpOnly:true,sameSite:'strict',secure:new URL(r.url).protocol==='https:',path:'/api/actions',maxAge:300});return res;
  }catch(error){return NextResponse.json({error:error instanceof z.ZodError?'Invalid action or input.':error instanceof ActionRequestError?error.message:'Sandbox action approval is unavailable. Nothing was sent.'},{status:error instanceof z.ZodError?400:error instanceof ActionRequestError?error.status:503});}
 }

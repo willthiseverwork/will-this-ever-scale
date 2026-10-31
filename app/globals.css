@@ -9,3 +9,4 @@ a,a:visited{color:inherit}.lock-icon{width:18px;height:18px;vertical-align:middl
 @media(max-width:899px){.app-header:not(.has-back) .brand{display:flex}}
 .who{display:inline-flex;align-items:center;gap:6px}.who .icon-bolt{color:var(--lime)}.money-card>a{display:inline-flex;align-items:center;gap:8px}.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.action-panel:focus-visible{outline:2px solid var(--lime);outline-offset:4px}
 @media(prefers-reduced-motion:reduce){.spin{animation:none!important}}
+.help-drafts{display:grid;gap:12px}.help-drafts label{display:grid;gap:6px;color:var(--muted);font-size:13px;text-transform:capitalize}.help-drafts input{width:100%;min-height:52px;padding:12px;background:var(--inset);border:1px solid var(--field);border-radius:10px;color:var(--text)}.help-drafts .quote p{margin-top:8px;white-space:pre-wrap}
