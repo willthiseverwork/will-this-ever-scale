@@ -1,0 +1,53 @@
+{
+  "aggregate": {
+    "currency": "USD",
+    "money_map": {
+      "came_in": 26786,
+      "paypal_fees": 1419,
+      "refunds": 1050,
+      "costs": 0,
+      "ad_spend": 0,
+      "kept": 24317
+    },
+    "ranked_leaks": [
+      {
+        "id": "one_time_buyers",
+        "money_per_month": 204.18
+      },
+      {
+        "id": "refunds_one_item",
+        "money_per_month": 40.83
+      },
+      {
+        "id": "small_order_fees",
+        "money_per_month": 2.94
+      }
+    ],
+    "quick_win": {
+      "one_off_amount": 540,
+      "invoices": 3
+    },
+    "returning_buyers": 113,
+    "invoice_candidates": [
+      {
+        "index": 1,
+        "amount": 180,
+        "age_days": 30
+      },
+      {
+        "index": 2,
+        "amount": 180,
+        "age_days": 29
+      },
+      {
+        "index": 3,
+        "amount": 180,
+        "age_days": 28
+      }
+    ]
+  },
+  "read": "The sales were $26,786.00 and the money kept was $24,317.00 after included deductions, which may not include all business costs. The estimated opportunity of $204.18 per month for buyers who have not returned depends on an assumption. $540.00 is waiting in 3 unpaid invoices.",
+  "model": "us.amazon.nova-2-lite-v1:0",
+  "validatedOn": "2026-10-31",
+  "validationCall": 10
+}
