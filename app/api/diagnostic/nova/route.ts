@@ -4,8 +4,8 @@ import {generateText} from 'ai';
 import {selectModel} from '../../../../lib/ai-provider';
 import {analyze} from '../../../../lib/engine';
 import {demoTransactions,DEMO_AS_OF} from '../../../../lib/demo';
-import {readAggregate,buildReadPrompt,validateRead} from '../../../../lib/read';
-import {buildGroupingPrompt,validateItemMappings,type ItemDescriptor} from '../../../../lib/item-grouping';
+import {readAggregate,buildReadPrompt,inspectReadValidation} from '../../../../lib/read';
+import {buildGroupingPrompt,parseGroupingOutput,type ItemDescriptor} from '../../../../lib/item-grouping';
 import {buildSuggestionPrompt,buildSuggestionTools,validateSelection} from '../../../../lib/ai-suggestions';
 
 export const runtime='nodejs';
@@ -55,19 +55,26 @@ export async function POST(request:Request){
   // Identical synthetic inputs to the browser's initial demo; never accept caller data.
   const aggregate=readAggregate(analyze(demoTransactions(),{monthlyAdSpend:0,asOf:DEMO_AS_OF,fixedFee:.49}));
   if(stage==='read'){
-   const result=await generateText({model,prompt:buildReadPrompt(aggregate),maxOutputTokens:180,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
-   if(!validateRead(result.text,aggregate)||/@|https?:\/\/|[A-Za-z0-9_-]{32,}/i.test(result.text))return NextResponse.json({stage,outcome:'invalid_output'},{headers});
+   const result=await generateText({model,prompt:buildReadPrompt(aggregate),maxOutputTokens:300,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
+   const checks=inspectReadValidation(result.text,aggregate),piiPattern=/@|https?:\/\/|[A-Za-z0-9_-]{32,}/i.test(result.text);
+   const finishReason=['stop','length','content-filter','tool-calls','error','other','unknown'].includes(result.finishReason)?result.finishReason:'unknown';
+   if(!checks.numericValidation||piiPattern||finishReason!=='stop')return NextResponse.json({stage,outcome:'invalid_output',finishReason,textLength:result.text.length,numericValidation:checks.numericValidation,piiPattern,spelledNumberPattern:checks.spelledNumberPattern,numericTokenMismatch:checks.numericTokenMismatch},{headers});
    return NextResponse.json({stage,outcome:'validated',read_source:'model',read:result.text,aggregate,needs_factual_review:true},{headers});
   }
   if(stage==='grouping'){
    const fixture:ItemDescriptor[]=[{index:1,features:['silver','hoop','earring'],orders:3},{index:2,features:['silver','hoop','earring'],orders:2},{index:3,features:['ring','necklace'],orders:1}];
    const result=await generateText({model,prompt:buildGroupingPrompt(fixture),maxOutputTokens:300,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
-   let raw:unknown;try{raw=JSON.parse(result.text);}catch{return NextResponse.json({stage,outcome:'invalid_output'},{headers});}
-   const mappings=validateItemMappings(raw,fixture);const passed=!!mappings&&mappings.length===2&&[1,2].every(i=>mappings.some(m=>m.index===i&&m.group==='silver_hoops'))&&!mappings.some(m=>m.index===3);
-   return NextResponse.json(passed?{stage,outcome:'validated',mappings}:{stage,outcome:'invalid_output'},{headers});
+   const {jsonParsed,schemaValid,mappings}=parseGroupingOutput(result.text,fixture);
+   const expectedMappingMatch=!!mappings&&mappings.length===2&&[1,2].every(i=>mappings.some(m=>m.index===i&&m.group==='silver_hoops'))&&!mappings.some(m=>m.index===3);
+   const finishReason=['stop','length','content-filter','tool-calls','error','other','unknown'].includes(result.finishReason)?result.finishReason:'unknown';
+   const passed=finishReason==='stop'&&expectedMappingMatch;
+   const metrics={finishReason,textLength:result.text.length,jsonParsed,schemaValid,expectedMappingMatch};
+   return NextResponse.json(passed?{stage,outcome:'validated',mappings,...metrics}:{stage,outcome:'invalid_output',...metrics},{headers});
   }
   const result=await generateText({model,prompt:buildSuggestionPrompt(aggregate),tools:buildSuggestionTools(),toolChoice:'auto',maxOutputTokens:180,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
   const suggestion=validateSelection(result.toolCalls,aggregate);
-  return NextResponse.json(suggestion?{stage,outcome:'validated',suggestion}:{stage,outcome:'invalid_output'},{headers});
+  const finishReason=['stop','length','content-filter','tool-calls','error','other','unknown'].includes(result.finishReason)?result.finishReason:'unknown';
+  const toolCallCount=Math.min(result.toolCalls.length,20),validated=!!suggestion;
+  return NextResponse.json(suggestion?{stage,outcome:'validated',suggestion,finishReason,toolCallCount,validated}:{stage,outcome:'invalid_output',finishReason,toolCallCount,validated},{headers});
  }catch(error){return NextResponse.json({stage,...failure(error)},{headers});}
 }

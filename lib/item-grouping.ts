@@ -37,17 +37,24 @@ export function validateItemMappings(input:unknown,descriptors:ItemDescriptor[])
  for(const x of m.data){const evidence=d.data.find(v=>v.index===x.index);if(!evidence||!supported(evidence,x.group))return null;}
  return m.data;
 }
+/** Accept plain JSON or one complete JSON code fence, then enforce the same schema and evidence checks. */
+export function parseGroupingOutput(text:string,descriptors:ItemDescriptor[]):{jsonParsed:boolean;schemaValid:boolean;mappings:ItemMapping[]|null}{
+ const trimmed=text.trim();const fence=/^```(?:json)?[ \t]*\r?\n([\s\S]*?)\r?\n```$/i.exec(trimmed);const json=fence?fence[1]:trimmed;
+ let raw:unknown;try{raw=JSON.parse(json);}catch{return {jsonParsed:false,schemaValid:false,mappings:null};}
+ const schemaValid=mappingsSchema.safeParse(raw).success;
+ return {jsonParsed:true,schemaValid,mappings:validateItemMappings(raw,descriptors)};
+}
 /** Apply locally to matching original indexes; all missing assignments retain their original names. */
 export function applyItemMappings<T extends {name:string}>(items:ReadonlyArray<T>,descriptors:ItemDescriptor[],input:unknown):T[]{
  const mappings=validateItemMappings(input,descriptors);if(!mappings)return items.map(v=>({...v}));const byIndex=new Map(mappings.map(m=>[m.index,m.group]));
  return items.map((v,i)=>({...v,name:byIndex.has(i+1)?labels[byIndex.get(i+1)!]:v.name}));
 }
-export function buildGroupingPrompt(descriptors:ItemDescriptor[]):string {const safe=descriptorListSchema.parse(descriptors);return `Group only items supported by the fixed features. Return JSON array only, each object has index and group. Allowed groups: silver_hoops, gold_hoops, hoop_earrings, rings, necklaces, bracelets, stud_earrings, digital_products, lessons, services. Omit uncertain items. No extra fields. Descriptors: ${JSON.stringify(safe)}`;}
+export function buildGroupingPrompt(descriptors:ItemDescriptor[]):string {const safe=descriptorListSchema.parse(descriptors);return `Group only items supported by the fixed features. Return JSON array only, each object has index and group. Allowed groups: silver_hoops, gold_hoops, hoop_earrings, rings, necklaces, bracelets, stud_earrings, digital_products, lessons, services. Omit uncertain items. Omit any item with competing product categories among hoop, ring, necklace, bracelet, stud, digital, lesson and service. Choose the most specific supported group. No extra fields. Descriptors: ${JSON.stringify(safe)}`;}
 /** No fallback guesses: unavailable, malformed or unsupported output returns no mapping. */
 export async function groupItems(descriptors:ItemDescriptor[]):Promise<{mappings:ItemMapping[];source:'model'|'template'}>{
  const safe=descriptorListSchema.parse(descriptors);if(!safe.length)return {mappings:[],source:'template'};
  try {const {selectModel}=await import('./ai-provider');const model=await selectModel();if(!model)return {mappings:[],source:'template'};const {generateText}=await import('ai');
   const result=await generateText({model,maxOutputTokens:300,maxRetries:0,prompt:buildGroupingPrompt(safe)});
-  const raw:unknown=JSON.parse(result.text);const mappings=validateItemMappings(raw,safe);return mappings?{mappings,source:'model'}:{mappings:[],source:'template'};
+  const {mappings}=parseGroupingOutput(result.text,safe);return result.finishReason==='stop'&&mappings?{mappings,source:'model'}:{mappings:[],source:'template'};
  } catch{return {mappings:[],source:'template'};}
 }
