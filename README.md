@@ -8,7 +8,7 @@ Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). The 
 
 1. Select **Try the demo shop** and inspect the money map and ranked findings.
 2. Answer the questions for the top finding and choose a test. Some tests cannot be filled when the source data lacks the required evidence; the app reports that gap.
-3. In Sandbox actions, use sample invoice ID `INV-0`, select **Review action**, then explicitly approve the reminder. The server maps it to a real sandbox invoice and shows the response. The three demo invoices total USD 540. No sign-in is needed for this demo action. Download and upload the sample CSV to exercise the browser parser; the optional sandbox connection lets developers use their own credentials.
+3. In Sandbox actions, choose sample invoice `INV-0`, select **Review action**, then explicitly approve the reminder. The server maps it to a real sandbox invoice and shows the response. The three demo invoices total USD 540. No sign-in is needed for this demo action. Download and upload the sample CSV to exercise the browser parser; the optional sandbox connection lets developers use their own credentials.
 
 ## Run locally
 
@@ -19,7 +19,7 @@ npm test
 npm run dev
 ```
 
-The app uses deterministic wording when the configured AI provider is unavailable. Amazon Bedrock is the default (`AI_PROVIDER=bedrock`); set `AI_PROVIDER=anthropic` only if direct Anthropic access is intended. For Bedrock, set `AWS_BEDROCK_REGION` and the exact `AWS_BEDROCK_MODEL` or inference profile supported in that region. Supply either `WTES_BEDROCK_API_KEY`, or `WTES_BEDROCK_ACCESS_KEY_ID` and `WTES_BEDROCK_SECRET_ACCESS_KEY` with optional `WTES_BEDROCK_SESSION_TOKEN`, as server-only secrets. Do not set both credential types. The provider does not use ambient AWS credentials or endpoints. Short-lived role credentials are preferable; role and OIDC setup require separate AWS permissions and are not configured here. No model access, entitlement, pricing, or credit use has been verified. `ANTHROPIC_API_KEY` is optional for direct Anthropic; `ANTHROPIC_MODEL` defaults to `claude-sonnet-5-5`. The currently documented Anthropic model list does not establish that this model ID is available, so an unsupported model falls back to the template. Demo wording never calls the model. Output is checked against the numeric aggregate, retried once if invalid, and then falls back to the template. Local requests share an in-process limit; it does not enforce a distributed production limit. Production remains on the template unless a verified external limit is in place and `AI_RATE_LIMIT_ENFORCED=true` is explicitly configured. A flag by itself does not provide protection.
+The app uses deterministic wording when the configured AI provider is unavailable. Amazon Bedrock is the default (`AI_PROVIDER=bedrock`); set `AI_PROVIDER=anthropic` only if direct Anthropic access is intended. For Bedrock, set `AWS_BEDROCK_REGION` and the exact `AWS_BEDROCK_MODEL` or inference profile supported in that region. Supply either `WTES_BEDROCK_API_KEY`, or `WTES_BEDROCK_ACCESS_KEY_ID` and `WTES_BEDROCK_SECRET_ACCESS_KEY` with optional `WTES_BEDROCK_SESSION_TOKEN`, as server-only secrets. Do not set both credential types. The provider does not use ambient AWS credentials or endpoints. Short-lived role credentials are preferable; role and OIDC setup require separate AWS permissions and are not configured here. No model access, entitlement, pricing, or credit use has been verified. `ANTHROPIC_API_KEY` is optional for direct Anthropic; `ANTHROPIC_MODEL` defaults to `claude-sonnet-5-5`. AWS Bedrock currently lists Claude Sonnet 5.5, but account entitlement and a successful call still need verification; an unavailable model falls back to the template. Demo wording never calls the model. Output is checked against the numeric aggregate, retried once if invalid, and then falls back to the template. Local requests share an in-process limit; it does not enforce a distributed production limit. Production remains on the template unless a verified external limit is in place and `AI_RATE_LIMIT_ENFORCED=true` is explicitly configured. A flag by itself does not provide protection.
 
 ## Data and APIs
 
@@ -46,6 +46,10 @@ For a new installation, seed products and invoices with `scripts/seed-sandbox.ts
 ## Current limitations
 
 Live AI is off until AWS model access, credit eligibility and the production limiter are verified. Item grouping is currently deterministic; Claude grouping and Claude-proposed action selection are not implemented. Every PayPal action still requires an explicit approval. Browser/server processes can lose in-memory sandbox sessions or proposals; reconnect or prepare the action again if it expires. No email reminder is sent. Separate fee-only rows, unlinked item refund rates, and complete subscription state need more evidence and are disclosed in the app. See [dependency security](dependencies-security.md) for outstanding upstream advisories and mitigations.
+
+## Sponsor tools used
+
+AG Grid Community powers the money map, item groups and invoice evidence tables. The three sample invoice balances reconcile to USD 540, and the seller chooses one for a separately approved reminder. No commercial grid license is required. The PayPal/APIMatic Context Plugin was used for a new read-only sandbox order and capture verification tool; see [the exact contribution and tests](docs/paypal-server-sdk-context.md). It is not credited for earlier implementation, and no sponsor claim has been submitted.
 
 ## License
 
