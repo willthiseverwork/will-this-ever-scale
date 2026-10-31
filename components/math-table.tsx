@@ -2,9 +2,8 @@
 import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 ModuleRegistry.registerModules([AllCommunityModule]);
-export default function MathTable({rows}:{rows:Record<string,unknown>[]}) {
- const labels:Record<string,string>={period:'Period',came_in:'Came in',paypal_fees:'PayPal fees',ad_spend:'Ad spend',buyers:'Buyers',new_buyers:'First-time buyers',returning_buyers:'Returning buyers',returning_share:'Share who returned',average_order:'Average order',orders_per_buyer:'Orders per buyer',id:'Invoice',date:'Issued',status:'Status',currency:'Currency',amount:'Unpaid amount',age_days:'Days unpaid',month:'Month',cameIn:'Came in',fees:'PayPal fees',refunds:'Refunds',costs:'Item costs',ads:'Ad spend',kept:'You kept',name:'Item group',gross:'Sales',orders:'Orders'};
- const monetary=new Set(['cameIn','fees','refunds','costs','ads','kept','gross','amount','came_in','paypal_fees','ad_spend','average_order']);
- const columns=Object.keys(rows[0]||{}).map(field=>({field,headerName:labels[field]||field.replaceAll('_',' '),minWidth:140,flex:1,...(monetary.has(field)?{valueFormatter:({value}:{value:unknown})=>typeof value==='number'?value.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):''}:{})}));
- return <div style={{height:360}}><AgGridReact theme={themeQuartz} rowData={rows} columnDefs={columns} defaultColDef={{sortable:true,resizable:true,filter:true}} /></div>;
+
+export default function MathTable({rows, highlight}:{rows:Record<string,string>[];highlight?:string}) {
+ const columns=Object.keys(rows[0]||{}).map((field,index)=>({field,headerName:field,flex:1,minWidth:index===0?120:90,cellClass:index?'math-number':'',headerClass:index?'math-number-header':''}));
+ return <div className="math-grid"><AgGridReact theme={themeQuartz.withParams({backgroundColor:'#0e0f11',foregroundColor:'#c4c6cb',headerTextColor:'#80848c',borderColor:'#1b1d21',fontFamily:'Geist Mono, monospace',fontSize:13,headerFontSize:12,rowBorder:true,wrapperBorder:false,spacing:4})} rowData={rows} columnDefs={columns} defaultColDef={{sortable:false,resizable:false,filter:false,suppressHeaderMenuButton:true}} domLayout="autoHeight" getRowClass={({data})=>data?.Month===highlight?'math-highlight':data?.Month==='Total'?'math-total':''}/></div>;
 }

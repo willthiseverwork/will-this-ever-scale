@@ -2,6 +2,7 @@ import { analyze } from './engine';
 import { normalizeTransactions,windows } from './paypal';
 import { templateRead } from './read';
 import type { Analysis,Inputs } from './types';
+import { cardFor } from './fix-cards';
 export function sandboxAnalysis(raw:any[]|null,invoices:any[]|null,inputs:Inputs={},now=new Date()):Analysis|null{
  const rows=raw?normalizeTransactions(raw):[];const sales=rows.filter(t=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&t.gross>0&&t.status==='completed');
  let analysis:Analysis;
@@ -12,8 +13,12 @@ export function sandboxAnalysis(raw:any[]|null,invoices:any[]|null,inputs:Inputs
  }
  if(invoices){
   const due=invoices.filter((i:any)=>['SENT','UNPAID','PARTIALLY_PAID'].includes(i.status)&&i.due_amount?.currency_code===analysis.currency&&Number.isFinite(Number(i.due_amount?.value))&&Number(i.due_amount?.value)>0&&typeof i.detail?.invoice_date==='string'&&/^\d{4}-\d{2}-\d{2}(?:$|T)/.test(i.detail.invoice_date)&&Number.isFinite(Date.parse(i.detail.invoice_date))&&now.getTime()-Date.parse(i.detail.invoice_date)>=14*86400000);
-  analysis.invoice_records=due.map((i:any)=>({id:typeof i.id==='string'&&/^[A-Za-z0-9-]{1,100}$/.test(i.id)?i.id:'',date:String(i.detail.invoice_date).slice(0,10),status:String(i.status).toLowerCase(),currency:analysis.currency,amount:Math.round(Number(i.due_amount.value)*100)/100,age_days:Math.floor((now.getTime()-Date.parse(i.detail.invoice_date))/86400000)}));
-  const total=Math.round(analysis.invoice_records.reduce((n,r)=>n+r.amount,0)*100)/100;analysis.quick_win=due.length?{id:'unpaid_invoices',kind:'quick_win',one_off_amount:total,method:'Sent invoices with outstanding balances, issued at least 14 days ago.',evidence:{invoices:analysis.invoice_records.length,unpaid_total:total}}:undefined;
+  analysis.invoice_records=due.map((i:any)=>({id:typeof i.id==='string'&&/^[A-Za-z0-9-]{1,100}$/.test(i.id)?i.id:'',title:typeof i.items?.[0]?.name==='string'?i.items[0].name:`Invoice ${i.detail?.invoice_number||i.id||''}`,date:String(i.detail.invoice_date).slice(0,10),status:String(i.status).toLowerCase(),currency:analysis.currency,amount:Math.round(Number(i.due_amount.value)*100)/100,age_days:Math.floor((now.getTime()-Date.parse(i.detail.invoice_date))/86400000)}));
+  const total=Math.round(analysis.invoice_records.reduce((n,r)=>n+r.amount,0)*100)/100;const invoiceQuick=due.length?{id:'unpaid_invoices',kind:'quick_win' as const,one_off_amount:total,method:'Sent invoices with outstanding balances, issued at least 14 days ago.',evidence:{invoices:analysis.invoice_records.length,unpaid_total:total}}:undefined;
+  if(invoiceQuick){const card=cardFor(invoiceQuick,analysis.currency);if(card)Object.assign(invoiceQuick,{card});}
+  if(analysis.quick_win?.id!=='held_money'||total>(analysis.quick_win.one_off_amount||0))analysis.quick_win=invoiceQuick;
+  analysis.cards=[...(analysis.cards||[]).filter(c=>c.id!=='unpaid_invoices'),...(invoiceQuick&&'card' in invoiceQuick?[invoiceQuick.card as NonNullable<Analysis['cards']>[number]]:[])];
+  analysis.action_findings=[...(analysis.action_findings||[]).filter(l=>l.id!=='unpaid_invoices'),...(invoiceQuick?[invoiceQuick]:[])];
  }
 
  if(!sales.length){analysis.read=raw?'No completed sales were found in the returned transaction records.':'Sales are unavailable because Transaction Search could not be read.';if(analysis.quick_win)analysis.read+=` ${new Intl.NumberFormat('en-US',{style:'currency',currency:analysis.currency}).format(analysis.quick_win.one_off_amount||0)} is outstanding across ${analysis.quick_win.evidence.invoices} qualifying sandbox invoices.`;else if(!invoices)analysis.read+=' Invoices could not be checked.';}

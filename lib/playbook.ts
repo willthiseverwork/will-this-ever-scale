@@ -30,7 +30,7 @@ export function testFor(leakId:string,answers:Answers,context:Context) {
 
 /** Project only evidenced values; missing facts stay missing, and testFor reports them. */
 export function contextFor(a:import('./types').Analysis, leakId:string):Context {
-  const leak=[...a.ranked_leaks,...(a.risks||[]),...(a.quick_win?[a.quick_win]:[])].find(l=>l.id===leakId);
+  const leak=[...a.ranked_leaks,...(a.risks||[]),...(a.action_findings||[]),...(a.quick_win?[a.quick_win]:[])].find(l=>l.id===leakId);
   if(!leak) throw new Error('This finding is not present in the analysis.');
   const e=leak.evidence,c:Context={};
   const copy=(from:string,to=from)=>{const value=e[from];if(typeof value==='string'||typeof value==='number')c[to]=value;};

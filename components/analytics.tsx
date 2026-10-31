@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import {usePathname} from 'next/navigation';
-const ids=new Set(['demo','upload','sample_download','sandbox_toggle','sandbox_demo','sandbox_connect','sandbox_disconnect','question_cost','question_ads','question_unknown_cost','question_no_ads','question_continue','question_skip','read_add_costs','read_math','read_top_leak','read_plan','leak_answer','leak_plan','leak_reminder','plan_top_leak','plan_reminder','reminder_approve','reminder_cancel','reminder_stop','reminder_back','reminder_email','reminder_submit','privacy_link','source_link','analytics_toggle','back_link','math_close']);
+const ids=new Set(['demo','upload','sample_download','sandbox_toggle','sandbox_demo','sandbox_connect','sandbox_disconnect','sandbox_find_keys','question_cost','question_ads','question_unknown_cost','question_no_ads','question_continue','question_skip','read_add_costs','read_math','read_top_leak','read_plan','leak_answer','leak_plan','leak_reminder','leak_help','plan_top_leak','plan_reminder','reminder_approve','reminder_cancel','reminder_stop','reminder_back','reminder_email','reminder_submit','privacy_link','source_link','analytics_toggle','back_link','math_close']);
 const key='scale_analytics_consent';
 declare global {interface Window {dataLayer:unknown[];gtag:(...args:unknown[])=>void}}
 export default function Analytics(){
