@@ -34,7 +34,7 @@ export default function ScaleTool(){
  useEffect(()=>{try{const value=sessionStorage.getItem(STORE);if(value)setStored(JSON.parse(value));}catch{}setHydrated(true)},[]);
  const save=(next:Stored)=>{setStored(next);sessionStorage.setItem(STORE,JSON.stringify(next));};
  const startDemo=()=>{activeRows=demoTransactions();const analysis=analyze(activeRows,{asOf:DEMO_AS_OF,fixedFee:.49});save({analysis,source:'demo',inputs:{asOf:DEMO_AS_OF,fixedFee:.49},answers:{}});router.push('/questions')};
- const upload=async(files:FileList|null)=>{if(!files?.length)return;try{if([...files].some(f=>f.size>5_000_000))throw new Error('Choose CSV files smaller than 5 MB.');activeRows=await parsePayPalCsv(await Promise.all([...files].map(f=>f.text()));save({analysis:analyze(activeRows,{}),source:'csv',inputs:{},answers:{}});router.push('/questions')}catch(e){setError((e as Error).message)}};
+ const upload=async(files:FileList|null)=>{if(!files?.length)return;try{if([...files].some(f=>f.size>5_000_000))throw new Error('Choose CSV files smaller than 5 MB.');activeRows=await parsePayPalCsv(await Promise.all([...files].map(f=>f.text())));save({analysis:analyze(activeRows,{}),source:'csv',inputs:{},answers:{}});router.push('/questions')}catch(e){setError((e as Error).message)}};
  const analysis=stored?.analysis;
  useEffect(()=>{if(hydrated&&path!=='/'&&!analysis)router.replace('/')},[hydrated,path,analysis,router]);
  if(path==='/')return <><Start startDemo={startDemo} upload={upload} setError={setError} error={error} save={save} router={router}/><Footer/></>;
