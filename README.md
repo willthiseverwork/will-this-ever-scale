@@ -70,6 +70,8 @@ MIT; see [LICENSE](LICENSE).
 
 ## Chat, workspace and connections
 
+Production runtime at commit `8c41402f37984333853947a356a1a5b87749f9a6` is served by the app alias from deployment `dpl_6w4PU9wz78dRbWxvWqyZhSfE26pf` (READY). The hosted build passed 165 tests and compilation/type checking; a production audit covered 21 route/viewport checks. The public synthetic MCP demo works. WorkOS account storage, Paddle billing, live PayPal and authenticated MCP lifecycle remain unconfigured or unverified; a real Claude or Codex installation has not been tested.
+
 - `/chat` answers sales, refund, fee and monthly comparison questions from the browser analysis. Calculations stay local. The optional model intent helper accepts only fixed tokens and month IDs; it never receives the question text or product names.
 - `/workspace` keeps local reminders without sign-in. Account storage requires dedicated WorkOS and private storage configuration. Saving a CSV summary is explicit; raw CSV rows are not stored. Reviewed product labels and assistant sharing both default off.
 - `/connect` offers a downloadable plugin package and a public synthetic sample at `/mcp`. Authenticated workspace tools are unavailable until verified OAuth configuration is present. A package download is not an installed or connected client.
