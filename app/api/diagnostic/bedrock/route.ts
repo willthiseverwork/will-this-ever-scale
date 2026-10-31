@@ -54,7 +54,7 @@ export async function POST(request:Request){
  if(request.body){const reader=request.body.getReader();try{const part=await reader.read();if(!part.done&&part.value.byteLength>0){await reader.cancel();return hidden();}}finally{reader.releaseLock();}}
  if(used)return hidden();used=true;
  try{const model=await selectModel();if(!model)return NextResponse.json({outcome:'unavailable',reason:'configuration'},{headers:privateHeaders});
-  await generateText({model,prompt:'Reply with OK.',maxOutputTokens:40,maxRetries:0,abortSignal:AbortSignal.timeout(20000)});
+  await generateText({model,prompt:'Reply with OK.',providerOptions:{bedrock:{reasoningConfig:{type:'disabled'}}},maxOutputTokens:40,maxRetries:0,abortSignal:AbortSignal.timeout(20000)});
   return NextResponse.json({outcome:'success'},{headers:privateHeaders});
  }catch(error){return NextResponse.json(details(error),{headers:privateHeaders});}
 }
