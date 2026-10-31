@@ -42,11 +42,12 @@ export function applyItemMappings<T extends {name:string}>(items:ReadonlyArray<T
  const mappings=validateItemMappings(input,descriptors);if(!mappings)return items.map(v=>({...v}));const byIndex=new Map(mappings.map(m=>[m.index,m.group]));
  return items.map((v,i)=>({...v,name:byIndex.has(i+1)?labels[byIndex.get(i+1)!]:v.name}));
 }
+export function buildGroupingPrompt(descriptors:ItemDescriptor[]):string {const safe=descriptorListSchema.parse(descriptors);return `Group only items supported by the fixed features. Return JSON array only, each object has index and group. Allowed groups: silver_hoops, gold_hoops, hoop_earrings, rings, necklaces, bracelets, stud_earrings, digital_products, lessons, services. Omit uncertain items. No extra fields. Descriptors: ${JSON.stringify(safe)}`;}
 /** No fallback guesses: unavailable, malformed or unsupported output returns no mapping. */
 export async function groupItems(descriptors:ItemDescriptor[]):Promise<{mappings:ItemMapping[];source:'model'|'template'}>{
  const safe=descriptorListSchema.parse(descriptors);if(!safe.length)return {mappings:[],source:'template'};
  try {const {selectModel}=await import('./ai-provider');const model=await selectModel();if(!model)return {mappings:[],source:'template'};const {generateText}=await import('ai');
-  const result=await generateText({model,maxOutputTokens:300,maxRetries:0,prompt:`Group only items supported by the fixed features. Return JSON array only, each object has index and group. Allowed groups: silver_hoops, gold_hoops, hoop_earrings, rings, necklaces, bracelets, stud_earrings, digital_products, lessons, services. Omit uncertain items. No extra fields. Descriptors: ${JSON.stringify(safe)}`});
+  const result=await generateText({model,maxOutputTokens:300,maxRetries:0,prompt:buildGroupingPrompt(safe)});
   const raw:unknown=JSON.parse(result.text);const mappings=validateItemMappings(raw,safe);return mappings?{mappings,source:'model'}:{mappings:[],source:'template'};
  } catch{return {mappings:[],source:'template'};}
 }

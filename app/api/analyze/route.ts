@@ -4,6 +4,9 @@ import { readLimitedJson } from '../../../lib/request';
 import { templateSuggestions, suggestActions } from '../../../lib/ai-suggestions';
 import { descriptorListSchema, groupItems } from '../../../lib/item-grouping';
 import { aggregateSchema, makeReadWithSource, templateRead } from '../../../lib/read';
+import { demoReadWithSource } from '../../../lib/demo-cache';
+import { demoTransactions, DEMO_AS_OF } from '../../../lib/demo';
+import { analyze } from '../../../lib/engine';
 
 const body=z.discriminatedUnion('source',[
   z.object({source:z.literal('aggregate'),aggregate:aggregateSchema}).strict(),
@@ -15,7 +18,7 @@ const requests=new Map<string,number[]>();
 export async function POST(request:Request) {
   try {
     const b=body.parse(await readLimitedJson(request,16000));
-    if(b.source==='demo') return NextResponse.json({read:'This is a sample shop. The figures below show where money went and where a small test may help.',read_source:'template',suggestions:[]});
+    if(b.source==='demo') {const analysis=analyze(demoTransactions(),{asOf:DEMO_AS_OF,fixedFee:.49,monthlyAdSpend:0});return NextResponse.json({...demoReadWithSource(analysis),suggestions:[]});}
     // Serverless instances cannot share this counter. Fail closed to the free template
     // until a shared atomic limiter is configured; do not risk unbounded AI spend.
 
