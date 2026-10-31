@@ -16,7 +16,7 @@ export async function selectModel(env:Environment=process.env):Promise<LanguageM
  if(auth==='vercel_oidc'){
   // The IAM trust policy restricts the configured role to the reviewed project.
   const roleArn=env.WTES_BEDROCK_ROLE_ARN;
-  if(env.VERCEL_ENV!=='production'||region!=='us-east-1'||model!=='us.anthropic.claude-sonnet-5-5'||!roleArn||!/^arn:aws:iam::\d{12}:role\/wtes-bedrock-production$/.test(roleArn)||bearer||accessKeyId||secretAccessKey||sessionToken)return null;
+  if(env.VERCEL_ENV!=='production'||region!=='us-east-1'||model!=='us.anthropic.claude-sonnet-5'||!roleArn||!/^arn:aws:iam::\d{12}:role\/wtes-bedrock-production$/.test(roleArn)||bearer||accessKeyId||secretAccessKey||sessionToken)return null;
   const {awsCredentialsProvider}=await import('@vercel/oidc-aws-credentials-provider');
   const {createAmazonBedrock}=await import('@ai-sdk/amazon-bedrock');
   return createAmazonBedrock({region,baseURL:`https://bedrock-runtime.${region}.amazonaws.com`,apiKey:'',credentialProvider:awsCredentialsProvider({roleArn,clientConfig:{region:'us-east-1'}})})(model);
