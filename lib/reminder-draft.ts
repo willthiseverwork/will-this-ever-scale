@@ -1,17 +1,15 @@
 import {createHmac,timingSafeEqual} from 'node:crypto';
 import {reminderNote} from './paypal-actions';
 export type NoteSource='demo'|'connected';
-// Restrict output to an audited, ordinary vocabulary. This prevents names,
-// links, amounts, deadlines, pressure, or new product claims from entering a note.
-const vocabulary=new Set(('hi hello a friendly gentle quick reminder about your custom order you can pay any time with the payment link in this email thank thanks for support whenever are ready just sending an is to and').split(' '));
+// Whole grammatical sentences are the allowed unit, not a bag of safe words.
+// Keep these patterns narrow: no names, claims, deadlines, amounts or links.
+const notePattern=/^(?:Hi|Hello), (?:a|just a) (?:friendly|gentle|quick) reminder about your (?:custom )?order\. (?:You can pay (?:any time|whenever you are ready)|When you are ready, you can pay) (?:with|using) the (?:payment )?link in this email\. (?:Thank you|Thanks(?: for your support)?)[.!]$/i;
 export function validReminderNote(text:unknown):text is string {
  if(typeof text!=='string'||!text.trim()||text!==text.trim()||text.length>240||/[^\x20-\x7e]|[\d@:/{}<>]/.test(text))return false;
- if(!/\breminder\b/i.test(text)||!(/\b(?:pay|payment)\b/i.test(text)&&/\blink\b/i.test(text)&&/\bemail\b/i.test(text)))return false;
- const words=text.match(/[A-Za-z]+/g)||[];if(!words.length||words.some(word=>!vocabulary.has(word.toLowerCase())))return false;
- return !/\b(?:no\s+payment|no\s+pay|no\s+link|no\s+email|not\s+pay|ignore\s+(?:the\s+)?(?:payment|link))\b/i.test(text);
+ return notePattern.test(text);
 }
 /** The prompt is static: no seller data, rows, names, IDs or item labels. */
-export function buildReminderPrompt(){return 'Write only a warm, plain invoice reminder, at most 240 characters. Remind the buyer about their order and say they can pay with the link in this email. No names, numbers, dates, links, emoji, deadlines, urgency, pressure, discounts, or claims about payment status. Use only these ordinary words: '+[...vocabulary].join(', ')+'. Do not add a subject, explanation, quotation marks, or any other text.';}
+export function buildReminderPrompt(){return 'Write one warm invoice reminder in exactly three complete sentences, at most 240 characters. Follow this example: Hi, a friendly reminder about your order. You can pay any time with the link in this email. Thank you! You may replace Hi with Hello; friendly with gentle or quick; any time with whenever you are ready; the link with the payment link; and Thank you with Thanks for your support. Keep the sentence structure and meaning. Use a comma after the greeting and full stops after the reminder and payment sentences. Do not combine the example and variations into a word list. No names, numbers, dates, URLs, emoji, deadlines, urgency, discounts, payment-status claims, subject, explanation or quotation marks. Return only the three sentences.';}
 export async function draftReminder(source:NoteSource,generate?:(prompt:string)=>Promise<string>):Promise<{note:string;source:'ai'|'template'}>{
  const fallback={note:reminderNote(source),source:'template' as const};
  // Demo runs never call a provider. A reviewed static cache can be added later.
