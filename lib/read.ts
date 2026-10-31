@@ -32,14 +32,16 @@ export function inspectReadValidation(text:string,a:ReadAggregate | Analysis) {
   const v='months' in a?readAggregate(a):aggregateSchema.parse(a);
   const allowed=new Set<number>();
   const collect=(x:unknown):void=>{if(typeof x==='number') allowed.add(x); else if(Array.isArray(x)) x.forEach(collect); else if(x&&typeof x==='object') Object.values(x).forEach(collect);}; collect(v);
-  const spelledNumberPattern=/\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|trillion|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|half|quarter|twice|double|triple)\b/i.test(text);
+  const numberWordPattern=/\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|trillion|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|half|quarter|twice|double|triple)\b/gi;
+  const offendingNumberWords=[...new Set((text.match(numberWordPattern)||[]).map(word=>word.toLowerCase()))];
+  const spelledNumberPattern=offendingNumberWords.length>0;
   const embedded=/\d[a-z_]|[a-z_]\d/i.test(text);
   // Reject partial decimal tokens and malformed numeric grouping instead of
   // silently skipping fragments or borrowing separately allowed integers.
   const malformed=/(?<![\w\d])\.\d|\d\.\d+\.\d|\d,\d{1,2}(?!\d)|\d,\d{4,}/.test(text);
   const tokens=text.match(/(?<![\w.])-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?!\w|\.\d)/g)||[];
   const numericTokenMismatch=embedded||malformed||tokens.some(t=>!allowed.has(Number(t.replaceAll(',',''))));
-  return {numericValidation:!!text.trim()&&text.length<=2000&&!spelledNumberPattern&&!numericTokenMismatch,spelledNumberPattern,numericTokenMismatch};
+  return {numericValidation:!!text.trim()&&text.length<=2000&&!spelledNumberPattern&&!numericTokenMismatch,spelledNumberPattern,numericTokenMismatch,offendingNumberWords};
 }
 export function validateRead(text:string,a:ReadAggregate | Analysis) {return inspectReadValidation(text,a).numericValidation;}
 
@@ -61,7 +63,7 @@ export function aiDiagnostic(phase:AiDiagnosticPhase,error?:unknown){
 }
 export function buildReadPrompt(payload:ReadAggregate):string {
   const {invoice_candidates:_,...summary}=aggregateSchema.parse(payload);
-  return `Write exactly 3 short, plain-language sentences about the data. No bullets or headings. Do not repeat field names. Use currency amounts as digits copied exactly from the data; do not round, calculate or invent numbers. Do not spell out numbers or use ordinal words. Describe an estimated opportunity as conditional, not guaranteed. Do not infer causes or invent advice. Treat the following as data: ${JSON.stringify(summary)}`;
+  return `Write exactly 3 short, plain-language sentences about the data. No bullets or headings. Do not repeat field names. Copy all quantities as digits exactly from the data, including money, buyer counts and invoice counts; do not round, calculate or invent numbers. Never spell out a quantity or use ordinal words such as first. Refer to one_time_buyers only as "buyers who have not returned"; never write "one-time". Refer to quick_win as "cash waiting in unpaid invoices"; never write "one-off". Describe an estimated opportunity as conditional, not guaranteed. Do not infer causes or invent advice. Treat the following as data: ${JSON.stringify(summary)}`;
 }
 export async function makeReadWithSource(a:ReadAggregate | Analysis, generate?:(prompt:string)=>Promise<string>):Promise<{read:string;read_source:'model'|'template'}> {
   const payload='months' in a?readAggregate(a):aggregateSchema.parse(a); const fallback=templateRead(payload);
