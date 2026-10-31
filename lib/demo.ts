@@ -9,7 +9,7 @@ export function demoTransactions():Txn[] {
       const group=j<count*.18?'Stud earrings':j<count*.66?'Silver hoops':j<count*.97?'Stacking rings':'Necklaces';const price=group==='Stud earrings'?18:group==='Silver hoops'?30:group==='Stacking rings'?30:55;const fee=Math.round((price*.035+.49)*100)/100;
       const date=new Date(Date.UTC(2025,10+mi,1+j%27)).toISOString().slice(0,10);
       out.push({id:`sale-${++id}`,date,kind:'sale',gross:price,fee,net:price-fee,currency:'USD',buyer_key:buyer,item_title:group,item_group:group,country:j<count*.35?'CA':'US',status:'Completed'});
-      if(group==='Stacking rings'&&j<56)out.push({id:`refund-${id}`,date,kind:'refund',gross:-price,fee:0,net:-price,currency:'USD',reference_id:`sale-${id}`,item_group:group,status:'Refunded'});
+      if(group==='Stacking rings'&&j<Math.ceil(count*.66)+3)out.push({id:`refund-${id}`,date,kind:'refund',gross:-price,fee:0,net:-price,currency:'USD',reference_id:`sale-${id}`,item_group:group,status:'Refunded'});
     }previous.push(buyers);
   }
   for(let i=0;i<3;i++)out.push({id:`invoice-${i}`,date:`2026-10-0${i+1}`,kind:'other',gross:180,fee:0,net:180,currency:'USD',invoice_id:`INV-${i}`,status:'Unpaid'});

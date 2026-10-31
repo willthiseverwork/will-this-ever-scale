@@ -46,8 +46,7 @@ test('real Blob SDK sends overwrite and ETag headers on the second reservation',
   const metadata={url:'https://test.private.blob.vercel-storage.com/ai-budget/2026-10.json',downloadUrl:'https://test.private.blob.vercel-storage.com/ai-budget/2026-10.json?download=1',pathname:'ai-budget/2026-10.json',contentType:'application/json',contentDisposition:'inline',etag:'etag-1'};
   const mock=agent.get('https://vercel.com');
   const reply=(opts:{headers:unknown})=>{const headers=new Headers(opts.headers as HeadersInit);writes.push({overwrite:headers.get('x-allow-overwrite'),etag:headers.get('x-if-match')});return {statusCode:200,data:metadata};};
-  mock.intercept({path:/^\/api\/blob\/\?pathname=/,method:'PUT'}).reply(reply);
-  mock.intercept({path:/^\/api\/blob\/\?pathname=/,method:'PUT'}).reply(reply);
+  mock.intercept({path:/^\/api\/blob\/\?pathname=/,method:'PUT'}).reply(reply).persist();
   globalThis.fetch=(async(input:RequestInfo|URL)=>{
     const url=new URL(String(input));assert.equal(url.hostname,'test.private.blob.vercel-storage.com');assert.equal(url.searchParams.get('cache'),'0');
     if(++reads===1)return new Response(null,{status:404});
