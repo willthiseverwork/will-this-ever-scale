@@ -25,3 +25,4 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 @media(max-width:899px){.start-upload>h2{order:0}.start-upload>.steps{order:1}.start-upload>.entry-button{order:2}.start-upload>.lock{order:3}.start-upload>.small-link{order:4}.start-upload>.error{order:5}}
 .read>h1 strong,.read>h1 b{font-weight:inherit}.kept b,.top-plan strong,.plan-heading strong,.small-leak span{font-weight:600}.start .steps li{display:flex;gap:12px;align-items:flex-start}.start .steps li:before{flex:none;margin-right:0}
 .start h1,.questions>h1,.read>h1,.leak-hero h1,.plan h1{text-wrap:balance}.app-header .brand,.app-header .back{min-height:44px}.card a:not(.button){display:inline-flex;align-items:center;min-height:44px}
+.site-footer a{min-width:44px}
