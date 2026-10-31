@@ -1,7 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {deleteWorkspace,getWorkspace,saveWorkspace,setWorkspaceStoreForTests,WorkspaceConflict,type WorkspaceStore} from '../lib/workspace-store';
-import {emptyWorkspace} from '../lib/workspace-types';
+import {emptyWorkspace,workspaceInput} from '../lib/workspace-types';
+import {callMcpTool} from '../lib/mcp-tools';
 const snapshot={id:'55e9dbb7-843f-47e3-91f6-a24d17785db0',capturedAt:'2026-10-31T00:00:00.000Z',currency:'USD',periodStart:'2026-01-01',periodEnd:'2026-10-31',source:'csv' as const,periodPrecision:'month' as const,coverageGaps:[],months:[],items:[],cameIn:100,fees:4,refunds:0,costs:10,adSpend:3,kept:83};
 function input(w:ReturnType<typeof emptyWorkspace>){return {settings:w.settings,revision:w.revision,snapshots:w.snapshots,reminders:w.reminders,tests:w.tests};}
 function memoryStore():WorkspaceStore {const records=new Map<string,{body:string;etag:string}>();let version=0;return {async read(path){return records.get(path)??null;},async write(path,body,etag){const current=records.get(path);if((current?.etag??null)!==etag)throw new WorkspaceConflict();records.set(path,{body,etag:String(++version)});}};}
@@ -26,4 +27,39 @@ test('workspace storage requires an explicit valid store selection and fails clo
   await assert.rejects(()=>workspaceBlobCredentials({storeId:'store_abc123'},async()=>{throw new Error('OIDC unavailable')}));
   assert.deepEqual(await workspaceBlobCredentials({token:'explicit-workspace-token'},async()=>{throw new Error('must not request OIDC')}),{token:'explicit-workspace-token'});
  }finally{names.forEach((name,i)=>{if(old[i]===undefined)delete process.env[name];else process.env[name]=old[i];});}
+});
+
+
+test('assistant access defaults off, requires explicit enablement and revokes on the next request',async()=>{
+ const previous=process.env.WTES_WORKSPACE_SECRET;process.env.WTES_WORKSPACE_SECRET='x'.repeat(40);setWorkspaceStoreForTests(memoryStore());
+ try{
+  const legacy=workspaceInput.parse({...input(emptyWorkspace()),settings:{shareProductNamesWithAssistant:true},snapshots:[{...snapshot,items:[{id:'item_1',label:'Hat',labelReviewed:true,gross:100,orders:1,refunds:0}]}]});
+  assert.equal(legacy.settings.shareWorkspaceWithAssistant,false);
+  let saved=await saveWorkspace('user_consent',legacy);
+  for(const name of ['current_summary','rank_products','compare_periods','list_reminders','issue_playbook'])await assert.rejects(()=>callMcpTool(name,{},'user_consent'),/sharing is disabled/);
+  assert.equal((await callMcpTool('demo_summary',{}) as {source:string}).source,'synthetic demo');
+  saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareWorkspaceWithAssistant:true}});
+  assert.equal((await callMcpTool('current_summary',{},'user_consent') as {source:string}).source,'csv');
+  assert.equal((await callMcpTool('rank_products',{metric:'gross'},'user_consent') as {items:{label?:string}[]}).items[0].label,'Hat');
+  saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareProductNamesWithAssistant:false}});
+  assert.equal((await callMcpTool('rank_products',{metric:'gross'},'user_consent') as {items:{label?:string}[]}).items[0].label,undefined);
+  saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareProductNamesWithAssistant:true}});
+  saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareWorkspaceWithAssistant:false}});
+  assert.equal(saved.settings.shareProductNamesWithAssistant,true);
+  await assert.rejects(()=>callMcpTool('current_summary',{},'user_consent'),/sharing is disabled/);
+  assert.equal((await getWorkspace('user_consent')).snapshots.length,1);
+ }finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}
+});
+
+test('deletion marker wins or conflicts with a simultaneous save and blocks later writes',async()=>{
+ const {beginAccountDeletion,WorkspaceDeleting}=await import('../lib/workspace-store');
+ const previous=process.env.WTES_WORKSPACE_SECRET;process.env.WTES_WORKSPACE_SECRET='z'.repeat(40);setWorkspaceStoreForTests(memoryStore());
+ try{
+  const initial=emptyWorkspace();const result=await Promise.allSettled([beginAccountDeletion('user_RACE'),saveWorkspace('user_RACE',input(initial))]);
+  assert.equal(result.filter(x=>x.status==='fulfilled').length,1);
+  assert.equal(result.filter(x=>x.status==='rejected'&&x.reason instanceof WorkspaceConflict).length,1);
+  await beginAccountDeletion('user_RACE');
+  await assert.rejects(()=>getWorkspace('user_RACE'),WorkspaceDeleting);
+  await assert.rejects(()=>saveWorkspace('user_RACE',input(initial)),WorkspaceDeleting);
+ }finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}
 });
