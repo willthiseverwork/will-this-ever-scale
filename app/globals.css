@@ -20,3 +20,7 @@ a,a:visited{color:inherit}.lock-icon{width:18px;height:18px;vertical-align:middl
 .math-grid .math-label{font-family:Geist,sans-serif}
 @media(max-width:359px){.math-grid .ag-cell,.math-grid .ag-header-cell{font-size:11px;padding-left:2px;padding-right:2px}}
 .math-grid .ag-cell-wrap-text{overflow-wrap:anywhere}
+h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{display:flex;flex-direction:column;gap:4px}.start .inset strong{font-weight:600;line-height:1.3;letter-spacing:-.02em}.start .steps b{font-weight:500;color:var(--text)}
+@media(min-width:900px){.start .wrap{display:flex;flex-direction:column;gap:40px;padding-top:80px;padding-bottom:96px}.start .wrap>h1{font-size:44px;line-height:1.1;font-weight:600;letter-spacing:-.035em;max-width:720px;margin:0}.start-grid .card{gap:14px;padding:24px}.start-grid h2{font-size:18px;line-height:1.25;font-weight:600;letter-spacing:-.02em}.start-grid .entry-button{margin-top:auto}.start-grid .lock{display:flex;gap:8px;align-items:flex-start}.start-grid .lock .icon{flex:none}.start-grid .inset{min-height:0}.start-grid .small-link{min-height:44px}}
+@media(max-width:899px){.start-upload>h2{order:0}.start-upload>.steps{order:1}.start-upload>.entry-button{order:2}.start-upload>.lock{order:3}.start-upload>.small-link{order:4}.start-upload>.error{order:5}}
+.read>h1 strong,.read>h1 b{font-weight:inherit}.kept b,.top-plan strong,.plan-heading strong,.small-leak span{font-weight:600}.start .steps li{display:flex;gap:12px;align-items:flex-start}.start .steps li:before{flex:none;margin-right:0}

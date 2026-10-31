@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSession,sessionId,sameOrigin } from '../../../../lib/paypal-session';
 import { token,transactions,pages,api } from '../../../../lib/paypal';
-import { sandboxAnalysis } from '../../../../lib/paypal-analysis';
+import { sandboxAnalysis,sandboxReanalysisRows } from '../../../../lib/paypal-analysis';
 import { observeSubscriptions } from '../../../../lib/paypal-subscriptions';
 import { toolkitInvoices,toolkitTransactions,sandboxInsightsGap } from '../../../../lib/paypal-toolkit';
 import { reserveSandboxRequest } from '../../../../lib/action-store';
@@ -21,6 +21,6 @@ export async function POST(r:Request){
  const analysis=sandboxAnalysis(txResult.status==='fulfilled'?txResult.value:null,invoices,inputs);if(!analysis)return NextResponse.json({analysis:null,coverage,error:'No completed sales or usable invoice balances were available to analyze.'},{status:422,headers:{'Cache-Control':'no-store'}});
  if(subscriptions){Object.assign(analysis,{subscriptions});analysis.gaps?.push(subscriptions.coverageNote);}else analysis.gaps?.push('Subscription details are unavailable; account-wide coverage is unknown.');
  if(invoiceDetailFailures)analysis.gaps?.push(`${invoiceDetailFailures} invoice details could not be read; invoice results are incomplete.`);
- return NextResponse.json({analysis,coverage,source},{headers:{'Cache-Control':'no-store'}});
+ return NextResponse.json({analysis,coverage,source,reanalysisRows:sandboxReanalysisRows(txResult.status==='fulfilled'?txResult.value:null,invoices)},{headers:{'Cache-Control':'no-store'}});
  }catch{return NextResponse.json({error:'Could not retrieve or analyze PayPal sandbox data. Check access and try again.'},{status:502});}
 }
