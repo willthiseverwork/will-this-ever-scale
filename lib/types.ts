@@ -1,0 +1,5 @@
+export type Kind = 'sale'|'refund'|'reversal'|'dispute'|'invoice_payment'|'subscription_payment'|'fee'|'payout'|'transfer'|'other';
+export type Txn = { id:string; date:string; kind:Kind; gross:number; fee:number; net:number; currency:string; buyer_key?:string; item_title?:string; item_group?:string; country?:string; invoice_id?:string; status?:string };
+export type Inputs = { costPerItem?:number; monthlyAdSpend?:number; smallOrderThreshold?:number; homeCountry?:string };
+export type Leak = { id:string; kind:'monthly'|'quick_win'|'risk'; money_per_month?:number; one_off_amount?:number; method:string; assumption?:{label:string; value:number}; evidence:Record<string,number|string>; label?:string };
+export type Analysis = { currency:string; excludedCurrencies:Record<string,number>; period:{start:string;end:string}; months:Array<{month:string;cameIn:number;fees:number;refunds:number;costs:number;ads:number;kept:number}>; money_map:Record<string,number>; buyers:Record<string,number>; item_groups:Array<{name:string;gross:number;orders:number;refunds:number}>; ranked_leaks:Leak[]; quick_win?:Leak; small_leaks:Leak[]; read:string };

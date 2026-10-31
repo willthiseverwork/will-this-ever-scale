@@ -1,0 +1,31 @@
+import { SMALL_LEAK_SHARE } from './brand';
+import type { Analysis, Inputs, Leak, Txn } from './types';
+const n=(x:number)=>Math.round(x*100)/100;
+const month=(d:string)=>d.slice(0,7);
+const sum=(xs:number[])=>xs.reduce((a,b)=>a+b,0);
+export function analyze(rows:Txn[], inputs:Inputs={}):Analysis {
+  if(!rows.length) throw new Error('There are no usable PayPal transactions in this file.');
+  const currencies=Object.entries(rows.reduce<Record<string,number>>((a,t)=>{a[t.currency]=(a[t.currency]||0)+Math.abs(t.gross);return a;},{})).sort((a,b)=>b[1]-a[1]);
+  const currency=currencies[0][0]; const tx=rows.filter(t=>t.currency===currency); const excludedCurrencies=Object.fromEntries(currencies.slice(1));
+  const sales=tx.filter(t=>t.kind==='sale'||t.kind==='invoice_payment'||t.kind==='subscription_payment').filter(t=>t.status?.toLowerCase()!=='pending');
+  const refunds=tx.filter(t=>['refund','reversal','dispute'].includes(t.kind));
+  const months=[...new Set(tx.map(t=>month(t.date)))].sort(); const allOrders=sales.length||1;
+  const fee=sum(sales.map(x=>Math.abs(x.fee))); const refundTotal=sum(refunds.map(x=>Math.abs(x.gross)||Math.abs(x.net)));
+  const costs=(inputs.costPerItem||0)*sales.length; const ads=(inputs.monthlyAdSpend||0)*months.length; const cameIn=sum(sales.map(x=>x.gross)); const kept=cameIn-fee-refundTotal-costs-ads;
+  const money_map={came_in:n(cameIn), paypal_fees:n(fee), refunds:n(refundTotal), costs:n(costs), ad_spend:n(ads), kept:n(kept)};
+  const perMonth=months.map(m=>{const ms=sales.filter(x=>month(x.date)===m), mr=refunds.filter(x=>month(x.date)===m); const mi=sum(ms.map(x=>x.gross)), mf=sum(ms.map(x=>Math.abs(x.fee))), rr=sum(mr.map(x=>Math.abs(x.gross)||Math.abs(x.net))); const c=(inputs.costPerItem||0)*ms.length, a=inputs.monthlyAdSpend||0;return {month:m,cameIn:n(mi),fees:n(mf),refunds:n(rr),costs:n(c),ads:n(a),kept:n(mi-mf-rr-c-a)};});
+  const buyerOrders=new Map<string,Txn[]>(); for(const s of sales) if(s.buyer_key) buyerOrders.set(s.buyer_key,[...(buyerOrders.get(s.buyer_key)||[]),s]);
+  const returning=[...buyerOrders.values()].filter(v=>v.length>1).length; const buyers=buyerOrders.size; const groups=new Map<string,{gross:number;orders:number;refunds:number}>(); for(const s of sales){const name=s.item_group||s.item_title||'Unlabelled items';const x=groups.get(name)||{gross:0,orders:0,refunds:0};x.gross+=s.gross;x.orders++;groups.set(name,x);} for(const r of refunds){const name=r.item_group||r.item_title||'Unlabelled items';const x=groups.get(name)||{gross:0,orders:0,refunds:0};x.refunds+=Math.abs(r.gross)||Math.abs(r.net);groups.set(name,x);} const item_groups=[...groups.entries()].map(([name,x])=>({name,gross:n(x.gross),orders:x.orders,refunds:n(x.refunds)})).sort((a,b)=>b.gross-a.gross);
+  const averageMonthly=cameIn/(months.length||1), keptShare=cameIn?kept/cameIn:0, last3=months.slice(-3), prior3=months.slice(-6,-3); const buyersIn=(ms:string[])=>new Set(sales.filter(s=>ms.includes(month(s.date))).map(s=>s.buyer_key).filter(Boolean)).size;
+  const bestShare=Math.max(...months.map(m=>{const b=new Map<string,number>();sales.filter(s=>month(s.date)===m&&s.buyer_key).forEach(s=>b.set(s.buyer_key!, (b.get(s.buyer_key!)||0)+1));return b.size?[...b.values()].filter(x=>x>1).length/b.size:0;}),returning/(buyers||1)+.05);
+  const target=Math.max(bestShare,returning/(buyers||1)+.05), newBuyers=Math.max(0,buyers-returning), avgOrder=cameIn/allOrders;
+  const leaks:Leak[]=[];
+  const l1=Math.max(0,(target-returning/(buyers||1))*newBuyers*avgOrder*keptShare); leaks.push({id:'one_time_buyers',kind:'monthly',money_per_month:n(l1),method:'If returning buyers reach your best recent level, with new buyers held steady.',assumption:{label:'Target returning-buyer share',value:n(target*100)},evidence:{returning_buyers:returning,buyers,target_share:n(target*100),average_order:n(avgOrder),kept_share:n(keptShare*100)}});
+  const refGroup=[...item_groups].sort((a,b)=>b.refunds-a.refunds)[0]; if(refGroup?.refunds) leaks.push({id:'refunds_one_item',kind:'monthly',money_per_month:n(refGroup.refunds/(months.length||1)/2),method:'Half the refunds on the most-refunded item group.',assumption:{label:'Refunds reduced',value:50},evidence:{refunds:n(refGroup.refunds),months:months.length,item:refGroup.name}});
+  const threshold=inputs.smallOrderThreshold||20, small=sales.filter(s=>s.gross<threshold), smallFees=sum(small.map(s=>Math.abs(s.fee))); if(small.length) leaks.push({id:'small_order_fees',kind:'monthly',money_per_month:n(smallFees/(months.length||1)/2),method:'Half of small orders become sets of two.',assumption:{label:'Small-order threshold',value:threshold},evidence:{small_orders:small.length,orders:sales.length,fees:n(smallFees),threshold}});
+  if(item_groups[0]&&item_groups[0].gross/cameIn>.5) leaks.push({id:'one_item_dependence',kind:'risk',method:'One item group is over half of sales.',evidence:{top_group:item_groups[0].name,share:n(item_groups[0].gross/cameIn*100)}});
+  const unpaid=tx.filter(t=>t.invoice_id&&/unpaid|sent|pending/i.test(t.status||'')&&((Date.now()-new Date(t.date).getTime())/86400000>=14)); const unpaidAmount=sum(unpaid.map(t=>Math.abs(t.gross)||Math.abs(t.net))); const quick_win=unpaid.length?{id:'unpaid_invoices',kind:'quick_win' as const,one_off_amount:n(unpaidAmount),method:'Exact unpaid invoices that have waited 14 days or more.',evidence:{invoices:unpaid.length,unpaid_total:n(unpaidAmount)}}:undefined;
+  const ranked=leaks.filter(x=>x.kind==='monthly').sort((a,b)=>(b.money_per_month||0)-(a.money_per_month||0)); for(const l of ranked) if((l.money_per_month||0)<averageMonthly*SMALL_LEAK_SHARE) l.label='small, leave it for now';
+  const small_leaks=ranked.filter(x=>x.label); const buyersData={buyers,returning_buyers:returning,returning_share:n(returning/(buyers||1)*100),orders_per_buyer:n(sales.length/(buyers||1)),average_order:n(avgOrder),top_buyer_share:0,last_3_month_buyers:buyersIn(last3),prior_3_month_buyers:buyersIn(prior3)};
+  return {currency,excludedCurrencies,period:{start:months[0],end:months.at(-1)!},months:perMonth,money_map,buyers:buyersData,item_groups,ranked_leaks:ranked,quick_win,small_leaks,read:''};
+}

@@ -1,0 +1,3 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { parsePayPalCsv } from '../lib/csv';
+test('documented-style PayPal CSV parses and drops buyer email',()=>{const rows=parsePayPalCsv('Date,Time,Name,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title\n2026-10-01,12:00:00,Ada,Payment Received,Completed,USD,28.00,-1.47,26.53,ada@example.com,T1,Silver hoops');assert.equal(rows.length,1);assert.equal(rows[0].item_title,'Silver hoops');assert.ok(rows[0].buyer_key);assert.equal(JSON.stringify(rows).includes('ada@example.com'),false);});
+test('wrong file gives a clear message',()=>assert.throws(()=>parsePayPalCsv('hello\nworld'),/PayPal activity CSV/));

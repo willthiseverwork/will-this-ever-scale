@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server'; import { z } from 'zod'; import { testFor } from '../../../lib/playbook';
+export async function POST(r:Request){try{const b=z.object({leakId:z.string(),answers:z.record(z.string()),context:z.record(z.union([z.string(),z.number()]))}).parse(await r.json());return NextResponse.json(testFor(b.leakId,b.answers,b.context));}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Invalid test request'},{status:400});}}

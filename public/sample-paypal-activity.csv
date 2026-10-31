@@ -1,0 +1,3 @@
+Date,Time,TimeZone,Name,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title,Invoice Number,Country
+2026-10-01,12:00:00,PDT,Sample Buyer,Payment Received,Completed,USD,28.00,-1.47,26.53,sample@example.com,TXN-1,Silver hoops,,US
+2026-10-10,12:00:00,PDT,Sample Buyer,Payment Received,Completed,USD,18.00,-1.12,16.88,sample@example.com,TXN-2,Stud earrings,,CA

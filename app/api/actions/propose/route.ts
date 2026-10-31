@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server'; import { z } from 'zod';
+export async function POST(r:Request){const b=z.object({leakId:z.string(),evidence:z.record(z.union([z.string(),z.number()]))}).parse(await r.json()); const actions=b.leakId==='unpaid_invoices'?[{id:'send_invoice_reminder',reason:`${b.evidence.invoices||0} invoices have waited at least 14 days.`,requiresApproval:true}]:b.leakId==='one_time_buyers'?[{id:'create_subscription_plan',reason:'Returning buyers are the biggest monthly opportunity.',requiresApproval:true}]:[];return NextResponse.json({actions});}
