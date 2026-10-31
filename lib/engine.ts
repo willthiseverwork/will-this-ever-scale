@@ -64,5 +64,5 @@ export function analyze(rows:Txn[], inputs:Inputs={}):Analysis {
   for(const finding of [...ranked,...risks,...[invoiceQuick,heldQuick].filter((x):x is Leak=>!!x)]) { finding.card=cardFor(finding,currency); if(!finding.card) gaps.push(`No supplied fix-card lesson for ${finding.id}; existing finding retained.`); }
   const action_findings=[invoiceQuick,heldQuick].filter((x):x is Leak=>!!x);
   const cards=[...ranked,...action_findings].flatMap(x=>x.card?[x.card]:[]);
-  return {cards,action_findings,as_of:asOf.toISOString(),currency,excludedCurrencies,period:{start:first,end:last},months:monthDetails,money_map,business_shape,item_groups_by_period,period_summaries,buyers:buyersData,item_groups,ranked_leaks:ranked,quick_win,invoice_records,invoice_observations,small_leaks:ranked.filter(x=>x.label),risks,gaps,read:''};
+  return {clock_basis:inputs.asOf?'fixed':'seller',cards,action_findings,as_of:asOf.toISOString(),currency,excludedCurrencies,period:{start:first,end:last},months:monthDetails,money_map,business_shape,item_groups_by_period,period_summaries,buyers:buyersData,item_groups,ranked_leaks:ranked,quick_win,invoice_records,invoice_observations,small_leaks:ranked.filter(x=>x.label),risks,gaps,read:''};
 }

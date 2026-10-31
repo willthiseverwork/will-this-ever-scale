@@ -24,7 +24,7 @@ export function testFor(leakId:string,answers:Answers,context:Context) {
     case 'fewer_new_buyers': if(answers.source!=='unknown') values.target_new=Math.ceil(numeric(context,'last_new')*1.1); break;
     case 'subscription_failed_payments': values.target=Math.ceil(numeric(context,'n_failed')*.3); break;
   }
-  const fill=(s:string)=>s.replace(/\{(\w+)\}/g,(_,k:string)=>{const v=values[k]; if(v===undefined || (typeof v==='number'&&!Number.isFinite(v)) || (typeof v==='string'&&!v.trim())) throw new Error(`Missing engine value: ${k}.`); return String(v);});
+  const fill=(s:string)=>s.replace(/\{(\w+)\}/g,(_,k:string,offset:number)=>{const v=values[k]; if(v===undefined || (typeof v==='number'&&!Number.isFinite(v)) || (typeof v==='string'&&!v.trim())) throw new Error(`Missing engine value: ${k}.`); const text=String(v),prefix=s.slice(0,offset).trimEnd(); return ['item','top_group'].includes(k)&&prefix&&!/[.!?]$/.test(prefix)?text[0].toLocaleLowerCase()+text.slice(1):text;});
   return {do:fill(selected.do),success:fill(selected.success),who:leak.who,can_hand_off:selected.can_hand_off};
 }
 

@@ -13,6 +13,7 @@ export function demoTransactions():Txn[] {
       if(group==='Stacking rings'&&j<Math.ceil(count*.66)+(mi>=9?5:3))out.push({id:`refund-${id}`,date,kind:'refund',gross:-price,fee:0,net:-price,currency:'USD',reference_id:`sale-${id}`,item_group:group,status:'Refunded'});
     }previous.push(buyers);
   }
-  for(let i=0;i<3;i++)out.push({id:`invoice-${i}`,date:`2026-10-0${i+1}`,kind:'other',gross:180,fee:0,net:180,currency:'USD',invoice_id:`INV-${i}`,status:'Unpaid'});
+  // Titles read back from the three mapped PayPal sandbox invoices on 31 Oct 2026.
+  for(let i=0;i<3;i++)out.push({id:`invoice-${i}`,date:`2026-10-0${i+1}`,kind:'other',gross:180,fee:0,net:180,currency:'USD',invoice_id:`INV-${i}`,item_title:'Jewelry order',status:'Unpaid'});
   return out;
 }

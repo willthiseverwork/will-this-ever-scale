@@ -15,6 +15,13 @@ test('currency and mid-sentence item formatting',()=>{
  assert.equal(money(-41,'USD',true),'−$41');
  assert.equal(titleLowercase('Stacking rings'),'stacking rings');
 });
+test('demo month-end is complete while seller current month remains in progress',()=>{
+ const fixture=analyze(demoTransactions(),{asOf:DEMO_AS_OF});
+ assert.equal(headlineMonth(fixture,new Date(2026,9,31,23))?.month,'2026-10');
+ const seller={...fixture,clock_basis:'seller' as const};
+ assert.equal(headlineMonth(seller,new Date(2026,9,31,23))?.month,'2026-09');
+ assert.equal(headlineMonth(seller,new Date(2026,10,1,0))?.month,'2026-10');
+});
 test('monthly kept and column totals retain cents from displayed parts',()=>{
  const rows=[displayMonth({cameIn:102.4,fees:2.94,refunds:0,costs:0,ads:0}),displayMonth({cameIn:25.6,fees:1.25,refunds:0,costs:0,ads:0})];
  assert.equal(reconciledMoney(rows[0].kept,'USD'),'$99.06');

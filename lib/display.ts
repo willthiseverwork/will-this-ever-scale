@@ -35,12 +35,15 @@ export function inOneHundred(value:number) { return `${Math.round(value)} in 100
 
 export function titleLowercase(value:string) { return value?value[0].toLocaleLowerCase()+value.slice(1):value; }
 
-export function headlineMonth(analysis:Analysis) {
+export function localMonth(clock=new Date()) { return `${clock.getFullYear()}-${String(clock.getMonth()+1).padStart(2,'0')}`; }
+
+export function headlineMonth(analysis:Analysis, sellerClock=new Date()) {
   const latest=analysis.months.at(-1);
   if(!latest) return undefined;
-  const clock=analysis.as_of?new Date(analysis.as_of):new Date();
-  const current=`${clock.getUTCFullYear()}-${String(clock.getUTCMonth()+1).padStart(2,'0')}`;
-  const complete=clock.getUTCDate()===new Date(Date.UTC(clock.getUTCFullYear(),clock.getUTCMonth()+1,0)).getUTCDate();
+  const fixed=analysis.clock_basis==='fixed'&&analysis.as_of;
+  const clock=fixed?new Date(analysis.as_of!):sellerClock;
+  const current=fixed?`${clock.getUTCFullYear()}-${String(clock.getUTCMonth()+1).padStart(2,'0')}`:localMonth(clock);
+  const complete=!!fixed&&clock.getUTCDate()===new Date(Date.UTC(clock.getUTCFullYear(),clock.getUTCMonth()+1,0)).getUTCDate();
   return latest.month===current&&!complete&&analysis.months.length>1?analysis.months.at(-2):latest;
 }
 
