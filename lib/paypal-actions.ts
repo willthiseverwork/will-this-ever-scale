@@ -4,7 +4,7 @@ import { api,token } from './paypal';
 import { toolkitCreateInvoice } from './paypal-toolkit';
 const money=z.string().regex(/^\d{1,8}(\.\d{1,2})?$/).refine(v=>Number(v)>0);
 const invoice=z.object({recipient:z.string().email().max(254),description:z.string().min(1).max(200),amount:money,currency:z.string().regex(/^[A-Z]{3}$/)}).strict();
-const product=z.object({name:z.string().min(1).max(127),description:z.string().min(1).max(255),amount:money,currency:z.string().regex(/^[A-Z]{3}$/),interval:z.enum(['DAY','WEEK','MONTH','YEAR'])}).strict();
+const product=z.object({name:z.string().min(1).max(127),description:z.string().min(1).max(255),amount:money,currency:z.string().regex(/^[A-Z]{3}$/),interval:z.literal('MONTH')}).strict();
 export const proposalSchema=z.discriminatedUnion('action',[
  z.object({action:z.literal('send_invoice_reminder'),input:z.object({invoiceId:z.string().regex(/^[A-Za-z0-9-]{1,100}$/)}).strict()}).strict(),
  z.object({action:z.literal('create_and_send_invoice'),input:invoice}).strict(),

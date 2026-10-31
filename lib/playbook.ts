@@ -38,7 +38,7 @@ export function contextFor(a:import('./types').Analysis, leakId:string):Context 
   switch(leakId){
     case 'one_time_buyers': copy('past_buyers');copy('month_buyers');break;
     case 'unpaid_invoices': copy('invoices','n_unpaid');copy('unpaid_total');break;
-    case 'refunds_one_item': copy('item');break;
+    case 'refunds_one_item': copy('item');copy('refund_rate');break;
     case 'small_order_fees': copy('threshold');copy('small_group');if(typeof e.small_orders==='number'&&typeof e.orders==='number'&&e.orders>0)c.small_share=Math.round(e.small_orders/e.orders*10000)/100;break;
     case 'one_item_dependence':copy('top_group');copy('share','current_share');break;
     case 'below_cost_items':copy('item');break;
