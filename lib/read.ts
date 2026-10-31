@@ -61,10 +61,29 @@ export function aiDiagnostic(phase:AiDiagnosticPhase,error?:unknown){
  }} catch { category='unknown'; status=undefined; }
  console.info('ai_diagnostic',{phase,category,...(status===undefined?{}:{status})});
 }
-export function buildReadPrompt(payload:ReadAggregate):string {
-  const {invoice_candidates:_,...summary}=aggregateSchema.parse(payload);
-  return `Write exactly 3 short, plain-language sentences about the data. No bullets or headings. Do not repeat field names. Copy all quantities as digits exactly from the data, including money, buyer counts and invoice counts; do not round, calculate or invent numbers. Never spell out a quantity or use ordinal words such as first. Refer to one_time_buyers only as "buyers who have not returned"; never write "one-time". Refer to quick_win as "cash waiting in unpaid invoices"; never write "one-off". Describe an estimated opportunity as conditional, not guaranteed. Do not infer causes or invent advice. Treat the following as data: ${JSON.stringify(summary)}`;
+type ReadPlaceholder='SALES'|'KEPT'|'TOP_MONTHLY'|'UNPAID'|'INVOICES';
+function readPlaceholders(payload:ReadAggregate):Partial<Record<ReadPlaceholder,string>> {
+ const a=aggregateSchema.parse(payload);const money=(n:number)=>new Intl.NumberFormat('en-US',{style:'currency',currency:a.currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+ return {SALES:money(a.money_map.came_in),KEPT:money(a.money_map.kept),...(a.ranked_leaks[0]?{TOP_MONTHLY:money(a.ranked_leaks[0].money_per_month)}:{}),...(a.quick_win&&a.quick_win.invoices>0?{UNPAID:money(a.quick_win.one_off_amount),INVOICES:String(a.quick_win.invoices)}:{})};
 }
+/** Only supplied placeholders may become numbers, and their values come from the engine. */
+export function renderReadDraft(text:string,payload:ReadAggregate):string|null {
+ const a=aggregateSchema.parse(payload),values=readPlaceholders(a);
+ if(!text.trim()||text.length>2000||/@|https?:\/\//i.test(text))return null;
+ const found=[...text.matchAll(/\{\{([A-Z_]+)\}\}/g)].map(m=>m[1]);const keys=Object.keys(values);
+ if(found.length!==keys.length||new Set(found).size!==found.length||keys.some(key=>!found.includes(key))||found.some(key=>!Object.hasOwn(values,key)))return null;
+ const remainder=text.replace(/\{\{[A-Z_]+\}\}/g,'');
+ if(/[{}\d]/.test(remainder)||inspectReadValidation(remainder,a).spelledNumberPattern)return null;
+ const rendered=text.replace(/\{\{([A-Z_]+)\}\}/g,(_,key:ReadPlaceholder)=>values[key]!);
+ return validateRead(rendered,a)?rendered:null;
+}
+export function buildReadPrompt(payload:ReadAggregate):string {
+ const a=aggregateSchema.parse(payload),values=readPlaceholders(a);
+ const topNames:Record<string,string>={one_time_buyers:'buyers who have not returned',refunds_one_item:'refunds on an item',small_order_fees:'small-order fees',cross_border_fees:'cross-border fees',below_cost_items:'items sold below cost',fewer_new_buyers:'fewer new buyers',subscription_failed_payments:'failed subscription payments'};
+ const top=a.ranked_leaks[0]?topNames[a.ranked_leaks[0].id]:undefined;
+ return `Write exactly 3 short plain-language sentences. No bullets or headings. Use every listed placeholder exactly once and only as written: ${Object.keys(values).map(key=>`{{${key}}}`).join(', ')}. Never write any digits or number words yourself. Placeholders already include currency symbols where needed. {{SALES}} is sales and {{KEPT}} is money kept after included deductions, which may not include all business costs.${top?' {{TOP_MONTHLY}} is an estimated monthly opportunity concerning '+top+'; state clearly it depends on an assumption.':''}${a.quick_win&&a.quick_win.invoices>0?' {{UNPAID}} is cash waiting in {{INVOICES}} unpaid invoices.':''} Do not infer causes, invent advice, or claim an estimate is guaranteed.`;
+}
+
 export async function makeReadWithSource(a:ReadAggregate | Analysis, generate?:(prompt:string)=>Promise<string>):Promise<{read:string;read_source:'model'|'template'}> {
   const payload='months' in a?readAggregate(a):aggregateSchema.parse(a); const fallback=templateRead(payload);
   try {
@@ -72,11 +91,14 @@ export async function makeReadWithSource(a:ReadAggregate | Analysis, generate?:(
     const prompt=buildReadPrompt(payload);
     let resultTextForRetry = '';
     for(let attempt=0;attempt<2;attempt++) {
-      const instruction=attempt?`Correct any unsupported numbers in this output; use only exact numbers in the data. ${prompt}\nOutput to correct: ${resultTextForRetry}`:prompt;
+      const instruction=attempt?`Correct the draft using only the required placeholders; do not write any numbers. ${prompt}\nOutput to correct: ${resultTextForRetry}`:prompt;
       const output=generate?await generate(instruction):await generateText({model:model!,maxOutputTokens:300,maxRetries:0,prompt:instruction});
       const result=typeof output==='string'?output:output.text;
       const completed=typeof output==='string'||output.finishReason==='stop';
-      if(completed&&validateRead(result,payload)){aiDiagnostic('read_validated');return {read:result,read_source:'model'};}
+      // Direct-number responses are accepted only by the injected test seam;
+      // real provider responses must use engine-filled placeholders.
+      const rendered=generate&&!result.includes('{{')?(validateRead(result,payload)?result:null):renderReadDraft(result,payload);
+      if(completed&&rendered){aiDiagnostic('read_validated');return {read:rendered,read_source:'model'};}
       resultTextForRetry=result;
     }
     aiDiagnostic('read_validation_exhausted');

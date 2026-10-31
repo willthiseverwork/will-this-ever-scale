@@ -41,6 +41,18 @@ export function validateItemMappings(input:unknown,descriptors:ItemDescriptor[])
  for(const x of m.data){const evidence=d.data.find(v=>v.index===x.index);if(!evidence||!supported(evidence,x.group))return null;}
  return m.data;
 }
+/** Refine a generic hoop label only from known, unambiguous metal features. */
+export function refineItemMappings(input:unknown,descriptors:ItemDescriptor[]):ItemMapping[]|null {
+ const checked=validateItemMappings(input,descriptors);if(!checked)return null;
+ const refined=checked.map(mapping=>{
+  if(mapping.group!=='hoop_earrings')return mapping;
+  const features=new Set(descriptors.find(d=>d.index===mapping.index)!.features);
+  if(features.has('silver')&&!features.has('gold'))return {...mapping,group:'silver_hoops' as const};
+  if(features.has('gold')&&!features.has('silver'))return {...mapping,group:'gold_hoops' as const};
+  return mapping;
+ });
+ return validateItemMappings(refined,descriptors);
+}
 /** Accept plain JSON or one complete JSON code fence, then enforce the same schema and evidence checks. */
 export function parseGroupingOutput(text:string,descriptors:ItemDescriptor[]):{jsonParsed:boolean;schemaValid:boolean;mappings:ItemMapping[]|null;parsedMappings:ItemMapping[]|null;unsupportedMappingCount:number}{
  const trimmed=text.trim();const fence=/^```(?:json)?[ \t]*\r?\n([\s\S]*?)\r?\n```$/i.exec(trimmed);const json=fence?fence[1]:trimmed;
@@ -48,7 +60,7 @@ export function parseGroupingOutput(text:string,descriptors:ItemDescriptor[]):{j
  const parsed=mappingsSchema.safeParse(raw);const schemaValid=parsed.success;
  const parsedMappings=parsed.success?parsed.data:null;
  const unsupportedMappingCount=parsedMappings?parsedMappings.filter(m=>{const d=descriptors.find(x=>x.index===m.index);return !d||!supported(d,m.group);}).length:0;
- return {jsonParsed:true,schemaValid,mappings:validateItemMappings(raw,descriptors),parsedMappings,unsupportedMappingCount};
+ return {jsonParsed:true,schemaValid,mappings:refineItemMappings(raw,descriptors),parsedMappings,unsupportedMappingCount};
 }
 /** Apply locally to matching original indexes; all missing assignments retain their original names. */
 export function applyItemMappings<T extends {name:string}>(items:ReadonlyArray<T>,descriptors:ItemDescriptor[],input:unknown):T[]{

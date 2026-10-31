@@ -4,7 +4,7 @@ import {generateText} from 'ai';
 import {selectModel} from '../../../../lib/ai-provider';
 import {analyze} from '../../../../lib/engine';
 import {demoTransactions,DEMO_AS_OF} from '../../../../lib/demo';
-import {readAggregate,buildReadPrompt,inspectReadValidation} from '../../../../lib/read';
+import {readAggregate,buildReadPrompt,inspectReadValidation,renderReadDraft} from '../../../../lib/read';
 import {buildGroupingPrompt,parseGroupingOutput,type ItemDescriptor} from '../../../../lib/item-grouping';
 import {buildSuggestionPrompt,buildSuggestionTools,validateSelection} from '../../../../lib/ai-suggestions';
 
@@ -56,21 +56,24 @@ export async function POST(request:Request){
   const aggregate=readAggregate(analyze(demoTransactions(),{monthlyAdSpend:0,asOf:DEMO_AS_OF,fixedFee:.49}));
   if(stage==='read'){
    const result=await generateText({model,prompt:buildReadPrompt(aggregate),maxOutputTokens:300,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
-   const checks=inspectReadValidation(result.text,aggregate),piiPattern=/@|https?:\/\/|[A-Za-z0-9_-]{32,}/i.test(result.text);
+   const draftWithoutPlaceholders=result.text.replace(/\{\{[A-Z_]+\}\}/g,''),checks=inspectReadValidation(draftWithoutPlaceholders,aggregate),piiPattern=/@|https?:\/\/|[A-Za-z0-9_-]{32,}/i.test(result.text);
+   const rendered=renderReadDraft(result.text,aggregate);
    const finishReason=['stop','length','content-filter','tool-calls','error','other','unknown'].includes(result.finishReason)?result.finishReason:'unknown';
-   if(!checks.numericValidation||piiPattern||finishReason!=='stop')return NextResponse.json({stage,outcome:'invalid_output',finishReason,textLength:result.text.length,numericValidation:checks.numericValidation,piiPattern,spelledNumberPattern:checks.spelledNumberPattern,offendingNumberWords:checks.offendingNumberWords,numericTokenMismatch:checks.numericTokenMismatch},{headers});
-   return NextResponse.json({stage,outcome:'validated',read_source:'model',read:result.text,aggregate,needs_factual_review:true},{headers});
+   if(!rendered||piiPattern||finishReason!=='stop')return NextResponse.json({stage,outcome:'invalid_output',finishReason,textLength:result.text.length,numericValidation:checks.numericValidation,piiPattern,spelledNumberPattern:checks.spelledNumberPattern,offendingNumberWords:checks.offendingNumberWords,numericTokenMismatch:checks.numericTokenMismatch,placeholderValid:!!rendered},{headers});
+   return NextResponse.json({stage,outcome:'validated',read_source:'model',read:rendered,aggregate,needs_factual_review:true},{headers});
   }
   if(stage==='grouping'){
    const fixture:ItemDescriptor[]=[{index:1,features:['silver','hoop','earring'],orders:3},{index:2,features:['silver','hoop','earring'],orders:2},{index:3,features:['ring','necklace'],orders:1}];
    const result=await generateText({model,prompt:buildGroupingPrompt(fixture),maxOutputTokens:300,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
    const {jsonParsed,schemaValid,mappings,parsedMappings,unsupportedMappingCount}=parseGroupingOutput(result.text,fixture);
-   const missingExpectedCount=[1,2].filter(i=>!parsedMappings?.some(m=>m.index===i&&m.group==='silver_hoops')).length;
+   const checkedOrParsed=mappings??parsedMappings;
+   const missingExpectedCount=[1,2].filter(i=>!checkedOrParsed?.some(m=>m.index===i&&m.group==='silver_hoops')).length;
+   const mappingCount=parsedMappings?.length??0,duplicateCount=parsedMappings?parsedMappings.length-new Set(parsedMappings.map(m=>m.index)).size:0;
    const expectedMappingMatch=!!mappings&&mappings.length===2&&[1,2].every(i=>mappings.some(m=>m.index===i&&m.group==='silver_hoops'))&&!mappings.some(m=>m.index===3);
    const finishReason=['stop','length','content-filter','tool-calls','error','other','unknown'].includes(result.finishReason)?result.finishReason:'unknown';
    const passed=finishReason==='stop'&&expectedMappingMatch;
-   const metrics={finishReason,textLength:result.text.length,jsonParsed,schemaValid,expectedMappingMatch,unsupportedMappingCount,missingExpectedCount};
-   return NextResponse.json(passed?{stage,outcome:'validated',mappings,...metrics}:{stage,outcome:'invalid_output',...metrics},{headers});
+   const metrics={finishReason,textLength:result.text.length,jsonParsed,schemaValid,expectedMappingMatch,unsupportedMappingCount,missingExpectedCount,mappingCount,duplicateCount};
+   return NextResponse.json(passed?{stage,outcome:'validated',mappings,...metrics}:{stage,outcome:'invalid_output',...(mappings?{validatedMappings:mappings}:{}),...metrics},{headers});
   }
   const result=await generateText({model,prompt:buildSuggestionPrompt(aggregate),tools:buildSuggestionTools(),toolChoice:'auto',maxOutputTokens:180,maxRetries:0,abortSignal:AbortSignal.timeout(25000)});
   const suggestion=validateSelection(result.toolCalls,aggregate);
