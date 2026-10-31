@@ -7,14 +7,17 @@ type Entry={id:string;questions:Question[];tests:Test[];who:string};
 const entries=raw.leaks as Entry[];
 function entry(id:string):Entry { const found=entries.find(x=>x.id===id); if(!found) throw new Error('That leak is not in the playbook.'); return found; }
 export function questionsFor(leakId:string) { return entry(leakId).questions; }
-function numeric(c:Context,key:string):number { const v=c[key]; if(typeof v!=='number'||!Number.isFinite(v)||v<0) throw new Error(`Missing or invalid engine value: ${key}.`); return v; }
-/** Call locally with engine evidence; never let a model choose a playbook branch or target. */
-export function testFor(leakId:string,answers:Answers,context:Context) {
+export function testTemplateFor(leakId:string,answers:Answers) {
   const leak=entry(leakId); const keys=Object.keys(answers);
   if(keys.length!==leak.questions.length || leak.questions.some(q=>!q.answers.some(a=>a.id===answers[q.id])) || keys.some(k=>!leak.questions.some(q=>q.id===k))) throw new Error('Answer every question using one of the listed options.');
   const matches=leak.tests.filter(t=>!t.when||Object.entries(t.when).every(([k,values])=>values.includes(answers[k])));
   if(matches.length!==1) throw new Error('No unique playbook test matches these answers.');
-  const selected=matches[0]; const values:Context={...context};
+  return matches[0];
+}
+function numeric(c:Context,key:string):number { const v=c[key]; if(typeof v!=='number'||!Number.isFinite(v)||v<0) throw new Error(`Missing or invalid engine value: ${key}.`); return v; }
+/** Call locally with engine evidence; never let a model choose a playbook branch or target. */
+export function testFor(leakId:string,answers:Answers,context:Context) {
+  const leak=entry(leakId); const selected=testTemplateFor(leakId,answers); const values:Context={...context};
   switch(leakId) {
     case 'one_time_buyers': if(answers.reach!=='none') { const base=Math.max(1,Math.round(numeric(context,'past_buyers')*.03)); values.target_orders=answers.reach==='some'?Math.max(1,Math.ceil(base/2)):base; } break;
     case 'unpaid_invoices': values.target_paid=Math.ceil(numeric(context,'n_unpaid')*.5); break;
@@ -25,7 +28,7 @@ export function testFor(leakId:string,answers:Answers,context:Context) {
     case 'subscription_failed_payments': values.target=Math.ceil(numeric(context,'n_failed')*.3); break;
   }
   const fill=(s:string)=>s.replace(/\{(\w+)\}/g,(_,k:string,offset:number)=>{const v=values[k]; if(v===undefined || (typeof v==='number'&&!Number.isFinite(v)) || (typeof v==='string'&&!v.trim())) throw new Error(`Missing engine value: ${k}.`); const text=String(v),prefix=s.slice(0,offset).trimEnd(); return ['item','top_group'].includes(k)&&prefix&&!/[.!?]$/.test(prefix)?text[0].toLocaleLowerCase()+text.slice(1):text;});
-  return {do:fill(selected.do),success:fill(selected.success),who:leak.who,can_hand_off:selected.can_hand_off};
+  return {leakId,answerIds:leak.questions.map(question=>answers[question.id]),do:fill(selected.do),success:fill(selected.success),template:selected.do,values,numbers:Object.fromEntries(Object.entries(values).filter(([,v])=>typeof v==='number')) as Record<string,number>,who:leak.who,can_hand_off:selected.can_hand_off};
 }
 
 /** Project only evidenced values; missing facts stay missing, and testFor reports them. */

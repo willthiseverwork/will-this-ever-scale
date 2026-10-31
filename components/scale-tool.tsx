@@ -5,6 +5,7 @@ import Link from 'next/link';
 import BrandLogo from './brand-logo';
 import MathTable from './math-table';
 import {fillCardDraft,type CardDraft} from '../lib/card-drafts';
+import {fillValidatedTest} from '../lib/test-draft';
 import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import raw from '../playbook.json';
 import {analyze} from '../lib/engine';
@@ -88,7 +89,7 @@ function HelpDrafts({id,source,label}:{id:string;source:Source;label:string}){
 }
 
 function Dots({value,label}:{value:number;label:string}){return <div className="dots"><div>{Array.from({length:100},(_,i)=><i className={i<Math.round(value)?'on':''} key={i}/>)}</div><b>{inOneHundred(value)}</b><small>{label}</small></div>}
-function TestCard({test}:{test:any}){const first=/^(\d+\s+\w+)(.*)$/s.exec(test.success);return <Card className="test-card"><h2>Your test this month</h2><p className="small">Built from your answers.</p><p className="test-do">{test.do}</p><div className="goal"><small>{first?'It worked if you get':'It worked if'}</small><b>{first?first[1]:test.success}</b>{first?.[2]&&<span>{first[2].trim()}</span>}</div></Card>}
+function TestCard({test}:{test:any}){const [sentence,setSentence]=useState(test.do),[written,setWritten]=useState(false);useEffect(()=>{let cancelled=false;setSentence(test.do);setWritten(false);void (async()=>{try{const result=await post('/api/drafts/test',{leakId:test.leakId,answerIds:test.answerIds,template:test.template,numbers:test.numbers});const filled=fillValidatedTest(result.sentence,test.template,test.values);if(!cancelled&&result.source==='ai'&&filled){setSentence(filled);setWritten(true);}}catch{}})();return()=>{cancelled=true};},[test]);const first=/^(\d+\s+\w+)(.*)$/s.exec(test.success);return <Card className="test-card"><h2>Your test this month</h2><p className="small">{written?'Written by AI from your answers. Numbers checked.':'Built from your answers.'}</p><p className="test-do">{sentence}</p><div className="goal"><small>{first?'It worked if you get':'It worked if'}</small><b>{first?first[1]:test.success}</b>{first?.[2]&&<span>{first[2].trim()}</span>}</div></Card>}
 function Reminder({leakId,check}:{leakId:string;check?:{metric:string;how:string;days:number}}){return <Card className="reminder"><h2>Check again in 30 days</h2><p>{check?.metric||'Check your progress in 30 days.'}</p>{check?.how&&<p>{check.how}</p>}<a data-analytics-id="reminder_submit" className="button line" href={`/api/cards/${encodeURIComponent(leakId)}/calendar`}>Add a calendar reminder</a></Card>}
 
 function Plan({stored,router,action}:{stored:Stored;router:ReturnType<typeof useRouter>;action:boolean}){
