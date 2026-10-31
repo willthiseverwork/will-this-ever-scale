@@ -38,8 +38,9 @@ test('demo keeps its ordered story and exposes both action findings',()=>{
   assert.equal(a.action_findings?.find(l=>l.id==='held_money')?.one_off_amount,210);
 });
 test('held money requires both confirmed current hold and confirmed missing tracking',()=>{
-  const base=order('sale',50,2.24),hold={...order('held',40,1.89),hold_confirmed:true,tracking_present:false};
+  const base=order('sale',50,2.24),hold={...order('held',40,1.89),date:'2026-10-15',hold_confirmed:true,tracking_present:false};
   assert.ok(analyze([base,hold],{asOf:DEMO_AS_OF}).cards?.find(c=>c.id==='held_money'));
   assert.equal(analyze([base,{...hold,tracking_present:undefined}],{asOf:DEMO_AS_OF}).cards?.find(c=>c.id==='held_money'),undefined);
   assert.equal(analyze([base,{...hold,hold_confirmed:undefined,status:'Pending'}],{asOf:DEMO_AS_OF}).cards?.find(c=>c.id==='held_money'),undefined);
+  assert.equal(analyze([base,{...hold,date:'2026-09-30'}],{asOf:DEMO_AS_OF}).cards?.find(c=>c.id==='held_money'),undefined);
 });
