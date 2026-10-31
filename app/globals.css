@@ -37,3 +37,4 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 .sandbox form label,.help-drafts label{font-size:15px}
 .card p.error{font-size:14px}.money-row small{font-size:14px}
 .money-row>span{min-width:0}.money-row>b{white-space:nowrap;flex-shrink:0}
+.small-leak>span{white-space:nowrap;flex-shrink:0}.action-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px}.action-heading>b{float:none;white-space:nowrap}
