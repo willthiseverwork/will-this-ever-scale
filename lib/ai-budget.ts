@@ -31,7 +31,7 @@ function blobStore(token:string):BudgetStore {
       catch(error){if(error instanceof BlobPreconditionFailedError)throw new BudgetConflict();throw error;}
     },
     async replace(path,body,etag){
-      try{await put(path,body,{access:'private',token,addRandomSuffix:false,ifMatch:etag,contentType:'application/json',abortSignal:AbortSignal.timeout(TIMEOUT_MS)});}
+      try{await put(path,body,{access:'private',token,addRandomSuffix:false,allowOverwrite:true,ifMatch:etag,contentType:'application/json',abortSignal:AbortSignal.timeout(TIMEOUT_MS)});}
       catch(error){if(error instanceof BlobPreconditionFailedError)throw new BudgetConflict();throw error;}
     }
   };
