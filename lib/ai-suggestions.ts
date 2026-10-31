@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { aggregateSchema, type ReadAggregate } from './read';
+import { aggregateSchema, aiDiagnostic, type ReadAggregate } from './read';
 
 export type ActionSuggestion={action:'send_invoice_reminder'|'create_product_and_plan';source:'ai'|'template';reason:string;invoice_index?:number};
 type Selection={toolName:string;input:unknown};
@@ -29,19 +29,19 @@ export function validateSelection(raw:unknown,a:ReadAggregate):ActionSuggestion|
 }
 export function templateSuggestions(a:ReadAggregate):ActionSuggestion[]{return choices(aggregateSchema.parse(a),'template');}
 export async function suggestActions(a:ReadAggregate,select?:()=>Promise<unknown>):Promise<ActionSuggestion[]>{
- const payload=aggregateSchema.parse(a),fallback=templateSuggestions(payload);if(!fallback.length)return [];
+ const payload=aggregateSchema.parse(a),fallback=templateSuggestions(payload);if(!fallback.length){aiDiagnostic('suggestions_no_evidence');return [];}
  try {
   let calls:unknown;
   if(select) calls=await select();
   else {
-   const {selectModel}=await import('./ai-provider');const model=await selectModel();if(!model)return fallback;
+   const {selectModel}=await import('./ai-provider');const model=await selectModel();if(!model){aiDiagnostic('suggestions_unavailable');return fallback;}
    const {generateText,tool}=await import('ai');
-   const result=await generateText({model,maxOutputTokens:180,toolChoice:'auto',tools:{
+   const result=await generateText({model,maxOutputTokens:180,maxRetries:0,toolChoice:'auto',tools:{
     recommend_invoice_reminder:tool({description:'Suggest reviewing a reminder for unpaid invoices; never send it.',inputSchema:invoiceInput}),
     recommend_returning_offer:tool({description:'Suggest reviewing a product and subscription plan when returning buyers are evidenced; never create it.',inputSchema:offerInput})
    },prompt:`Select at most one appropriate action from the tools for this aggregate. Do not invent facts. No tool executes. If no evidence supports an action, select none. ${JSON.stringify(payload)}`});
    calls=result.toolCalls;
   }
-  const selected=validateSelection(calls,payload);return selected?[selected]:fallback;
- } catch{return fallback;}
+  const selected=validateSelection(calls,payload);if(selected){aiDiagnostic('suggestions_validated');return [selected];}aiDiagnostic('suggestions_invalid');return fallback;
+ } catch(error){aiDiagnostic('suggestions_call_failed',error);return fallback;}
 }
