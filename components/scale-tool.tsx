@@ -2,6 +2,7 @@
 
 import {useEffect,useMemo,useState} from 'react';
 import Link from 'next/link';
+import BrandLogo from './brand-logo';
 import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import raw from '../playbook.json';
 import {analyze} from '../lib/engine';
@@ -22,7 +23,7 @@ const post=async(url:string,body:unknown)=>{const r=await fetch(url,{method:'POS
 
 function Icon({kind='arrow'}:{kind?:'arrow'|'bolt'|'user'|'close'|'upload'|'lock'}){if(kind==='lock')return <svg aria-hidden="true" className="icon lock-icon" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>;return <span aria-hidden="true" className={`icon icon-${kind}`}>{kind==='close'?'×':kind==='upload'?'↑':kind==='bolt'?'↯':kind==='user'?'♙':'‹'}</span>}
 function SourcePill({source}:{source:Source}){return source==='demo'?<span className="source-pill"><i/>Sample data</span>:source==='sandbox'?<span className="source-pill sandbox-pill">PayPal sandbox</span>:null}
-function Header({source,back}:{source?:Source;back?:string}){return <header className="app-header"><Link href="/" className="brand" aria-label="Will This Ever Scale home"><b>↗</b><code>willthiseverscale</code></Link>{back&&<><span className="header-rule"/><Link data-analytics-id="back_link" href={back} className="back"><Icon/>{back==='/plan'?'Your plan':back==='/read'?'Your read':'Back'}</Link></>}<span className="header-spacer"/>{source&&<SourcePill source={source}/>}</header>}
+function Header({source,back}:{source?:Source;back?:string}){return <header className="app-header"><BrandLogo/>{back&&<><span className="header-rule"/><Link data-analytics-id="back_link" href={back} className="back"><Icon/>{back==='/plan'?'Your plan':back==='/read'?'Your read':'Back'}</Link></>}<span className="header-spacer"/>{source&&<SourcePill source={source}/>}</header>}
 function Footer(){const [on,setOn]=useState(false);useEffect(()=>setOn(localStorage.getItem('scale_analytics_consent')==='yes'),[]);return <footer className="site-footer">IE Startup Factory · <Link data-analytics-id="privacy_link" href="/privacy">Privacy</Link> · <a data-analytics-id="source_link" href="https://github.com/willthiseverwork/will-this-ever-scale?utm_source=willthiseverscale&utm_medium=referral&utm_campaign=paypal_tool&utm_content=footer">Source code</a> · <button data-analytics-id="analytics_toggle" onClick={()=>{localStorage.setItem('scale_analytics_consent',on?'no':'yes');location.reload();}}>Analytics: {on?'on · Turn off':'off · Turn on'}</button></footer>}
 function Card({children,className='' }:{children:React.ReactNode;className?:string}){return <section className={`card ${className}`}>{children}</section>}
 function Tag({children,tone='neutral'}:{children:React.ReactNode;tone?:'neutral'|'lime'|'soft'}){return <span className={`tag ${tone}`}>{children}</span>}
