@@ -3,9 +3,10 @@ import { questionsFor } from './playbook';
 import { analyze } from './engine';
 import { demoTransactions,DEMO_AS_OF } from './demo';
 
-const noauth=[{type:'noauth'}], oauth=[{type:'oauth2',scopes:[]}];
+type SecurityScheme={type:string;scopes?:string[]};
+const noauth:SecurityScheme[]=[{type:'noauth'}], oauth:SecurityScheme[]=[{type:'oauth2',scopes:[]}];
 const schema=(properties:Record<string,unknown>={},required:string[]=[])=>({type:'object',properties,required,additionalProperties:false});
-const tool=(name:string,description:string,inputSchema:unknown,auth=oauth)=>({name,description,inputSchema,annotations:{readOnlyHint:true,destructiveHint:false,openWorldHint:false},securitySchemes:auth,_meta:{securitySchemes:auth}});
+const tool=(name:string,description:string,inputSchema:unknown,auth:SecurityScheme[]=oauth)=>({name,description,inputSchema,annotations:{readOnlyHint:true,destructiveHint:false,openWorldHint:false},securitySchemes:auth,_meta:{securitySchemes:auth}});
 export function mcpTools(scope?:string){const auth=[{type:'oauth2',scopes:scope?[scope]:[]}];return [
  tool('demo_summary','Read a clearly labelled synthetic sample shop. No account or live PayPal data.',schema(),noauth),
  tool('current_summary','Read the latest saved workspace snapshot with its source, period and limitations.',schema(),auth),
