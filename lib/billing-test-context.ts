@@ -9,8 +9,8 @@ const scope=new AsyncLocalStorage<BillingTestContext>();
 export function billingTestConfig(env:Record<string,string|undefined>=process.env):BillingTestContext|null {
  const owner=env.WTES_BILLING_TEST_OWNER_USER_ID,apiKey=env.WTES_BILLING_TEST_PADDLE_API_KEY,clientToken=env.WTES_BILLING_TEST_PADDLE_CLIENT_TOKEN,priceId=env.WTES_BILLING_TEST_PADDLE_PRICE_MONTHLY,webhookSecret=env.WTES_BILLING_TEST_PADDLE_WEBHOOK_SECRET,secret=env.WTES_BILLING_TEST_SECRET,token=env.WTES_BILLING_TEST_BLOB_TOKEN,phase=env.WTES_BILLING_TEST_PHASE;
  if((env.WTES_WORKSPACE_SECRET&&secret===env.WTES_WORKSPACE_SECRET)||(env.WTES_WORKSPACE_BLOB_TOKEN&&token===env.WTES_WORKSPACE_BLOB_TOKEN)||(env.WTES_BILLING_SECRET&&secret===env.WTES_BILLING_SECRET)||(env.WTES_BILLING_BLOB_TOKEN&&token===env.WTES_BILLING_BLOB_TOKEN)||(env.WTES_PADDLE_WEBHOOK_SECRET&&webhookSecret===env.WTES_PADDLE_WEBHOOK_SECRET)||(env.WTES_PADDLE_API_KEY&&apiKey===env.WTES_PADDLE_API_KEY))return null;
- if(env.WTES_BILLING_TEST_ENABLED!=='true'||!/^user_[A-Za-z0-9]+$/.test(owner||'')||!/^pdl_sdbx_[A-Za-z0-9_]+$/.test(apiKey||'')||!/^test_[A-Za-z0-9_]+$/.test(clientToken||'')||!/^pri_[a-z0-9]+$/i.test(priceId||'')||!webhookSecret||!secret||Buffer.byteLength(secret)<32||!token||(phase!=='active'&&phase!=='expired'))return null;
- return {owner:owner!,apiKey,clientToken,priceId:priceId!,webhookSecret,secret,token,phase,environment:'sandbox',api:'https://sandbox-api.paddle.com'};
+ if(env.WTES_BILLING_TEST_ENABLED!=='true'||!owner||!apiKey||!clientToken||!priceId||!/^user_[A-Za-z0-9]+$/.test(owner)||!/^pdl_sdbx_[A-Za-z0-9_]+$/.test(apiKey)||!/^test_[A-Za-z0-9_]+$/.test(clientToken)||!/^pri_[a-z0-9]+$/i.test(priceId)||!webhookSecret||!secret||Buffer.byteLength(secret)<32||!token||(phase!=='active'&&phase!=='expired'))return null;
+ return {owner,apiKey,clientToken,priceId,webhookSecret,secret,token,phase,environment:'sandbox',api:'https://sandbox-api.paddle.com'};
 }
 export function billingTestAuthorized(userId:string|undefined,c=billingTestConfig()){return !!c&&userId===c.owner;}
 export function currentBillingTest(){return scope.getStore();}
