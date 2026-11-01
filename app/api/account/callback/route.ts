@@ -12,9 +12,9 @@ export async function GET(request:Request){
  const headers=new Headers({'Cache-Control':'no-store','Referrer-Policy':'no-referrer'});
  try {
   const c=config();if(!c)throw new Error('Account setup is incomplete.');
-  const cookies=await finishLogin(request);
-  headers.set('Location',c.origin+'/workspace');
-  for(const cookie of cookies)headers.append('Set-Cookie',cookie);
+  const login=await finishLogin(request);
+  headers.set('Location',c.origin+login.next);
+  for(const cookie of login.cookies)headers.append('Set-Cookie',cookie);
  } catch(error) {
   // Only fixed categories are logged; no callback URLs, codes, tokens or identities.
   console.warn('wtes_login_failed',safeReasons.get(error instanceof Error?error.message:'')??'unexpected');

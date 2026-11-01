@@ -34,7 +34,7 @@ export async function POST(r:Request){
    const access=await token(actionCredentials(source,session));
    for(let i=0;i<ids.length;i++){
     const full=await api(access,'/v2/invoicing/invoices/'+encodeURIComponent(ids[i]));const amount=Number(full.due_amount?.value),currency=full.due_amount?.currency_code,date=full.detail?.invoice_date,age_days=Math.floor((Date.now()-Date.parse(date))/86400000);
-    if(full.id!==ids[i]||!['SENT','UNPAID','PARTIALLY_PAID'].includes(full.status)||!Number.isFinite(amount)||amount<=0||!Number.isFinite(age_days)||age_days<(source==='demo'?0:14)||currency!==review[i].currency||Math.abs(amount-review[i].amount)>0.001)return NextResponse.json({error:'PayPal invoice details changed or do not match this read. Read the sandbox again before approving.'},{status:409});
+    if(full.id!==ids[i]||!['SENT','UNPAID','PARTIALLY_PAID'].includes(full.status)||!Number.isFinite(amount)||amount<=0||!Number.isFinite(age_days)||age_days<(source==='demo'?0:14)||currency!==review[i].currency||Math.abs(amount-review[i].amount)>0.001)return NextResponse.json({error:'The sandbox invoices changed since these results. Reconnect and review them again. Nothing was sent.'},{status:409});
     invoices.push({id:full.id,requestedId:requested[i],title:typeof full.items?.[0]?.name==='string'?full.items[0].name:`Invoice ${full.detail?.invoice_number||full.id}`,currency,amount,age_days});
    }
   }

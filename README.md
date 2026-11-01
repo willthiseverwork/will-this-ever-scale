@@ -8,6 +8,8 @@ After a read, optional AI product grouping receives only unique item titles and 
 
 Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). The sample jewelry shop is synthetic, dated 31 October 2026; PayPal actions use its separately identified sandbox test copies.
 
+Hackathon judges can open **Hackathon judge? Use your access code** on the trial screen, enter `PAYPAL-JUDGE-2026`, and receive full card-free access until 15 December 2026 at 23:59 Pacific Time. The deployed code is stored as `WTES_JUDGE_CODE` and can be changed by the project owner.
+
 1. Select **Open the demo shop**, then **Skip both** or enter item costs and monthly ad spend. The October read shows the money map, the largest monthly opportunity, three unpaid invoices totaling USD 540, other findings and an item concentration risk.
 2. Open **Show the math** to see AG Grid month and item tables and the calculation behind the first finding. Close with Escape, Back, or the close button.
 3. Choose **What to do about it**, answer the questions, and inspect the test, fixed lesson steps and 30-day check. **Add a calendar reminder** downloads an `.ics` file without collecting an email.
@@ -77,7 +79,7 @@ The app includes data chat, saved-workspace support and a public synthetic MCP d
 - `/chat` calculates answers from browser-held transaction rows. Its optional AI planner receives the seller's question plus item-title/count inventory and date capabilities, returns a strict validated lookup plan, and never receives buyer data, transaction IDs, or raw rows. When unavailable, a local parser provides a limited fallback.
 - `/workspace` keeps local reminders without sign-in. Account storage uses the dedicated WorkOS project and encrypted private store; real sign-in and consent persistence are verified; real saved-analysis and deletion lifecycles remain unverified. Saving a CSV summary is explicit; raw CSV rows are not stored. Assistant workspace access and reviewed-product-label sharing are separate controls and both default off. Turning workspace sharing off blocks the next private assistant request.
 - `/connect` offers a downloadable plugin package and a public synthetic sample at `/mcp`. Private OAuth metadata is configured and anonymous private calls require authentication; Codex private access to the empty workspace is verified; Claude private reads and real saved-analysis reads remain unverified. A package download is not an installed or connected client.
-- `/billing` exposes the planned $14.99/month offer after a 30-day no-card trial. Billing remains off by default; no payment is collected without a configured provider and explicit checkout. The free demo remains unrestricted for judges.
+- `/billing` exposes the $14.99/month offer after a 30-day Paddle trial that requires a card at checkout. Billing remains off by default; no payment is collected without a configured provider and explicit checkout. The free demo remains unrestricted, and judges can use the access code above.
 - Live merchant PayPal access and daily refresh are not activated. The read-only transport and atomic snapshot orchestration are prepared, but require an approved merchant grant, secure storage and a configured daily job. CSV upload remains the current own-data entry point.
 
 See `docs/workspace.md`, `docs/data-chat.md`, `docs/plugin.md`, `docs/live-paypal.md` and `docs/billing.md` for exact configuration and verification boundaries. Never reuse another product's provider credentials.

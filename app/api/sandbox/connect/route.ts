@@ -4,10 +4,12 @@ import {z} from 'zod';
 import {token} from '../../../../lib/paypal';
 import {newSession,removeSession,sessionId,sameOrigin} from '../../../../lib/paypal-session';
 import {reserveSandboxRequest} from '../../../../lib/action-store';
+import {hasPaidOrJudgeAccess} from '../../../../lib/access';
 export const runtime='nodejs';
 export const maxDuration=60;
 export async function POST(r:Request){
  if(!sameOrigin(r))return NextResponse.json({error:'Invalid request origin.'},{status:403});
+ if(!await hasPaidOrJudgeAccess(r))return NextResponse.json({error:'Start a trial, subscribe, or use judge access to connect a sandbox.'},{status:403});
  try{
   const c=z.object({clientId:z.string().min(1).max(500),clientSecret:z.string().min(1).max(500)}).strict().parse(await readLimitedJson(r,4096));
   const secret=process.env.PAYPAL_ACTION_SIGNING_SECRET;if(!secret||!await reserveSandboxRequest(r,'connect',secret))return NextResponse.json({error:'Sandbox connection is temporarily unavailable. Try again in a minute.'},{status:429});
