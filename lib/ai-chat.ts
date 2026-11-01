@@ -3,7 +3,7 @@ import type {Txn, Inputs} from './types';
 
 const measure=z.enum(['sales','orders','units','refunds','fees','kept','buyers','returning_buyer_share']);
 const groupBy=z.enum(['item','item_group','month','week','weekday','day','country','buyer_status']);
-const filter=z.object({start:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),end:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),items:z.array(z.string().min(1).max(160)).max(50).optional(),groups:z.array(z.string().min(1).max(160)).max(50).optional(),countries:z.array(z.string().min(2).max(2)).max(50).optional()}).strict();
+const filter=z.object({start:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),end:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),items:z.array(z.string().min(1).max(160)).max(50).optional(),groups:z.array(z.string().min(1).max(160)).max(50).optional(),countries:z.array(z.string().min(2).max(2)).max(50).optional(),weekends:z.boolean().optional()}).strict();
 export const chatPlanSchema=z.object({measure,groupBy:groupBy.optional(),filters:filter.default({}),sort:z.enum(['asc','desc']).default('desc'),limit:z.number().int().min(1).max(20).default(8),compare:z.object({start:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),end:z.string().regex(/^\d{4}-\d{2}-\d{2}$/)}).strict().optional(),cannotAnswer:z.string().max(240).optional(),sentence:z.string().min(1).max(300)}).strict();
 export type ChatPlan=z.infer<typeof chatPlanSchema>;
 export const chatPlanRequestSchema=z.object({question:z.string().trim().min(1).max(500),titles:z.array(z.object({title:z.string().min(1).max(160),orders:z.number().int().nonnegative()}).strict()).max(200),lastDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),hasQuantity:z.boolean(),countries:z.array(z.string().length(2)).max(100)}).strict();
@@ -15,11 +15,12 @@ function money(n:number,c:string){return new Intl.NumberFormat('en-US',{style:'c
 function localPlan(question:string,lastDate:string):ChatPlan|null {
  const q=question.toLowerCase(), last=new Date(`${lastDate}T00:00:00Z`), month=String(last.getUTCMonth()+1).padStart(2,'0'), year=last.getUTCFullYear();
  const metric=q.includes('refund')?'refunds':q.includes('fee')?'fees':q.includes('profit')||q.includes('after materials')||q.includes('kept')?'kept':q.includes('buyer')?'buyers':q.includes('unit')||q.includes('quantity')?'units':q.includes('order')?'orders':'sales';
- const group=q.includes('buyer')&&q.includes('back')?'buyer_status':q.includes('weekend')?'weekday':q.includes('last christmas')||/what do i sell most|which items?|product/.test(q)?'item':undefined;
+ const group=q.includes('buyer')&&q.includes('back')?'buyer_status':q.includes('weekend')?'item':q.includes('last christmas')||/what do i sell most|which items?|product/.test(q)?'item':undefined;
  const filters:ChatPlan['filters']={};
  const named=/\b(march|april|may|june|july|august|september|october|november|december|january|february)\b/.exec(q)?.[1];
  if(named){const names=['january','february','march','april','may','june','july','august','september','october','november','december'];let y=year,m=names.indexOf(named)+1;if(m>last.getUTCMonth()+1)y--;filters.start=`${y}-${String(m).padStart(2,'0')}-01`;filters.end=iso(new Date(Date.UTC(y,m,0)));}
  if(q.includes('last christmas')){let y=year;if(last.getUTCMonth()+1<12)y--;filters.start=`${y}-12-01`;filters.end=`${y}-12-24`;}
+ if(q.includes('weekend'))filters.weekends=true;
  const plan:ChatPlan={measure:metric,groupBy:group,filters,sort:'desc',limit:8,sentence:''};
  if(q.includes('this summer')&&q.includes('last winter')){const summerYear=year, winterYear=summerYear-1;plan.filters={start:`${summerYear}-06-01`,end:`${summerYear}-08-31`};plan.compare={start:`${winterYear}-12-01`,end:`${summerYear}-02-28`};plan.groupBy=undefined;}
  return plan;
@@ -31,7 +32,7 @@ export function executeChatPlan(rows:Txn[], inputs:Inputs, currency:string, plan
  const fallback=localPlan(fallbackQuestion||'',rows.map(x=>x.date).sort().at(-1)!)||plan; const p=plan.sentence?plan:fallback;
  if(p.measure==='units'&&!rows.some(x=>typeof x.quantity==='number'||x.cart_items?.some(i=>typeof i.quantity==='number')))return {status:'unavailable',text:"Can't answer from this data: it has no Quantity column.",columns:[],rows:[]};
  if(p.measure==='kept'&&inputs.costPerItem===undefined&&!inputs.costsByItem)return {status:'unavailable',text:"Can't answer from this data: your material costs have not been entered.",columns:[],rows:[]};
- const f=p.filters||{}, matches=(t:Txn,filters:ChatPlan['filters'])=>(!filters.start||t.date>=filters.start)&&(!filters.end||t.date<=filters.end)&&(!filters.items?.length||filters.items.includes(title(t)))&&(!filters.groups?.length||filters.groups.includes(t.item_group||''))&&(!filters.countries?.length||filters.countries.includes(t.country||''));
+ const f=p.filters||{}, matches=(t:Txn,filters:ChatPlan['filters'])=>{const day=new Date(`${t.date}T00:00:00Z`).getUTCDay();return (!filters.start||t.date>=filters.start)&&(!filters.end||t.date<=filters.end)&&(!filters.items?.length||filters.items.includes(title(t)))&&(!filters.groups?.length||filters.groups.includes(t.item_group||''))&&(!filters.countries?.length||filters.countries.includes(t.country||''))&&(!filters.weekends||day===0||day===6);};
  const selected=rows.filter(t=>matches(t,f));
  if(!selected.length)return {status:'unavailable',text:"Can't answer from this data: no rows match that period or filter.",columns:[],rows:[]};
  const sales=selected.filter(sale), buyers=new Map<string,number>(); for(const s of sales)if(s.buyer_key)buyers.set(s.buyer_key,(buyers.get(s.buyer_key)||0)+1);
@@ -43,6 +44,6 @@ export function executeChatPlan(rows:Txn[], inputs:Inputs, currency:string, plan
  const format=(n:number)=>['orders','units','buyers'].includes(p.measure)?String(Math.round(n)):p.measure==='returning_buyer_share'?`${n.toFixed(1)}%`:money(n,currency);
  const period=f.start&&f.end?`${f.start} to ${f.end}`:f.start?`from ${f.start}`:f.end?`through ${f.end}`:'across the supplied dates';
  if(p.compare){const compared=rows.filter(t=>matches(t,p.compare!)), comparedValue=value(compared);const comparePeriod=`${p.compare.start} to ${p.compare.end}`;const answer=`${p.measure.replaceAll('_',' ')} was ${format(result[0]?.n||0)} ${period}, compared with ${format(comparedValue)} ${comparePeriod}.`;return {status:'answer',text:p.sentence.includes('{{result}}')?p.sentence.replace('{{result}}',answer):answer,columns:['period',p.measure.replaceAll('_',' ')],rows:[[period,format(result[0]?.n||0)],[comparePeriod,format(comparedValue)]],dates:`${period}; ${comparePeriod}`};}
- const first=result[0];const computed=first?p.groupBy?`${first.label} has the ${p.sort==='asc'?'lowest':'highest'} ${p.measure.replaceAll('_',' ')} (${format(first.n)}) ${period}.`:`${p.measure.replaceAll('_',' ')}: ${format(first.n)} ${period}.`:`Can't answer from this data: there is no matching ${p.measure}.`;const text=p.sentence.includes('{{result}}')?p.sentence.replace('{{result}}',computed):computed;
+ const first=result[0],returning=result.find(x=>x.label==='Returning buyers');const computed=returning&&p.groupBy==='buyer_status'&&/came back|returning/i.test(fallbackQuestion||'')?`Returning buyers: ${format(returning.n)} ${period}.`:first?p.groupBy?`${first.label} has the ${p.sort==='asc'?'lowest':'highest'} ${p.measure.replaceAll('_',' ')} (${format(first.n)}) ${period}.`:`${p.measure.replaceAll('_',' ')}: ${format(first.n)} ${period}.`:`Can't answer from this data: there is no matching ${p.measure}.`;const text=p.sentence.includes('{{result}}')?p.sentence.replace('{{result}}',computed):computed;
  return {status:'answer',text,columns:p.groupBy?[p.groupBy.replaceAll('_',' '),p.measure.replaceAll('_',' ')]:[p.measure.replaceAll('_',' ')],rows:result.map(x=>p.groupBy?[x.label,format(x.n)]:[format(x.n)]),dates:period};
 }
