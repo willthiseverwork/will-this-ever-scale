@@ -1,0 +1,2 @@
+/** A payment-link reference may select only the current server-bound sandbox transaction. */
+export function isBoundTestCheckout(id:unknown,value:unknown):boolean{if(typeof id!=='string'||!/^txn_[a-z0-9]+$/i.test(id)||!value||typeof value!=='object')return false;const v=value as {canCheckout?:unknown;paymentLink?:{transactionId?:unknown;clientToken?:unknown}|null};return v.canCheckout===true&&v.paymentLink?.transactionId===id&&typeof v.paymentLink.clientToken==='string'&&/^test_/.test(v.paymentLink.clientToken);}
