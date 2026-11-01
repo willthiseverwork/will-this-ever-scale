@@ -2,6 +2,8 @@
 
 A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. AI chat planning may receive the seller's question and item titles with order counts; buyer names and emails, transaction IDs, and raw transaction rows stay in the browser.
 
+After a read, optional AI product grouping receives only unique item titles and their order counts. It returns product families, a short shop description and any unplaced titles; this result is cached with the tab's analysis.
+
 ## Try it
 
 Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). The sample jewelry shop is synthetic, dated 31 October 2026; PayPal actions use its separately identified sandbox test copies.

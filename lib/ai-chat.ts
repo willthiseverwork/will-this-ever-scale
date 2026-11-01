@@ -38,6 +38,6 @@ export function executeChatPlan(rows:Txn[], inputs:Inputs, currency:string, plan
  const result=[...map].map(([label,rs])=>({label,n:value(rs)})).sort((a,b)=>p.sort==='asc'?a.n-b.n:b.n-a.n).slice(0,p.limit);
  const format=(n:number)=>['orders','units','buyers'].includes(p.measure)?String(Math.round(n)):p.measure==='returning_buyer_share'?`${n.toFixed(1)}%`:money(n,currency);
  const period=f.start&&f.end?`${f.start} to ${f.end}`:f.start?`from ${f.start}`:f.end?`through ${f.end}`:'across the supplied dates';
- const first=result[0];const text=first?p.groupBy?`${first.label} has the ${p.sort==='asc'?'lowest':'highest'} ${p.measure.replaceAll('_',' ')} (${format(first.n)}) ${period}.`:`${p.measure.replaceAll('_',' ')}: ${format(first.n)} ${period}.`:`Can't answer from this data: there is no matching ${p.measure}.`;
+ const first=result[0];const computed=first?p.groupBy?`${first.label} has the ${p.sort==='asc'?'lowest':'highest'} ${p.measure.replaceAll('_',' ')} (${format(first.n)}) ${period}.`:`${p.measure.replaceAll('_',' ')}: ${format(first.n)} ${period}.`:`Can't answer from this data: there is no matching ${p.measure}.`;const text=p.sentence.includes('{{result}}')?p.sentence.replace('{{result}}',computed):computed;
  return {status:'answer',text,columns:p.groupBy?[p.groupBy.replaceAll('_',' '),p.measure.replaceAll('_',' ')]:[p.measure.replaceAll('_',' ')],rows:result.map(x=>p.groupBy?[x.label,format(x.n)]:[format(x.n)]),dates:period};
 }
