@@ -8,8 +8,10 @@ export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';inputs:
 export const BROWSER_READ_KEY='wtes-approved-ui-v2';
 // Deliberately module-memory only: raw rows (and any buyer keys) never enter storage or a request.
 let chatRows:Txn[]=[];
-export function setBrowserChatRows(rows:Txn[]){chatRows=rows;}
-export function getBrowserChatRows(){return chatRows;}
+const BROWSER_ROWS_KEY='wtes-browser-rows-v1';
+/** Raw rows remain in this browser tab only, so client-route boundaries cannot erase chat context. */
+export function setBrowserChatRows(rows:Txn[]){chatRows=rows;try{sessionStorage.setItem(BROWSER_ROWS_KEY,JSON.stringify(rows));}catch{}}
+export function getBrowserChatRows(){if(chatRows.length)return chatRows;try{const parsed=JSON.parse(sessionStorage.getItem(BROWSER_ROWS_KEY)||'[]');if(Array.isArray(parsed)){chatRows=parsed as Txn[];return chatRows;}}catch{}return [];}
 export function readBrowserAnalysis():BrowserRead|null {try{const value=JSON.parse(sessionStorage.getItem(BROWSER_READ_KEY)||'null') as BrowserRead|null;return value && ['demo','csv','sandbox'].includes(value.source) && value.analysis && Array.isArray(value.analysis.months)?value:null;}catch{return null;}}
 function uniqueItems(rows:Txn[]){const orders=new Map<string,number>();for(const row of rows){const title=row.item_title?.trim();if(title)orders.set(title,(orders.get(title)||0)+(['sale','invoice_payment','subscription_payment'].includes(row.kind)&&row.gross>0?1:0));}return [...orders].map(([title,orders])=>({title,orders})).sort((a,b)=>a.title.localeCompare(b.title));}
 function applyGrouping(rows:Txn[],grouping:ProductGrouping){const names=new Map<string,string>();for(const group of grouping.groups)for(const title of group.titles)names.set(title,group.name);return rows.map(row=>row.item_title&&names.has(row.item_title)?{...row,item_group:names.get(row.item_title)}:{...row});}
