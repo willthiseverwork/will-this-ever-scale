@@ -6,7 +6,7 @@ import type {Txn} from './types';
 import {fallbackProductGrouping,productGroupRequestSchema,validateProductGrouping,type ProductGrouping} from './product-groups';
 export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';inputs:Inputs;answers:Record<string,string>};
 export const BROWSER_READ_KEY='wtes-approved-ui-v2';
-// Deliberately module-memory only: raw rows (and any buyer keys) never enter storage or a request.
+// Raw rows (and any buyer keys) remain in this browser tab's session storage and never enter a request.
 let chatRows:Txn[]=[];
 const BROWSER_ROWS_KEY='wtes-browser-rows-v1';
 /** Raw rows remain in this browser tab only, so client-route boundaries cannot erase chat context. */
