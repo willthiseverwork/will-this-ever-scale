@@ -1,6 +1,6 @@
 # Will This Ever Scale
 
-A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. If the seller requests an AI read, only a strict set of numeric totals and fixed finding IDs is sent; no transaction rows or item names are sent in that request.
+A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. AI chat planning may receive the seller's question and item titles with order counts; buyer names and emails, transaction IDs, and raw transaction rows stay in the browser.
 
 ## Try it
 
@@ -72,7 +72,7 @@ MIT; see [LICENSE](LICENSE).
 
 The app includes data chat, saved-workspace support and a public synthetic MCP demo. Dedicated WorkOS sign-in and private storage are configured. Real sign-in, session renewal before saving, and persisted assistant-sharing changes have been verified. Both local clients completed OAuth; Codex also reached the private empty workspace and respected the sharing control. Real saved-data, multi-user isolation, client renewal after expiry and Claude private reads remain unverified. Live PayPal daily refresh and billing are not yet operational. A downloadable plugin is not proof of installation or a connected account.
 
-- `/chat` answers sales, refund, fee and monthly comparison questions from the browser analysis. Calculations stay local. The optional model intent helper accepts only fixed tokens and month IDs; it never receives the question text or product names.
+- `/chat` calculates answers from browser-held transaction rows. Its optional AI planner receives the seller's question plus item-title/count inventory and date capabilities, returns a strict validated lookup plan, and never receives buyer data, transaction IDs, or raw rows. When unavailable, a local parser provides a limited fallback.
 - `/workspace` keeps local reminders without sign-in. Account storage uses the dedicated WorkOS project and encrypted private store; real sign-in and consent persistence are verified; real saved-analysis and deletion lifecycles remain unverified. Saving a CSV summary is explicit; raw CSV rows are not stored. Assistant workspace access and reviewed-product-label sharing are separate controls and both default off. Turning workspace sharing off blocks the next private assistant request.
 - `/connect` offers a downloadable plugin package and a public synthetic sample at `/mcp`. Private OAuth metadata is configured and anonymous private calls require authentication; Codex private access to the empty workspace is verified; Claude private reads and real saved-analysis reads remain unverified. A package download is not an installed or connected client.
 - `/billing` exposes the planned $14.99/month offer after a 30-day no-card trial. Billing remains off by default; no payment is collected without a configured provider and explicit checkout. The free demo remains unrestricted for judges.
