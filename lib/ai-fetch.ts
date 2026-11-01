@@ -2,6 +2,9 @@ import {reserveAiBudget,type BudgetResult} from './ai-budget';
 
 const MODEL='us.amazon.nova-2-lite-v1:0';
 type Reserve=()=>Promise<BudgetResult>;
+export class AiBudgetError extends Error {
+ constructor(readonly reason:'exhausted'|'unavailable'){super('AI allowance is unavailable.');}
+}
 /** Restrict the billable boundary, including future callers and SDK transport retries. */
 export function budgetedNovaFetch(fetchImpl:typeof fetch=fetch,reserve:Reserve=reserveAiBudget):typeof fetch {
  return async(input,init)=>{
@@ -20,8 +23,8 @@ export function budgetedNovaFetch(fetchImpl:typeof fetch=fetch,reserve:Reserve=r
   const messages=request.messages;
   if(!Array.isArray(messages)||messages.some(message=>!message||!Array.isArray(message.content)||message.content.some((part:unknown)=>!part||typeof part!=='object'||Object.keys(part).some(key=>key!=='text')||typeof (part as {text?:unknown}).text!=='string')))throw new Error('AI request exceeds the configured limits.');
   const result=await reserve();
-  if(!result.allowed){console.info('ai_budget',{status:result.reason});throw new Error('AI allowance is unavailable.');}
-  console.info('ai_budget',{status:'reserved'});
+  if(!result.allowed){console.info('ai_budget',{status:result.reason});throw new AiBudgetError(result.reason);}
+  console.info('ai_budget',{status:'reserved',used:result.used});
   return fetchImpl(input,init);
  };
 }

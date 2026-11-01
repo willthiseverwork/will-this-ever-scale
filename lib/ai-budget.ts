@@ -5,7 +5,7 @@ const MAX_MONTHLY_CALLS=500;
 const MAX_BYTES=256;
 const TIMEOUT_MS=3000;
 type BudgetRecord={version:1;month:string;count:number};
-export type BudgetResult={allowed:true;reason:'reserved'}|{allowed:false;reason:'exhausted'|'unavailable'};
+export type BudgetResult={allowed:true;reason:'reserved';used?:number}|{allowed:false;reason:'exhausted'|'unavailable'};
 export class BudgetConflict extends Error {}
 export interface BudgetStore {
   read(path:string):Promise<{body:string;etag:string}|null>;
@@ -58,12 +58,13 @@ export async function reserveAiBudget(options:{store?:BudgetStore;now?:Date;limi
   for(let attempt=0;attempt<3;attempt++){
     try{
       const existing=await store.read(path);
-      if(!existing){await store.create(path,JSON.stringify({version:1,month,count:1}));return {allowed:true,reason:'reserved'};}
+      if(!existing){await store.create(path,JSON.stringify({version:1,month,count:1}));return {allowed:true,reason:'reserved',used:1};}
       const record=parseRecord(existing.body,month);
       if(!existing.etag)return {allowed:false,reason:'unavailable'};
       if(record.count>=limit)return {allowed:false,reason:'exhausted'};
-      await store.replace(path,JSON.stringify({...record,count:record.count+1}),existing.etag);
-      return {allowed:true,reason:'reserved'};
+      const used=record.count+1;
+      await store.replace(path,JSON.stringify({...record,count:used}),existing.etag);
+      return {allowed:true,reason:'reserved',used};
     }catch(error){if(error instanceof BudgetConflict)continue;return {allowed:false,reason:'unavailable'};}
   }
   return {allowed:false,reason:'unavailable'};
