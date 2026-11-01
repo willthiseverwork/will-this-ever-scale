@@ -2,10 +2,15 @@ import type {Analysis,Inputs} from './types';
 import {workspaceProductLabel,type WorkspaceInput} from './workspace-types';
 import {analyze} from './engine';
 import {demoTransactions,DEMO_AS_OF} from './demo';
+import type {Txn} from './types';
 export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';inputs:Inputs;answers:Record<string,string>};
 export const BROWSER_READ_KEY='wtes-approved-ui-v2';
+// Deliberately module-memory only: raw rows (and any buyer keys) never enter storage or a request.
+let chatRows:Txn[]=[];
+export function setBrowserChatRows(rows:Txn[]){chatRows=rows;}
+export function getBrowserChatRows(){return chatRows;}
 export function readBrowserAnalysis():BrowserRead|null {try{const value=JSON.parse(sessionStorage.getItem(BROWSER_READ_KEY)||'null') as BrowserRead|null;return value && ['demo','csv','sandbox'].includes(value.source) && value.analysis && Array.isArray(value.analysis.months)?value:null;}catch{return null;}}
-export function startBrowserDemo():BrowserRead {const inputs={asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'};const read:BrowserRead={analysis:analyze(demoTransactions(),inputs),source:'demo',inputs,answers:{}};sessionStorage.setItem(BROWSER_READ_KEY,JSON.stringify(read));return read;}
+export function startBrowserDemo():BrowserRead {const inputs={asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'}, rows=demoTransactions();setBrowserChatRows(rows);const read:BrowserRead={analysis:analyze(rows,inputs),source:'demo',inputs,answers:{}};sessionStorage.setItem(BROWSER_READ_KEY,JSON.stringify(read));return read;}
 export type ReviewedLabels={confirmed:true;labels:Record<string,string>};
 export function snapshotForSave(read:BrowserRead, review?:ReviewedLabels):WorkspaceInput['snapshots'][number] {
  if(read.source!=='csv') throw new Error('Only a CSV analysis can be saved here.');

@@ -12,6 +12,7 @@ import {analyze} from '../lib/engine';
 import {reanalyzeSandboxRows} from '../lib/sandbox-reanalysis';
 import {demoTransactions,DEMO_AS_OF} from '../lib/demo';
 import {parsePayPalCsv} from '../lib/csv';
+import {setBrowserChatRows} from '../lib/browser-analysis';
 import {questionsFor,testFor,contextFor} from '../lib/playbook';
 import type {Analysis,Inputs,Leak,Txn} from '../lib/types';
 import {calculationLines,displayMonth,displayedMoneyMap,evidenceLine,feeRateNote,headlineMonth,inOneHundred,leakTitle,localMonth,money,monthLabel,reconciledMoney,titleLowercase,wholePercent,worthLine,verifiedInvoicesMatch} from '../lib/display';
@@ -39,8 +40,8 @@ export default function ScaleTool(){
  const [stored,setStored]=useState<Stored|null>(null),[hydrated,setHydrated]=useState(false),[error,setError]=useState('');
  useEffect(()=>{try{const value=sessionStorage.getItem(STORE);if(value){const restored=JSON.parse(value) as Stored;setStored(restored);if(restored.source==='demo')activeRows=demoTransactions();}}catch{}setHydrated(true)},[]);
  const save=(next:Stored)=>{setStored(next);sessionStorage.setItem(STORE,JSON.stringify(next));};
- const startDemo=()=>{sourceGeneration++;activeRows=demoTransactions();const analysis=analyze(activeRows,{asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'});save({analysis,source:'demo',inputs:{asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'},answers:{}});router.push('/questions')};
- const upload=async(files:FileList|null)=>{if(!files?.length)return;const generation=++sourceGeneration;try{if([...files].some(f=>f.size>5_000_000))throw new Error('Choose CSV files smaller than 5 MB.');const rows=await parsePayPalCsv(await Promise.all([...files].map(f=>f.text())));if(generation!==sourceGeneration)return;activeRows=rows;save({analysis:analyze(activeRows,{}),source:'csv',inputs:{},answers:{}});router.push('/questions')}catch(e){if(generation===sourceGeneration)setError((e as Error).message)}};
+ const startDemo=()=>{sourceGeneration++;activeRows=demoTransactions();setBrowserChatRows(activeRows);const analysis=analyze(activeRows,{asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'});save({analysis,source:'demo',inputs:{asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'},answers:{}});router.push('/questions')};
+ const upload=async(files:FileList|null)=>{if(!files?.length)return;const generation=++sourceGeneration;try{if([...files].some(f=>f.size>5_000_000))throw new Error('Choose CSV files smaller than 5 MB.');const rows=await parsePayPalCsv(await Promise.all([...files].map(f=>f.text())));if(generation!==sourceGeneration)return;activeRows=rows;setBrowserChatRows(activeRows);save({analysis:analyze(activeRows,{}),source:'csv',inputs:{},answers:{}});router.push('/questions')}catch(e){if(generation===sourceGeneration)setError((e as Error).message)}};
  const analysis=stored?.analysis;
  useEffect(()=>{if(hydrated&&path!=='/'&&!analysis)router.replace('/')},[hydrated,path,analysis,router]);
  if(path==='/')return <><Start startDemo={startDemo} upload={upload} setError={setError} error={error} save={save} router={router}/><Footer/></>;
