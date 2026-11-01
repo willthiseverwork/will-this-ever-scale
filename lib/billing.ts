@@ -1,10 +1,11 @@
 import {createHmac,randomBytes,timingSafeEqual} from 'node:crypto';
 import {get,put,BlobPreconditionFailedError} from '@vercel/blob';
+import {getVercelOidcToken} from '@vercel/oidc';
 import {openAction,sealAction} from './action-store';
 import {getWorkspace} from './workspace-store';
 import {effectiveTrialDates} from './trial';
 import {reserveCheckout} from './account-lifecycle';
-import {currentBillingTest,testTrial,billingTestBlobCredentials} from './billing-test-context';
+import {currentBillingTest,testTrial} from './billing-test-context';
 
 export type BillingStatus='none'|'active'|'past_due'|'paused'|'canceled';
 type PriorBinding={nonce:string;customerId:string;subscriptionId:string};
@@ -13,11 +14,12 @@ export class BillingConflict extends Error {}
 export function billingLaunchAt(value=process.env.WTES_BILLING_STARTS_AT):string|null {if(!value||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value))return null;const ms=Date.parse(value);if(!Number.isFinite(ms))return null;const normalized=value.includes('.')?value:value.replace('Z','.000Z');return new Date(ms).toISOString()===normalized?normalized:null;}
 export function billingEnabled(now=Date.now()){const launch=billingLaunchAt();return process.env.WTES_BILLING_ENABLED==='true'&&!!launch&&Date.parse(launch)<=now;}
 
-export function billingConfig(){const test=currentBillingTest();if(test)return test;if(!billingEnabled())return null;const apiKey=process.env.WTES_PADDLE_API_KEY,clientToken=process.env.WTES_PADDLE_CLIENT_TOKEN,priceId=process.env.WTES_PADDLE_PRICE_MONTHLY,webhookSecret=process.env.WTES_PADDLE_WEBHOOK_SECRET,secret=process.env.WTES_BILLING_SECRET,token=process.env.WTES_BILLING_BLOB_TOKEN,environment=process.env.WTES_PADDLE_ENV;if(!apiKey||!clientToken||!/^pri_[a-z0-9]+$/i.test(priceId||'')||!webhookSecret||!secret||Buffer.byteLength(secret)<32||!token||!['sandbox','production'].includes(environment||''))return null;return {apiKey,clientToken,priceId:priceId!,webhookSecret,secret,token,environment:environment as 'sandbox'|'production',api:environment==='sandbox'?'https://sandbox-api.paddle.com':'https://api.paddle.com'};}
+export function billingConfig(){const test=currentBillingTest();if(test)return test;if(!billingEnabled())return null;const apiKey=process.env.WTES_PADDLE_API_KEY,clientToken=process.env.WTES_PADDLE_CLIENT_TOKEN,priceId=process.env.WTES_PADDLE_PRICE_MONTHLY,webhookSecret=process.env.WTES_PADDLE_WEBHOOK_SECRET,secret=process.env.WTES_BILLING_SECRET,storeId=process.env.WTES_BILLING_STORE_ID,environment=process.env.WTES_PADDLE_ENV;if(!apiKey||!clientToken||!/^pri_[a-z0-9]+$/i.test(priceId||'')||!webhookSecret||!secret||Buffer.byteLength(secret)<32||!storeId||!/^store_[A-Za-z0-9]+$/.test(storeId)||!['sandbox','production'].includes(environment||''))return null;return {apiKey,clientToken,priceId:priceId!,webhookSecret,secret,storeId,environment:environment as 'sandbox'|'production',api:environment==='sandbox'?'https://sandbox-api.paddle.com':'https://api.paddle.com'};}
 function ownerKey(userId:string,secret:string){return createHmac('sha256',secret).update('wtes-billing-owner:'+userId).digest('hex');}
 export function billingRecordPath(key:string,isTest:boolean){return (isTest?'wtes-billing-test/records/':'wtes-billing/')+key+'.json';}
-async function read(key:string){const c=billingConfig();if(!c||!/^\w{64}$/.test(key))throw new Error('Billing unavailable');const credentials='storeId' in c?await billingTestBlobCredentials(c):{token:c.token};const r=await get(billingRecordPath(key,!!currentBillingTest()),{access:'private',...credentials,useCache:false,abortSignal:AbortSignal.timeout(4000)});if(!r)return {value:null,etag:null};if(r.statusCode!==200||!r.blob.etag||r.blob.size>16384)throw new Error('Billing unavailable');const body=await new Response(r.stream).text();return {value:openAction<RecordData>(body,c.secret),etag:r.blob.etag};}
-async function write(key:string,value:RecordData,etag:string|null){const c=billingConfig();if(!c)throw new Error('Billing unavailable');try{const credentials='storeId' in c?await billingTestBlobCredentials(c):{token:c.token};await put(billingRecordPath(key,!!currentBillingTest()),sealAction(value,c.secret),{access:'private',...credentials,addRandomSuffix:false,allowOverwrite:!!etag,...(etag?{ifMatch:etag}:{}),contentType:'application/json',abortSignal:AbortSignal.timeout(4000)});}catch(e){if(e instanceof BlobPreconditionFailedError)throw new BillingConflict();throw e;}}
+async function billingBlobCredentials(c:{storeId:string}){const oidcToken=(await getVercelOidcToken()).trim();if(!oidcToken)throw new Error('Billing store OIDC unavailable');return {storeId:c.storeId,oidcToken};}
+async function read(key:string){const c=billingConfig();if(!c||!/^\w{64}$/.test(key))throw new Error('Billing unavailable');const credentials=await billingBlobCredentials(c);const r=await get(billingRecordPath(key,!!currentBillingTest()),{access:'private',...credentials,useCache:false,abortSignal:AbortSignal.timeout(4000)});if(!r)return {value:null,etag:null};if(r.statusCode!==200||!r.blob.etag||r.blob.size>16384)throw new Error('Billing unavailable');const body=await new Response(r.stream).text();return {value:openAction<RecordData>(body,c.secret),etag:r.blob.etag};}
+async function write(key:string,value:RecordData,etag:string|null){const c=billingConfig();if(!c)throw new Error('Billing unavailable');try{const credentials=await billingBlobCredentials(c);await put(billingRecordPath(key,!!currentBillingTest()),sealAction(value,c.secret),{access:'private',...credentials,addRandomSuffix:false,allowOverwrite:!!etag,...(etag?{ifMatch:etag}:{}),contentType:'application/json',abortSignal:AbortSignal.timeout(4000)});}catch(e){if(e instanceof BlobPreconditionFailedError)throw new BillingConflict();throw e;}}
 export class PaddleHttpError extends Error {constructor(readonly status:number){super('Paddle unavailable');}}
 async function paddle(path:string,method='GET',body?:unknown){const c=billingConfig();if(!c)throw new Error('Billing unavailable');const r=await fetch(c.api+path,{method,headers:{Authorization:`Bearer ${c.apiKey}`,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(4000),cache:'no-store',redirect:'error'});if(!r.ok)throw new PaddleHttpError(r.status);return (await r.json()).data;}
 function validPaddleDate(value:unknown):string|null {if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value)||!Number.isFinite(Date.parse(value)))return null;return new Date(value).toISOString();}
@@ -39,7 +41,8 @@ export function adjustmentBinding(value:RecordData,nonce:string,customerId:strin
 }
 
 export function checkoutEligible(trialEndsAt:string|null,now=Date.now()){if(!trialEndsAt)return false;const end=Date.parse(trialEndsAt);return Number.isFinite(end)&&now>=end;}
-export function testCheckoutUrl(origin:string|undefined){if(origin!=='https://app.willthiseverscale.com')throw new Error('Invalid test origin');return origin+'/billing-test';}
+export function checkoutUrl(origin:string|undefined,isTest:boolean){if(origin!=='https://app.willthiseverscale.com')throw new Error('Invalid checkout origin');return origin+(isTest?'/billing-test':'/billing');}
+export function testCheckoutUrl(origin:string|undefined){return checkoutUrl(origin,true);}
 type CheckoutStage='config'|'origin'|'trial_read'|'trial_validate'|'price_read'|'price_validate'|'lifecycle'|'record_read'|'reservation_validate'|'reservation_write'|'transaction_create'|'transaction_validate'|'transaction_bind_read'|'transaction_bind_write';
 export function checkoutDiagnostic(error:unknown):{code:string;httpStatus?:number} {
  if(error instanceof PaddleHttpError)return {code:'provider_http',...(error.status>=400&&error.status<=599?{httpStatus:error.status}:{})};
@@ -52,7 +55,7 @@ export async function startCheckout(userId:string){
  const test=currentBillingTest();let stage:CheckoutStage='config';let checks:ReturnType<typeof checkoutPriceChecks>|undefined;
  try {
   const c=billingConfig();if(!c)throw new Error('Billing unavailable');if(test&&userId!==test.owner)throw new Error('Billing unavailable');
-  stage='origin';if(test)testCheckoutUrl(process.env.WTES_APP_ORIGIN);
+  stage='origin';const checkout=checkoutUrl(process.env.WTES_APP_ORIGIN,!!test);
   stage='trial_read';const trialEnd=test?(await testTrial(test))?.endsAt||null:effectiveTrialDates((await getWorkspace(userId)).trialStartedAt,billingLaunchAt()!)?.endsAt||null;
   stage='trial_validate';if(!checkoutEligible(trialEnd))throw new Error('Checkout unavailable until the trial ends.');
   stage='price_read';const price=await paddle('/prices/'+encodeURIComponent(c.priceId));
@@ -65,7 +68,7 @@ export async function startCheckout(userId:string){
   if(value&&value.status!=='canceled'&&Date.now()-value.createdAt<15*60000)throw new Error('Checkout is being prepared.');
   const previous=value?.status==='canceled'?value:null;const nonce=randomBytes(32).toString('hex');value=previous?replacementReservation(previous,nonce,Date.now()):{nonce,transactionId:null,customerId:null,subscriptionId:null,status:'none',occurredAt:null,eventId:null,createdAt:Date.now()};
   stage='reservation_write';await write(key,value,etag);
-  stage='transaction_create';const transaction=await paddle('/transactions','POST',{items:[{price_id:c.priceId,quantity:1}],collection_mode:'automatic',custom_data:{wtes_owner:key,wtes_nonce:nonce},...(test?{checkout:{url:testCheckoutUrl(process.env.WTES_APP_ORIGIN)}}:{})});
+  stage='transaction_create';const transaction=await paddle('/transactions','POST',{items:[{price_id:c.priceId,quantity:1}],collection_mode:'automatic',custom_data:{wtes_owner:key,wtes_nonce:nonce},checkout:{url:checkout}});
   stage='transaction_validate';if(!/^txn_[a-z0-9]+$/i.test(transaction?.id||''))throw new Error('Checkout unavailable');
   stage='transaction_bind_read';({value,etag}=await read(key));if(!value||value.nonce!==nonce||value.transactionId)throw new BillingConflict();
   stage='transaction_bind_write';await write(key,{...value,transactionId:transaction.id},etag);return {transactionId:transaction.id,clientToken:c.clientToken,environment:c.environment};
