@@ -59,6 +59,33 @@ try{
  await access.focus();await page.keyboard.press('Space');await page.waitForFunction(()=>{const el=document.querySelector('[data-analytics-id="workspace_assistant_access"]');return el&&!el.checked});
  assert.deepEqual(changes[2].settings,{shareWorkspaceWithAssistant:false,shareProductNamesWithAssistant:true});
  assert.equal(await labels.isChecked(),true);assert.equal(writes,3);
+ // Synthetic account data exercises the actual browser download, never a provider account.
+ const reminder={id:'55e9dbb7-843f-47e3-91f6-a24d17785db0',findingId:'one_time_buyers',dueDate:'2026-11-10',kind:'review',status:'open'};
+ const snapshot={id:'89f174a0-e25b-4d7f-937b-30de0d6f4f47',capturedAt:'2026-10-31T00:00:00.000Z',currency:'USD',periodStart:'2026-10-01',periodEnd:'2026-10-31',periodPrecision:'month',source:'csv',coverageGaps:['date_coverage_unknown'],months:[{month:'2026-10',cameIn:100,fees:4,refunds:0,costs:10,ads:3,kept:83,orders:1}],items:[{id:'item_1',gross:100,orders:1,refunds:0,label:'Silver hoops',labelReviewed:true}],cameIn:100,fees:4,refunds:0,costs:10,adSpend:3,kept:83};
+ workspace={...workspace,snapshots:[snapshot],reminders:[reminder],trialStartedAt:'2026-10-31T00:00:00.000Z',trialEndsAt:'2026-11-30T00:00:00.000Z',unexpectedPrivateField:'must-not-be-exported'};
+ const localReminder={...reminder,id:'062c01cb-8cd4-41c8-ae0f-ed19a7306bb0'};
+ await page.evaluate(item=>localStorage.setItem('wtes-local-reminders-v1',JSON.stringify([item])),localReminder);
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.getByText('Workspace saving is currently free during beta.').waitFor();
+ assert.equal(await page.getByText(/Trial started|A first nonempty saved analysis starts a 30-day trial/).count(),0,'Disabled billing must not show a trial countdown');
+ const accountExport=page.getByRole('button',{name:'Export saved workspace'}),deviceExport=page.getByRole('button',{name:'Export reminders from this device'});
+ await accountExport.waitFor();await deviceExport.waitFor();
+ let downloads=0;page.on('download',()=>downloads++);
+ const consume=async download=>{const stream=await download.createReadStream();let body='';for await(const chunk of stream)body+=chunk.toString();return JSON.parse(body);};
+ const readsBeforeRenewalFailure=workspaceReads;refreshStatus=503;
+ await accountExport.click();await page.getByText('Session renewal is temporarily unavailable. Please try again.').waitFor();
+ assert.equal(workspaceReads,readsBeforeRenewalFailure,'Failed renewal must not read for export');assert.equal(downloads,0,'Failed renewal must not download');
+ refreshStatus=200;workspaceMode='fail';await accountExport.click();await page.getByText('Your workspace could not be loaded for export. Please try again.').waitFor();
+ assert.equal(downloads,0,'Failed workspace read must not download');
+ workspaceMode='success';const [accountDownload]=await Promise.all([page.waitForEvent('download'),accountExport.click()]);
+ assert.equal(accountDownload.suggestedFilename(),'wtes-workspace.json');const exported=await consume(accountDownload);
+ assert.equal(exported.format,'will-this-ever-scale-workspace');assert.equal(exported.version,1);
+ assert.deepEqual(exported.workspace.snapshots,[snapshot]);assert.deepEqual(exported.workspace.reminders,[reminder]);
+ assert.deepEqual(exported.workspace.settings,workspace.settings);assert.equal(exported.workspace.trialEndsAt,workspace.trialEndsAt);
+ assert.equal('unexpectedPrivateField' in exported.workspace,false);assert.equal(JSON.stringify(exported).includes('must-not-be-exported'),false);
+ const [deviceDownload]=await Promise.all([page.waitForEvent('download'),deviceExport.click()]);
+ assert.equal(deviceDownload.suggestedFilename(),'wtes-reminders.json');assert.deepEqual(await consume(deviceDownload),[localReminder]);
+ assert.equal(writes,3,'Export checks do not save, delete or start a trial');
  await page.getByRole('button',{name:'Sign out'}).click();
  await page.getByText('Signed out locally, but provider session revocation could not be confirmed.').waitFor();
  assert.equal(await page.getByRole('link',{name:'Sign in',exact:true}).count(),1);
@@ -71,5 +98,5 @@ try{
  if(await retry.count())assert.equal(await retry.isDisabled(),true,'Retry requires typed confirmation');
  else await page.getByText('Account deletion needs the service owner to finish.',{exact:false}).waitFor();
  assert.equal(writes,3);
- console.log('Hosted workspace UI failure-state, session renewal, consent, and deletion-pending reload checks passed (mocked account APIs).');
+ console.log('Hosted workspace UI failure-state, session renewal, consent, account and device export, and deletion-pending checks passed (mocked account APIs).');
 }finally{await browser.close();}

@@ -1,0 +1,6 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {emptyWorkspace} from '../lib/workspace-types';
+import {serializeWorkspaceExport} from '../lib/workspace-export';
+test('workspace backup contains saved records and settings but excludes unrecognized identity data',()=>{const base=emptyWorkspace();const id='55e9dbb7-843f-47e3-91f6-a24d17785db0';const workspace={...base,settings:{shareWorkspaceWithAssistant:true,shareProductNamesWithAssistant:false},reminders:[{id,findingId:'one_time_buyers' as const,dueDate:'2026-11-10',kind:'review' as const,status:'open' as const}],trialStartedAt:'2026-11-01T00:00:00.000Z',trialEndsAt:'2026-12-01T00:00:00.000Z',email:'private@example.com'};const exported=JSON.parse(serializeWorkspaceExport(workspace));assert.equal(exported.version,1);assert.equal(exported.workspace.reminders[0].id,id);assert.equal(exported.workspace.settings.shareWorkspaceWithAssistant,true);assert.equal(exported.workspace.trialEndsAt,workspace.trialEndsAt);assert.equal('email' in exported.workspace,false);});
+test('invalid saved records cannot be silently exported as a valid backup',()=>{const bad={...emptyWorkspace(),reminders:[{id:'bad',findingId:'unknown',dueDate:'not-a-date',kind:'review',status:'open'}]};assert.throws(()=>serializeWorkspaceExport(bad as never));});
