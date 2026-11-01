@@ -1,5 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {setLifecycleStoreForTests,LifecycleConflict,type LifecycleStore} from '../lib/account-lifecycle';
 import {POST} from '../app/api/account/delete/route';
 import {GET as accountStatus} from '../app/api/account/route';
 import {GET as workspaceStatus} from '../app/api/workspace/route';
@@ -12,7 +13,7 @@ test('account deletion is origin and session bound, gated, and safe to retry aft
  const old=names.map(n=>process.env[n]),oldFetch=globalThis.fetch;let record:{body:string;etag:string}|null=null,version=0,calls:string[]=[];
  const store:WorkspaceStore={async read(){return record},async write(_path,body,etag){if((record?.etag??null)!==etag)throw new WorkspaceConflict();record={body,etag:String(++version)}}};
  Object.assign(process.env,{WTES_WORKOS_CLIENT_ID:'client_test',WTES_WORKOS_API_KEY:'signin-only',WTES_SESSION_SECRET:'s'.repeat(40),WTES_APP_ORIGIN:'https://example.com',WTES_WORKSPACE_SECRET:'w'.repeat(40),WTES_ACCOUNT_DELETION_ENABLED:'false',WTES_WORKOS_DELETION_API_KEY:'dedicated-delete-key',WTES_BILLING_ENABLED:'false'});
- setWorkspaceStoreForTests(store);
+ setWorkspaceStoreForTests(store);let lifecycleRecord:{body:string;etag:string}|null=null;let lifecycleVersion=0;const lifecycle:LifecycleStore={async read(){return lifecycleRecord},async write(_path,body,etag){if((lifecycleRecord?.etag??null)!==etag)throw new LifecycleConflict();lifecycleRecord={body,etag:String(++lifecycleVersion)}}};setLifecycleStoreForTests(lifecycle);
  const cookie='wtes_session='+encodeURIComponent(sealAction({userId:'user_A',emailVerified:true,expires:Date.now()+60000},process.env.WTES_SESSION_SECRET!));
  const req=(origin='https://example.com',c=cookie)=>new Request('https://example.com/api/account/delete',{method:'POST',headers:{origin,cookie:c}});
  try{
@@ -22,7 +23,7 @@ test('account deletion is origin and session bound, gated, and safe to retry aft
   assert.equal((await POST(req('https://example.com',''))).status,401);
   assert.equal((await POST(req())).status,503);assert.equal((await getWorkspace('user_A')).revision,1);assert.equal(calls.length,0);
   process.env.WTES_ACCOUNT_DELETION_ENABLED='true';process.env.WTES_BILLING_ENABLED='true';assert.equal((await POST(req())).status,409);assert.equal(calls.length,0);
-  process.env.WTES_BILLING_ENABLED='false';assert.equal((await POST(req())).status,503);assert.deepEqual(calls,['https://api.workos.com/user_management/users/user_A']);
+  process.env.WTES_BILLING_ENABLED='false';assert.equal((await POST(req())).status,409);assert.equal(calls.length,0);assert.equal((await getWorkspace('user_A')).revision,1);await beginAccountDeletion('user_A');assert.equal((await POST(req())).status,503);assert.deepEqual(calls,['https://api.workos.com/user_management/users/user_A']);
   const accountResponse=await accountStatus(new Request('https://example.com/api/account',{headers:{cookie}}));assert.equal(accountResponse.status,200);assert.deepEqual(await accountResponse.json(),{configured:true,authenticated:true,deletionPending:true});
   const workspaceResponse=await workspaceStatus(new Request('https://example.com/api/workspace',{headers:{cookie}}));assert.equal(workspaceResponse.status,409);
   await assert.rejects(()=>getWorkspace('user_A'),WorkspaceDeleting);
@@ -30,5 +31,5 @@ test('account deletion is origin and session bound, gated, and safe to retry aft
   await beginAccountDeletion('user_A');
   globalThis.fetch=async()=>new Response(null,{status:404});
   const retry=await POST(req());assert.equal(retry.status,200);assert.match(retry.headers.get('set-cookie')||'',/wtes_session=;/);assert.match(retry.headers.get('set-cookie')||'',/wtes_refresh=;/);
- }finally{globalThis.fetch=oldFetch;setWorkspaceStoreForTests(undefined);names.forEach((n,i)=>{if(old[i]===undefined)delete process.env[n];else process.env[n]=old[i]});}
+ }finally{globalThis.fetch=oldFetch;setWorkspaceStoreForTests(undefined);setLifecycleStoreForTests(undefined);names.forEach((n,i)=>{if(old[i]===undefined)delete process.env[n];else process.env[n]=old[i]});}
 });
