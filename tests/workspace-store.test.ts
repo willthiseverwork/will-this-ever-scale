@@ -36,10 +36,11 @@ test('assistant access defaults off, requires explicit enablement and revokes on
   const legacy=workspaceInput.parse({...input(emptyWorkspace()),settings:{shareProductNamesWithAssistant:true},snapshots:[{...snapshot,items:[{id:'item_1',label:'Hat',labelReviewed:true,gross:100,orders:1,refunds:0}]}]});
   assert.equal(legacy.settings.shareWorkspaceWithAssistant,false);
   let saved=await saveWorkspace('user_consent',legacy);
-  for(const name of ['current_summary','rank_products','compare_periods','list_reminders','issue_playbook'])await assert.rejects(()=>callMcpTool(name,{},'user_consent'),/sharing is disabled/);
+  for(const name of ['current_summary','rank_products','compare_periods','issue_playbook'])await assert.rejects(()=>callMcpTool(name,{},'user_consent'),/sharing is disabled/);
   assert.equal((await callMcpTool('demo_summary',{}) as {source:string}).source,'synthetic demo');
   saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareWorkspaceWithAssistant:true}});
   assert.equal((await callMcpTool('current_summary',{},'user_consent') as {source:string}).source,'csv');
+  await assert.rejects(()=>callMcpTool('list_reminders',{},'user_consent'),/Unknown tool/);
   assert.equal((await callMcpTool('rank_products',{metric:'gross'},'user_consent') as {items:{label?:string}[]}).items[0].label,'Hat');
   saved=await saveWorkspace('user_consent',{...input(saved),settings:{...saved.settings,shareProductNamesWithAssistant:false}});
   assert.equal((await callMcpTool('rank_products',{metric:'gross'},'user_consent') as {items:{label?:string}[]}).items[0].label,undefined);

@@ -33,7 +33,7 @@ try{
  await page.getByText('Saved to your account.',{exact:false}).waitFor();
  assert.equal(await add.isEnabled(),true);
  assert.equal(writes,0,'No workspace mutation before explicit interaction');
- const access=page.getByRole('checkbox',{name:'Allow connected Claude Code and Codex assistants to access my saved workspace'});
+ const access=page.getByRole('checkbox',{name:'Allow connected Claude Code and Codex assistants to access my saved summaries'});
  const labels=page.getByRole('checkbox',{name:'Also allow reviewed product labels to be shared with a connected assistant'});
  assert.equal(await access.isChecked(),false);assert.equal(await labels.isChecked(),false);
  for(const [viewport,width,height] of [['desktop',1440,900],['mobile',375,812]]){

@@ -16,3 +16,11 @@ test('unsupported protocol is rejected and allowed browser preflight is explicit
  assert.equal((await post('tools/list',{}, {'mcp-protocol-version':'invalid'})).status,400);
  const r=await OPTIONS(new Request('https://app.willthiseverscale.com/mcp',{method:'OPTIONS',headers:{origin:'https://claude.ai'}}));assert.equal(r.status,204);assert.equal(r.headers.get('access-control-allow-origin'),'https://claude.ai');
 });
+
+
+test('reminder access is absent from discovery and rejected as an unknown tool',async()=>{
+ const list=await (await post('tools/list')).json();
+ assert.equal(list.result.tools.some((tool:{name:string})=>tool.name==='list_reminders'),false);
+ const response=await (await post('tools/call',{name:'list_reminders',arguments:{}})).json();
+ assert.equal(response.error.code,-32602);assert.equal(response.error.message,'Unknown tool');
+});
