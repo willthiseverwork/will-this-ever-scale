@@ -1,6 +1,6 @@
 # Will This Ever Scale
 
-A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. AI chat planning may receive the seller's question and item titles with order counts; buyer names and emails, transaction IDs, and raw transaction rows stay in the browser.
+A plain-language money map for sellers using PayPal. The sample shop is synthetic. Uploaded CSV files are parsed and analyzed in the browser. AI chat planning receives questions and item titles with counts and totals, never buyer details, transaction IDs or raw rows.
 
 After a read, optional AI product grouping receives only unique item titles and their order counts. It returns product families, a short shop description and any unplaced titles; this result is cached with the tab's analysis.
 
