@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {deleteWorkspace,getWorkspace,saveWorkspace,setWorkspaceStoreForTests,WorkspaceConflict,type WorkspaceStore} from '../lib/workspace-store';
 import {emptyWorkspace,workspaceInput} from '../lib/workspace-types';
+import {sealAction} from '../lib/action-store';
 import {callMcpTool} from '../lib/mcp-tools';
 const snapshot={id:'55e9dbb7-843f-47e3-91f6-a24d17785db0',capturedAt:'2026-10-31T00:00:00.000Z',currency:'USD',periodStart:'2026-01-01',periodEnd:'2026-10-31',source:'csv' as const,periodPrecision:'month' as const,coverageGaps:[],months:[],items:[],cameIn:100,fees:4,refunds:0,costs:10,adSpend:3,kept:83};
 function input(w:ReturnType<typeof emptyWorkspace>){return {settings:w.settings,revision:w.revision,snapshots:w.snapshots,reminders:w.reminders,tests:w.tests};}
@@ -64,3 +65,6 @@ test('deletion marker wins or conflicts with a simultaneous save and blocks late
   await assert.rejects(()=>saveWorkspace('user_RACE',input(initial)),WorkspaceDeleting);
  }finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}
 });
+
+
+test('legacy encrypted workspace read and assistant summary retain unknown date coverage without writing',async()=>{const previous=process.env.WTES_WORKSPACE_SECRET;const secret='x'.repeat(40);process.env.WTES_WORKSPACE_SECRET=secret;const {coverageGaps,...legacySnapshot}=snapshot;void coverageGaps;const workspace={...emptyWorkspace(),settings:{shareWorkspaceWithAssistant:true,shareProductNamesWithAssistant:false},snapshots:[legacySnapshot]};const stored=sealAction(workspace,secret);let writes=0;setWorkspaceStoreForTests({async read(){return {body:stored,etag:'legacy'}},async write(){writes++}});try{const loaded=await getWorkspace('user_legacy');assert.deepEqual(loaded.snapshots[0].coverageGaps,['date_coverage_unknown']);const summary=await callMcpTool('current_summary',{},'user_legacy') as {coverageGaps:string[];caveats:string[]};assert.deepEqual(summary.coverageGaps,['date_coverage_unknown']);assert.ok(summary.caveats.some(c=>c.includes('Exact export coverage')));assert.equal(writes,0);}finally{setWorkspaceStoreForTests(undefined);if(previous===undefined)delete process.env.WTES_WORKSPACE_SECRET;else process.env.WTES_WORKSPACE_SECRET=previous;}});

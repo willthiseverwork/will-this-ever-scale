@@ -19,3 +19,6 @@ test('billing opt-out exception permits only withdrawal without workspace change
  const disabled={...current,settings:{shareWorkspaceWithAssistant:false,shareProductNamesWithAssistant:true}};
  assert.equal(isSharingOptOutOnly(disabled,input),false);
 });
+
+
+test('missing legacy date coverage is unknown while explicit gaps remain unchanged',()=>{const base={settings:{shareProductNamesWithAssistant:false},revision:0,reminders:[],tests:[]};const parse=(item:unknown)=>workspaceInput.parse({...base,snapshots:[item]}).snapshots[0];assert.deepEqual(parse(snapshot).coverageGaps,['date_coverage_unknown']);assert.deepEqual(parse({...snapshot,coverageGaps:[]}).coverageGaps,[]);assert.deepEqual(parse({...snapshot,coverageGaps:['item_costs_missing','date_coverage_unknown']}).coverageGaps,['item_costs_missing','date_coverage_unknown']);assert.throws(()=>parse({...snapshot,coverageGaps:null}));});
