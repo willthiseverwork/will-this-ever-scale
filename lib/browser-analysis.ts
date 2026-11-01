@@ -3,6 +3,7 @@ import {workspaceProductLabel,type WorkspaceInput} from './workspace-types';
 import {analyze} from './engine';
 import {demoTransactions,DEMO_AS_OF} from './demo';
 import type {Txn} from './types';
+import {fallbackProductGrouping,productGroupRequestSchema,validateProductGrouping,type ProductGrouping} from './product-groups';
 export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';inputs:Inputs;answers:Record<string,string>};
 export const BROWSER_READ_KEY='wtes-approved-ui-v2';
 // Deliberately module-memory only: raw rows (and any buyer keys) never enter storage or a request.
@@ -10,7 +11,11 @@ let chatRows:Txn[]=[];
 export function setBrowserChatRows(rows:Txn[]){chatRows=rows;}
 export function getBrowserChatRows(){return chatRows;}
 export function readBrowserAnalysis():BrowserRead|null {try{const value=JSON.parse(sessionStorage.getItem(BROWSER_READ_KEY)||'null') as BrowserRead|null;return value && ['demo','csv','sandbox'].includes(value.source) && value.analysis && Array.isArray(value.analysis.months)?value:null;}catch{return null;}}
-export function startBrowserDemo():BrowserRead {const inputs={asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'}, rows=demoTransactions();setBrowserChatRows(rows);const read:BrowserRead={analysis:analyze(rows,inputs),source:'demo',inputs,answers:{}};sessionStorage.setItem(BROWSER_READ_KEY,JSON.stringify(read));return read;}
+function uniqueItems(rows:Txn[]){const orders=new Map<string,number>();for(const row of rows){const title=row.item_title?.trim();if(title)orders.set(title,(orders.get(title)||0)+(['sale','invoice_payment','subscription_payment'].includes(row.kind)&&row.gross>0?1:0));}return [...orders].map(([title,orders])=>({title,orders})).sort((a,b)=>a.title.localeCompare(b.title));}
+function applyGrouping(rows:Txn[],grouping:ProductGrouping){const names=new Map<string,string>();for(const group of grouping.groups)for(const title of group.titles)names.set(title,group.name);return rows.map(row=>row.item_title&&names.has(row.item_title)?{...row,item_group:names.get(row.item_title)}:{...row});}
+/** One protected grouping request per newly read data set; raw rows remain browser-only. */
+export async function groupBrowserRows(rows:Txn[]):Promise<{rows:Txn[];grouping:ProductGrouping}>{const items=uniqueItems(rows),fallback=fallbackProductGrouping(items);if(!items.length)return {rows,grouping:fallback};try{if(!productGroupRequestSchema.safeParse({items}).success||new TextEncoder().encode(JSON.stringify({items})).byteLength>12000)throw new Error('too large');const response=await fetch('/api/product-groups',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});if(!response.ok)throw new Error('unavailable');const grouping=validateProductGrouping(await response.json(),items);if(!grouping)throw new Error('invalid');return {rows:applyGrouping(rows,grouping),grouping};}catch{return {rows:applyGrouping(rows,fallback),grouping:fallback};}}
+export function startBrowserDemo():BrowserRead {const inputs={asOf:DEMO_AS_OF,fixedFee:.49,homeCountry:'US'},rows=demoTransactions();setBrowserChatRows(rows);const read:BrowserRead={analysis:analyze(rows,inputs),source:'demo',inputs,answers:{}};sessionStorage.setItem(BROWSER_READ_KEY,JSON.stringify(read));return read;}
 export type ReviewedLabels={confirmed:true;labels:Record<string,string>};
 export function snapshotForSave(read:BrowserRead, review?:ReviewedLabels):WorkspaceInput['snapshots'][number] {
  if(read.source!=='csv') throw new Error('Only a CSV analysis can be saved here.');
