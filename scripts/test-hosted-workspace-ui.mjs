@@ -8,14 +8,14 @@ if(!base||new URL(base).protocol!=='https:')throw new Error('Set WTES_HOSTED_TES
 const browser=await chromium.launch({headless:true,...(process.env.WTES_TEST_CHROME_PATH?{executablePath:process.env.WTES_TEST_CHROME_PATH}:{})});
 try{
  const page=await browser.newPage();
- let signedIn=true, deletionPending=false, workspaceMode='pending', writes=0, workspaceReads=0;
+ let signedIn=true, deletionPending=false, workspaceMode='pending', writes=0, workspaceReads=0, refreshStatus=200, refreshes=0;const sequence=[];
  let workspace={revision:0,settings:{shareWorkspaceWithAssistant:false,shareProductNamesWithAssistant:false},snapshots:[],reminders:[],tests:[],trialStartedAt:null,trialEndsAt:null};
  const changes=[];
  await page.route('**/api/account',route=>route.fulfill({json:{configured:true,authenticated:signedIn,...(deletionPending?{deletionPending:true}:{trial:null})}}));
- await page.route('**/api/account/refresh',route=>route.fulfill({status:401,json:{error:'Sign in required.'}}));
+ await page.route('**/api/account/refresh',route=>{refreshes++;sequence.push('refresh');const status=signedIn?refreshStatus:401;return route.fulfill({status,json:status===200?{ok:true}:{error:'Session unavailable.'}})});
  await page.route('**/api/account/logout',route=>{signedIn=false;return route.fulfill({status:503,json:{ok:false,error:'Signed out locally; provider session revocation could not be confirmed.'}})});
  await page.route('**/api/workspace',async route=>{
-  if(route.request().method()!=='GET'){writes++;if(route.request().method()!=='PUT')return route.fulfill({status:500});const input=route.request().postDataJSON();changes.push(input);workspace={...workspace,...input,revision:input.revision+1};return route.fulfill({json:{workspace}});}
+  if(route.request().method()!=='GET'){sequence.push('write');writes++;if(route.request().method()!=='PUT')return route.fulfill({status:500});const input=route.request().postDataJSON();changes.push(input);workspace={...workspace,...input,revision:input.revision+1};return route.fulfill({json:{workspace}});}
   workspaceReads++;if(workspaceMode==='pending')return;
   if(workspaceMode==='fail')return route.fulfill({status:503,json:{error:'Workspace unavailable.'}});
   return route.fulfill({json:{workspace}});
@@ -46,7 +46,13 @@ try{
   assert.deepEqual(errors,[],`${viewport} console or page errors`);page.off('pageerror',onError);page.off('console',onConsole);
  }
  assert.equal(writes,0,'Viewport checks do not mutate workspace');
+ refreshStatus=503;const beforeFailure=writes;
+ await access.focus();await page.keyboard.press('Space');await page.getByText('Session renewal is temporarily unavailable. Please try again.').waitFor();
+ assert.equal(writes,beforeFailure,'Failed renewal must not submit a workspace change');
+ assert.equal(await access.isChecked(),false);
+ refreshStatus=200;sequence.length=0;
  await access.focus();await page.keyboard.press('Space');await page.waitForFunction(()=>document.querySelector('[data-analytics-id="workspace_assistant_access"]:checked'));
+ assert.ok(sequence.indexOf('refresh')>=0&&sequence.indexOf('refresh')<sequence.indexOf('write'),'A session refresh precedes the change');
  assert.deepEqual(changes[0].settings,{shareWorkspaceWithAssistant:true,shareProductNamesWithAssistant:false});
  await labels.focus();await page.keyboard.press('Space');await page.waitForFunction(()=>document.querySelector('[data-analytics-id="workspace_assistant_labels"]:checked'));
  assert.deepEqual(changes[1].settings,{shareWorkspaceWithAssistant:true,shareProductNamesWithAssistant:true});
@@ -65,5 +71,5 @@ try{
  if(await retry.count())assert.equal(await retry.isDisabled(),true,'Retry requires typed confirmation');
  else await page.getByText('Account deletion needs the service owner to finish.',{exact:false}).waitFor();
  assert.equal(writes,3);
- console.log('Hosted workspace UI failure-state, consent, and deletion-pending reload checks passed (mocked account APIs).');
+ console.log('Hosted workspace UI failure-state, session renewal, consent, and deletion-pending reload checks passed (mocked account APIs).');
 }finally{await browser.close();}
