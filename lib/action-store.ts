@@ -1,5 +1,5 @@
 import { createCipheriv,createDecipheriv,createHash,randomBytes } from 'node:crypto';
-import { get,put,BlobPreconditionFailedError } from '@vercel/blob';
+import { get,head,put,BlobPreconditionFailedError } from '@vercel/blob';
 
 export class ActionConflict extends Error {}
 export interface ActionStore {read(path:string):Promise<{body:string;etag:string}|null>;create(path:string,body:string):Promise<void>;replace(path:string,body:string,etag:string):Promise<void>}
@@ -15,7 +15,14 @@ export function actionStore():ActionStore {
  return {
   async read(path){const signal=AbortSignal.timeout(ACTION_STORE_TIMEOUT_MS);const result=await get(path,{access:'private',token,useCache:false,abortSignal:signal});if(!result)return null;if(result.statusCode!==200||!result.blob.etag||result.blob.size>32768)throw new Error('Action storage unavailable.');const body=await new Response(result.stream).text();if(Buffer.byteLength(body)>32768)throw new Error('Invalid action record.');return {body,etag:result.blob.etag};},
   async create(path,body){try{await put(path,body,{access:'private',token,addRandomSuffix:false,allowOverwrite:false,contentType:'application/json',abortSignal:AbortSignal.timeout(ACTION_STORE_TIMEOUT_MS)});}catch(error){if(error instanceof BlobPreconditionFailedError)throw new ActionConflict();throw error;}},
-  async replace(path,body,etag){try{await put(path,body,{access:'private',token,addRandomSuffix:false,allowOverwrite:true,ifMatch:etag,contentType:'application/json',abortSignal:AbortSignal.timeout(ACTION_STORE_TIMEOUT_MS)});}catch(error){if(error instanceof BlobPreconditionFailedError)throw new ActionConflict();throw error;}}
+  async replace(path,body,etag){try{
+   // Blob objects can be read through a response path whose ETag is no longer
+   // acceptable for a conditional overwrite. Resolve metadata immediately
+   // before the write, then retain the same compare-and-swap guard.
+   const current=await head(path,{token,abortSignal:AbortSignal.timeout(ACTION_STORE_TIMEOUT_MS)});
+   if(current.etag!==etag)throw new ActionConflict();
+   await put(path,body,{access:'private',token,addRandomSuffix:false,allowOverwrite:true,ifMatch:current.etag,contentType:'application/json',abortSignal:AbortSignal.timeout(ACTION_STORE_TIMEOUT_MS)});
+  }catch(error){if(error instanceof ActionConflict||error instanceof BlobPreconditionFailedError)throw new ActionConflict();throw error;}}
  };
 }
 function key(secret:string){if(Buffer.byteLength(secret)<32)throw new Error('Action signing is not configured.');return createHash('sha256').update(secret).digest();}
