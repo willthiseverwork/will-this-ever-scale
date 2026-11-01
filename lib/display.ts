@@ -34,8 +34,7 @@ export function displayMonth<T extends {cameIn:number;fees:number;refunds:number
 }
 
 export function wholePercent(value:number) {
-  const rounded=Math.round(value);
-  return `${rounded===0&&value>0?Number(value.toFixed(1)):rounded}%`;
+  return `${Math.round(value)}%`;
 }
 
 export function inOneHundred(value:number) { return `${Math.round(value)} in 100`; }
@@ -87,15 +86,15 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
   const n=(key:string)=>typeof e[key]==='number'?e[key] as number:undefined;
   const exact=(v:number)=>new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
   const result=money(leak.money_per_month||0,c);
-  if(leak.id==='one_time_buyers'&&n('additional_orders')!==undefined&&n('average_order')!==undefined&&n('kept_share')!==undefined) return [
+  if(leak.id==='one_time_buyers'&&n('additional_orders')!==undefined&&n('average_order')!==undefined&&n('kept_share')!==undefined) {const buyersBack=Number((n('additional_orders')!/3).toFixed(1)),averageOrder=n('average_order')!,keptShare=Math.round(n('kept_share')!),shownResult=money(buyersBack*averageOrder*keptShare/100,c);return [
     `Buyers, last 3 months: ${n('buyers')}`,
     `Came back, last 3 months: ${inOneHundred(n('current_share')||0)}`,
     `Came back, ${e.best_window||'best window'}: ${inOneHundred(n('target_share')||0)}`,
-    `More buyers back each month: ${(n('additional_orders')!/3).toFixed(2)}`,
-    `Average order: ${exact(n('average_order')!)}`,
-    `Kept after fees and refunds, all months: ${n('kept_share')}%`,
-    `${(n('additional_orders')!/3).toFixed(2)} × ${exact(n('average_order')!)} × ${n('kept_share')}% ≈ ${result} a month`
-  ];
+    `More buyers back each month: ${buyersBack.toFixed(1)}`,
+    `Average order: ${exact(averageOrder)}`,
+    `Kept after fees and refunds, all months: ${keptShare}%`,
+    `${buyersBack.toFixed(1)} × ${exact(averageOrder)} × ${keptShare}% ≈ ${shownResult} a month`
+  ];}
   if(leak.id==='refunds_one_item'&&n('refunds')!==undefined) {
     const p=leak.assumption?.value??50;
     return [`Refunds on ${e.item}, last 3 months: ${exact(n('refunds')!)}`,...(n('refunded_orders')!==undefined&&n('item_orders')!==undefined?[`Refunded orders: ${n('refunded_orders')} of ${n('item_orders')}`]:[]),`If you prevent: ${p}%`,`${exact(n('refunds')!)} ÷ 3 × ${p}% ≈ ${result} a month`];

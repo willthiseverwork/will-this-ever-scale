@@ -10,6 +10,7 @@ test('test sentence validator preserves placeholders and rejects numbers, causes
  const result=await draftTest(input,async prompt=>{assert.doesNotMatch(prompt,/Private|private@example/i);return 'Offer {small_group} together at a small discount.';});
  assert.deepEqual(result,{sentence:'Offer {small_group} together at a small discount.',source:'ai'});
  assert.equal(fillValidatedTest(result.sentence,input.template,{small_group:'Private earrings'}),'Offer Private earrings together at a small discount.');
+ assert.equal(fillValidatedTest('Show your newest {top_group} to past buyers.','Show your newest {top_group} to past buyers.',{top_group:'Silver hoops'}),'Show your newest silver hoops to past buyers.');
 });
 test('test payload is strict and carries only answer IDs, static template and engine numbers',()=>{
  assert.equal(testDraftSchema.safeParse({...input,item_title:'Private earrings'}).success,false);

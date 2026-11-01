@@ -28,5 +28,5 @@ export async function draftTest(input:z.infer<typeof testDraftSchema>,generate?:
 /** Browser-only substitution; model text never receives the seller's strings. */
 export function fillValidatedTest(sentence:string,template:string,values:Record<string,string|number>):string|null {
  if(!validTestDraft(sentence,template))return null;
- return sentence.replace(/\{([a-z_]+)\}/g,(_,key:string)=>typeof values[key]==='string'||typeof values[key]==='number'?String(values[key]):'');
+ return sentence.replace(/\{([a-z_]+)\}/g,(_,key:string,offset:number)=>{const value=values[key];if(typeof value!=='string'&&typeof value!=='number')return '';const text=String(value),prefix=sentence.slice(0,offset).trimEnd();return ['item','top_group'].includes(key)&&prefix&&!/[.!?]$/.test(prefix)?text[0].toLocaleLowerCase()+text.slice(1):text;});
 }

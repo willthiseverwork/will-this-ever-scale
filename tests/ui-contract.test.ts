@@ -23,10 +23,11 @@ test('two source fixtures change displayed numbers and repeat formula rounds wit
  for(const analysis of [a,b]){
   const leak=analysis.ranked_leaks.find(x=>x.id==='one_time_buyers')!;
   const e=leak.evidence;
-  const shownOrders=Number((Number(e.additional_orders)/3).toFixed(2));
+  const shownOrders=Number((Number(e.additional_orders)/3).toFixed(1));
   const shownAverage=Number(Number(e.average_order).toFixed(2));
-  const shownResult=Number(money(leak.money_per_month!,'USD').replace(/[^\d.]/g,''));
-  assert.ok(Math.abs(shownOrders*shownAverage*Number(e.kept_share)/100-shownResult)<=1);
-  assert.match(calculationLines(leak,analysis).at(-1)!,/≈ .* a month/);
+  const finalLine=calculationLines(leak,analysis).at(-1)!;
+  const shownResult=Number(finalLine.match(/≈ \$([\d.]+) a month/)?.[1]);
+  assert.ok(Math.abs(shownOrders*shownAverage*Math.round(Number(e.kept_share))/100-shownResult)<=1);
+  assert.match(finalLine,/≈ .* a month/);
  }
 });
