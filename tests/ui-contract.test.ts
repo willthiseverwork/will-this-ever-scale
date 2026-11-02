@@ -29,6 +29,13 @@ test('uploads go directly to results, where the whole-file PayPal totals are sho
  assert.match(source,/Reached your account/);
  assert.match(source,/periodLabel\(a\.period\.start,a\.period\.end\)/);
 });
+test('storage failures keep browser results available and use the signed-in and duplicate-file copy',()=>{
+ const source=readFileSync(new URL('../components/scale-tool.tsx',import.meta.url),'utf8');
+ assert.match(source,/We couldn&apos;t save this file to your account\. Your results are below; upload again later to save it\./);
+ assert.match(source,/Signed in: your file is saved privately to your account \(no names or emails\)\./);
+ assert.match(source,/Same file as \$\{/);
+ assert.doesNotMatch(source,/Upload unavailable\./);
+});
 test('two source fixtures change displayed numbers and repeat formula rounds within one dollar',()=>{
  const rows=demoTransactions(),a=analyze(rows,{asOf:DEMO_AS_OF,homeCountry:'US'});
  const b=analyze(rows.map(row=>({...row,gross:row.gross*2,fee:row.fee*2,net:row.net*2})),{asOf:DEMO_AS_OF});
