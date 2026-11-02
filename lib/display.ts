@@ -41,6 +41,16 @@ export function inOneHundred(value:number) { return `${Math.round(value)} in 100
 
 export function titleLowercase(value:string) { return value&&value.length>1&&/[A-Z]/.test(value[0])&&/[A-Z]/.test(value[1])?value:value?value[0].toLocaleLowerCase()+value.slice(1):value; }
 
+/** Human item labels keep genuine abbreviations but do not shout raw marketplace titles. */
+export function sentenceCaseItem(value:string) {
+ const initials=new Set(['USB','LED','UK','XL','A4']);
+ return value.toLowerCase().replace(/\b[\p{L}\p{N}]+\b/gu,(word,index)=>{
+   const raw=value.slice(index,index+word.length);
+   if(initials.has(raw.toUpperCase())||(!/[aeiou]/i.test(raw)&&raw.length>1)) return raw.toUpperCase();
+   return index===0?word.charAt(0).toUpperCase()+word.slice(1):word;
+ });
+}
+
 export function localMonth(clock=new Date()) { return `${clock.getFullYear()}-${String(clock.getMonth()+1).padStart(2,'0')}`; }
 
 export function headlineMonth(analysis:Analysis, sellerClock=new Date()) {
