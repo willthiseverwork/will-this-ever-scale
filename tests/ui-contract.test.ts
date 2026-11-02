@@ -33,7 +33,7 @@ test('storage failures keep browser results available and use the signed-in and 
  const source=readFileSync(new URL('../components/scale-tool.tsx',import.meta.url),'utf8');
  assert.match(source,/We couldn&apos;t save this file to your account\. Your results are below; upload again later to save it\./);
  assert.match(source,/Signed in: your file is saved privately to your account \(no names or emails\)\./);
- assert.match(source,/Same file as \$\{/);
+ assert.match(source,/uploaded \$\{count\} times/);
  assert.doesNotMatch(source,/Upload unavailable\./);
 });
 test('two source fixtures change displayed numbers and repeat formula rounds within one dollar',()=>{
