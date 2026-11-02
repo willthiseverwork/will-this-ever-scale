@@ -22,3 +22,13 @@ export function lapsedBuyersFinding(sales:Txn[]):Leak|undefined {
  const money=n(sum(quiet.map(row=>row.average))); if(money<10)return;
  return {id:'lapsed_buyers',kind:'monthly',money_per_month:money,method:'One more order from each regular buyer whose usual ordering gap has passed.',evidence:{card_period:'now',quiet_buyers:quiet.length,quiet_total_orders:sum(quiet.map(row=>row.orders)),quiet_spend:n(sum(quiet.map(row=>row.total))),quiet_money:money}};
 }
+
+export function abroadFeesFinding(sales:Txn[],currency:string,months:number,homeCountry?:string):Leak|undefined {
+ if(!supportedCurrencies.has(currency))return;
+ const known=sales.filter(row=>!!row.country); if(!known.length)return;
+ const counts=new Map<string,number>();for(const row of known){const code=row.country!.trim().toUpperCase();counts.set(code,(counts.get(code)||0)+1);}
+ const home=homeCountry?.trim().toUpperCase()||[...counts.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0]?.[0];if(!home)return;
+ const abroad=known.filter(row=>row.country!.trim().toUpperCase()!==home), domestic=known.filter(row=>row.country!.trim().toUpperCase()===home);if(!abroad.length||!domestic.length)return;
+ const gross=(rows:Txn[])=>sum(rows.map(row=>row.gross)), fees=(rows:Txn[])=>sum(rows.map(row=>Math.abs(row.fee))), homeRate=fees(domestic)/gross(domestic), extra=n((fees(abroad)-gross(abroad)*homeRate)*12/months);if(extra<20)return;
+ return {id:'cross_border_fees',kind:'monthly',money_per_month:extra,method:'Observed fees on sales outside the main country, less the observed home-country fee rate, annualised from this file.',evidence:{card_period:'year',home_country:home,abroad_orders:abroad.length,abroad_fees:n(fees(abroad)),home_fee_rate:n(homeRate*100),extra_fees:extra}};
+}
