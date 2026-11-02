@@ -20,6 +20,15 @@ test('reminder review visibly states when PayPal invoices are being read',()=>{
  const source=readFileSync(new URL('../components/scale-tool.tsx',import.meta.url),'utf8');
  assert.match(source,/Reading your invoices from PayPal…/);
 });
+test('uploads go directly to results, where the whole-file PayPal totals are shown before cards',()=>{
+ const source=readFileSync(new URL('../components/scale-tool.tsx',import.meta.url),'utf8');
+ assert.doesNotMatch(source,/router\.push\('\/questions'\)/);
+ assert.match(source,/router\.push\('\/read'\)/);
+ assert.match(source,/What PayPal shows/);
+ assert.match(source,/PayPal kept/);
+ assert.match(source,/Reached your account/);
+ assert.match(source,/periodLabel\(a\.period\.start,a\.period\.end\)/);
+});
 test('two source fixtures change displayed numbers and repeat formula rounds within one dollar',()=>{
  const rows=demoTransactions(),a=analyze(rows,{asOf:DEMO_AS_OF,homeCountry:'US'});
  const b=analyze(rows.map(row=>({...row,gross:row.gross*2,fee:row.fee*2,net:row.net*2})),{asOf:DEMO_AS_OF});

@@ -1,3 +1,4 @@
 # Release log
 
+- 2026-11-02T12:18:30Z — Step 2 — Uploads now open results directly. The first card shows the full uploaded period with Came in, PayPal kept, Refunds, and Reached your account; it does not infer seller costs or ad spend. Check `/` → upload any PayPal CSV, then `/read`; use the attached shop4–shop8 CSVs locally only. `npm test` (213 passing) and `npm run build` passed. Live-browser verification is deferred to Claude's fake-seller check because this runner has no browser.
 - 2026-11-02T12:04:36Z — `cf01b29` — Fixed B1–B5: correctly labels a five-point returning-buyer test, preserves all-caps item prefixes, renames the refunds finding, reads PayPal `Subject`, and applies one date order per PayPal file. Updated the upload guidance. Check `/` and upload a UK/US PayPal activity CSV; local fixture coverage is in `tests/csv.test.ts` and `tests/display.test.ts`.
