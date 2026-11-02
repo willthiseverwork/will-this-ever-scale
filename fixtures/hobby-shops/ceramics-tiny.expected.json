@@ -24,9 +24,11 @@
       "facts": {}
     },
     "item_jumped": {
-      "shown": false,
-      "money": null,
-      "facts": {}
+      "shown": true,
+      "money": 414.32,
+      "facts": {
+        "method": "Difference between the latest and prior 90-day sales, annualised at the latest pace."
+      }
     },
     "best_month": {
       "shown": false,

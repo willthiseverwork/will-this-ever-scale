@@ -24,14 +24,18 @@
       "facts": {}
     },
     "item_jumped": {
-      "shown": false,
-      "money": null,
-      "facts": {}
+      "shown": true,
+      "money": 2060.8,
+      "facts": {
+        "method": "Difference between the latest and prior 90-day sales, annualised at the latest pace."
+      }
     },
     "best_month": {
-      "shown": false,
-      "money": null,
-      "facts": {}
+      "shown": true,
+      "money": 412.13,
+      "facts": {
+        "method": "Highest calendar-month sales compared with the average calendar month in this file."
+      }
     },
     "refunds_one_item": {
       "shown": true,
