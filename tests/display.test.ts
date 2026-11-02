@@ -14,7 +14,7 @@ test('currency and mid-sentence item formatting',()=>{
  assert.equal(money(2.94,'USD'),'$2.94');
  assert.equal(money(-41,'USD',true),'−$41');
  assert.equal(titleLowercase('Stacking rings'),'stacking rings');
- assert.equal(titleLowercase('ASSTD MULTICOLOUR CIRCLES MUG'),'ASSTD MULTICOLOUR CIRCLES MUG');
+ assert.equal(titleLowercase('ASSTD MULTICOLOUR CIRCLES MUG'),'asstd multicolour circles mug');
 });
 test('returning-buyer hypothetical is never labelled as an observed period',()=>{const leak={id:'one_time_buyers',kind:'monthly' as const,money_per_month:10,method:'',evidence:{current_share:27,target_share:32,target_is_observed:0,best_window:'Aug–Oct',additional_orders:3,average_order:20,kept_share:80}};assert.match(evidenceLine(leak,'GBP',true),/five-point test/);assert.doesNotMatch(calculationLines(leak,analyze(demoTransactions(),{asOf:DEMO_AS_OF})).join(' '),/Aug–Oct/);});
 test('fee rate note displays whole dollars per $100 without cents',()=>{

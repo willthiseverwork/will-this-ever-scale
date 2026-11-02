@@ -39,7 +39,7 @@ export function wholePercent(value:number) {
 
 export function inOneHundred(value:number) { return `${Math.round(value)} in 100`; }
 
-export function titleLowercase(value:string) { return value&&value.length>1&&/[A-Z]/.test(value[0])&&/[A-Z]/.test(value[1])?value:value?value[0].toLocaleLowerCase()+value.slice(1):value; }
+export function titleLowercase(value:string) { const label=sentenceCaseItem(value);return /^[A-Z]{2}/.test(label)?label:label?label[0].toLocaleLowerCase()+label.slice(1):label; }
 
 /** Human item labels keep genuine abbreviations but do not shout raw marketplace titles. */
 export function sentenceCaseItem(value:string) {
@@ -114,7 +114,7 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
   ];}
   if(leak.id==='refunds_one_item'&&n('refunds')!==undefined) {
     const p=leak.assumption?.value??50;
-    return [`Refunds on ${e.item}, last 3 months: ${exact(n('refunds')!)}`,...(n('refunded_orders')!==undefined&&n('item_orders')!==undefined?[`Refunded orders: ${n('refunded_orders')} of ${n('item_orders')}`]:[]),`If you prevent: ${p}%`,`${exact(n('refunds')!)} ÷ 3 × ${p}% ≈ ${result} a month`];
+    return [`Refunds on ${sentenceCaseItem(String(e.item||'item'))}, last 3 months: ${exact(n('refunds')!)}`,...(n('refunded_orders')!==undefined&&n('item_orders')!==undefined?[`Refunded orders: ${n('refunded_orders')} of ${n('item_orders')}`]:[]),`If you prevent: ${p}%`,`${exact(n('refunds')!)} ÷ 3 × ${p}% ≈ ${result} a month`];
   }
   if(leak.id==='small_order_fees'&&n('annual_savings')!==undefined) return [`Qualifying orders, last 12 months: ${n('small_orders')}`,`Savings across those orders: ${exact(n('annual_savings')!)}`,`${exact(n('annual_savings')!)} ÷ 12 ≈ ${result} a month`];
   if(leak.id==='sets'&&n('single_orders')!==undefined&&n('second_price')!==undefined) {
