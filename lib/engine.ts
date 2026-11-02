@@ -8,13 +8,15 @@ const sum=(xs:number[])=>xs.reduce((a,b)=>a+b,0);
 const settled=(t:Txn)=>! /pending|failed|denied|refused|declined|cancel|unpaid/i.test(t.status||'');
 const sale=(t:Txn)=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&settled(t)&&t.gross>0;
 const refund=(t:Txn)=>['refund','reversal','dispute'].includes(t.kind)&&settled(t);
+/** Use one transaction identity rule wherever stored uploads become seller-visible rows. */
+export function dedupeRows(rows:Txn[]):Txn[]{const byEvent=new Map<string,Txn>();for(const t of rows.filter(t=>t.id)){const key=JSON.stringify([t.id,t.kind,t.date.slice(0,10),t.currency,t.gross]),old=byEvent.get(key);if(!old||settled(t)||!settled(old))byEvent.set(key,t);}return [...byEvent.values()];}
 const sequence=(start:string,end:string)=>{const out:string[]=[];let [y,m]=start.split('-').map(Number);while(`${y}-${String(m).padStart(2,'0')}`<=end){out.push(`${y}-${String(m).padStart(2,'0')}`);if(++m===13){m=1;y++;}}return out;};
 // Tie-break heuristic: a single direct follow-up before listing, pricing, or acquisition work.
 // This is a fixed approximation of effort, not a seller-specific claim.
 const EASY_ORDER=['subscription_failed_payments','refunds_one_item','small_order_fees','one_time_buyers','below_cost_items','fewer_new_buyers'];
 export function analyze(rows:Txn[], inputs:Inputs={}):Analysis {
   for(const [label,value,max] of [['Returning-buyer target',inputs.returningBuyerTargetPercent,99],['Refund reduction',inputs.refundReductionPercent,100]] as const)if(value!==undefined&&(!Number.isFinite(value)||value<0||value>max))throw new Error(`${label} must be between 0 and ${max} percent.`);
-  const byEvent=new Map<string,Txn>();for(const t of rows.filter(t=>t.id)){const key=JSON.stringify([t.id,t.kind,t.date.slice(0,10),t.currency,t.gross]),old=byEvent.get(key);if(!old||settled(t)||!settled(old))byEvent.set(key,t);}const unique=[...byEvent.values()].filter(t=>/^\d{4}-\d{2}-\d{2}/.test(t.date)&&Number.isFinite(t.gross)&&t.currency).map(t=>({...t}));
+  const unique=dedupeRows(rows).filter(t=>/^\d{4}-\d{2}-\d{2}/.test(t.date)&&Number.isFinite(t.gross)&&t.currency).map(t=>({...t}));
   const totals:Record<string,number>={};for(const t of unique.filter(sale))totals[t.currency]=(totals[t.currency]||0)+t.gross;
   const currencies=Object.entries(totals).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));if(!currencies.length)throw new Error('There are no completed sales with a usable date and currency in this data.');
   const currency=currencies[0][0],excludedCurrencies=Object.fromEntries(currencies.slice(1).map(([k,v])=>[k,n(v)]));

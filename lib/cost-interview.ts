@@ -1,5 +1,5 @@
 export type SellerKind='maker'|'reseller';
-export type CostAnswers={kind?:SellerKind;buy?:number;batch?:number;pieces?:number;waste?:number;post?:number;pay?:number;helpers?:number};
+export type CostAnswers={kind?:SellerKind;units?:number;buy?:number;batch?:number;pieces?:number;waste?:number;post?:number;pay?:number;helpers?:number};
 export type CostResult={cost:number;keep:number;fee:number;cameIn:number;parts:Array<{label:string;value:number|undefined}>;negativeRaise?:number;wasteGain?:number};
 
 /** Parse the deliberately small vocabulary used in the interview before considering AI. */

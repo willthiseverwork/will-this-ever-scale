@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { analyze } from '../lib/engine';
+import { analyze, dedupeRows } from '../lib/engine';
 import { answerDataChat, isDataChatPlan } from '../lib/data-chat';
 import type { Txn } from '../lib/types';
 const rows:Txn[]=[
@@ -49,4 +49,12 @@ test('fixed demo end-of-month clock uses the complete month; last month remains 
  assert.match(answerDataChat(finished,'sales latest completed month').text,/2026-10/);
  assert.match(answerDataChat(finished,'sales last month').text,/2026-09/);
  const partial=answerDataChat(a,'sales this month');assert.match(partial.text,/2026-10/);assert.match(partial.caveats.join(' '),/partial/);
+});
+test('the same saved upload does not change chat rows or answers',()=>{
+ const doubled=[...rows,...rows.map(row=>({...row}))];
+ const once=dedupeRows(rows),twice=dedupeRows(doubled);
+ assert.equal(twice.length,once.length);
+ const onceAnswer=answerDataChat(analyze(once,{asOf:'2026-10-15T00:00:00Z'}),'orders all time');
+ const twiceAnswer=answerDataChat(analyze(twice,{asOf:'2026-10-15T00:00:00Z'}),'orders all time');
+ assert.equal(twiceAnswer.text,onceAnswer.text);
 });

@@ -11,3 +11,9 @@ test('calculates reseller and maker costs including waste and a negative result'
  const maker=costResult({kind:'maker',answers:{batch:30,pieces:10,waste:.3,post:3,pay:2},cameIn:8,fee:1,units:1,ordersPerMonth:10});
  assert.equal(Math.round(maker.cost*100)/100,9.29);assert.equal(Math.round(maker.keep*100)/100,-2.29);assert.ok((maker.negativeRaise||0)>0);assert.ok((maker.wasteGain||0)>0);
 });
+test('uses the seller-confirmed units, not an implausible upload quantity',()=>{
+ const result=costResult({kind:'reseller',answers:{units:1,buy:8,post:3},cameIn:22.03,fee:.98,units:1,ordersPerMonth:20});
+ assert.equal(result.cost,11);
+ assert.equal(Math.round(result.keep*100)/100,10.05);
+ assert.equal(result.cost>result.cameIn*3,false);
+});

@@ -37,6 +37,7 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 .sandbox form label,.help-drafts label{font-size:15px}
 .card p.error{font-size:14px}.money-row small{font-size:14px}
 .money-bar i.kept{justify-content:flex-start;padding-left:10px}
+.upload-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--rule);padding-top:12px;min-width:0}.upload-row>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.upload-delete{flex:none;background:transparent;border:0;color:var(--muted);padding:6px 0;text-decoration:underline;text-underline-offset:3px}.chart-markers{color:var(--lime)!important;font:12px 'Geist Mono',monospace!important;margin:0!important}
 @media(max-width:899px){.read>h1{margin-bottom:10px}}
 .money-row>span{min-width:0}.money-row>b{white-space:nowrap;flex-shrink:0}
 .small-leak>span{white-space:nowrap;flex-shrink:0}.action-heading{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px}.action-heading>b{float:none;white-space:nowrap}
