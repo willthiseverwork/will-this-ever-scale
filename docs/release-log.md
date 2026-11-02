@@ -4,6 +4,8 @@
 
 Deploy this repository only to Vercel project `willthiseverscale-app` (`prj_n9tzKDV0sBpwfSZjU3K971S8f8jq`) in team `angrysushi11s-projects`. Its canonical production alias is `https://app.willthiseverscale.com`. The similarly named `will-this-ever-scale` project is not this app's production target; preserve it, but do not deploy routine releases there.
 
+- 2026-11-02T22:46:40Z — Rounds 4 and 5 — commit `16badd6` deployed as `dpl_82YymjYuj6ubQX8A6F6bZyxK4hMB` to `willthiseverscale-app`, aliased to `app.willthiseverscale.com`. `npm test` passed 233 tests and `npm run build` passed. Production HTTP checks: `/` and `/read` 200, `/api/chat/plan` GET 405, `/api/voice/transcribe` GET 200. Browser seller walkthrough, mobile/accessibility and analytics/search receipt checks remain unverified; Claude owns the live seller check. Previous deployment: `dpl_J6KheGUKsGTM4aiF3CAj6wNtLzFR`.
+
 - 2026-11-02T19:12:40Z — Corrected production-project deploy — `854baf1` is READY as `dpl_Ax9dGGx9Xg5QvDbnMdkuBBru9GGW` on Vercel project `willthiseverscale-app`, aliased to `app.willthiseverscale.com`.
 - 2026-11-02T19:16:01Z — Round 3 item 1 — `722074c` is READY as `dpl_FY6qopPi5iLNLV696jjUhpxMcQus` on Vercel project `willthiseverscale-app`, aliased to `app.willthiseverscale.com`. Small shops now model one buyer returning every month: shop4 is +£411 a year and shop8 is +£335 a year.
 - 2026-11-02T19:17:49Z — Round 3 item 2 — `ebf351c` is READY as `dpl_7Xxnnu3iiNyTxUxVydmskvccpLmV` on Vercel project `willthiseverscale-app`. Judge-code completion returns to `/read`, retaining the current in-memory/session upload for the visit.
