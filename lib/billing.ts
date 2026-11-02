@@ -50,7 +50,8 @@ export function checkoutDiagnostic(error:unknown):{code:string;httpStatus?:numbe
  let current:unknown=error;for(let i=0;i<3&&current&&typeof current==='object';i++){const e=current as {name?:unknown;code?:unknown;cause?:unknown};if(e.name==='TimeoutError'||e.name==='AbortError')return {code:'timeout'};if(typeof e.code==='string'&&['ETIMEDOUT','ECONNRESET','ECONNREFUSED','ENOTFOUND','EAI_AGAIN'].includes(e.code))return {code:e.code};current=e.cause;}
  return {code:'unavailable'};
 }
-export function checkoutPriceChecks(price:any,priceId:string){const trial=price?.trial_period;return {id:price?.id===priceId,active:price?.status==='active',amount:price?.unit_price?.amount==='1499',currency:price?.unit_price?.currency_code==='USD',interval:price?.billing_cycle?.interval==='month',frequency:price?.billing_cycle?.frequency===1,trialDays:trial?.interval==='day'&&trial?.frequency===30};}
+/** A trial must be free and collect a card: length alone would also admit a paid or cardless trial. */
+export function checkoutPriceChecks(price:any,priceId:string){const trial=price?.trial_period;return {id:price?.id===priceId,active:price?.status==='active',amount:price?.unit_price?.amount==='1499',currency:price?.unit_price?.currency_code==='USD',interval:price?.billing_cycle?.interval==='month',frequency:price?.billing_cycle?.frequency===1,trialDays:trial?.interval==='day'&&trial?.frequency===30,trialFree:trial?.unit_price===null,trialRequiresPaymentMethod:trial?.requires_payment_method===true};}
 export async function startCheckout(userId:string){
  const test=currentBillingTest();let stage:CheckoutStage='config';let checks:ReturnType<typeof checkoutPriceChecks>|undefined;
  try {
