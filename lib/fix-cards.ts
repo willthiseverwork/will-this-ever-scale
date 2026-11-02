@@ -18,6 +18,7 @@ function cardMath(leak:Leak,currency:string,amount:number,lessonMath:string):str
   return [lessonMath||leak.method,calculation].filter(Boolean).join(' ');
 }
 export function cardFor(leak:Leak,currency:string):FixCard|undefined {
+  if(leak.id==='lapsed_buyers')return {id:leak.id,title:'Your quiet regulars',money:{amount:leak.money_per_month||0,currency,period:'now',estimate:false},money_math:leak.method,so_what:'These people used to come back. A short, personal message is the simplest way to ask them back.',steps:['Pick the regular buyers shown in the math.','Send one short message: “We miss you. Your next order ships free if you write BACK before the end of the month.”','Check for an order in two weeks.'],help:{kind:'you_do',label:'Copy the message from your test'},check:{metric:'Orders from these regular buyers',how:'Check for an order in two weeks.',days:14},sources:[]};
   const entry=lessons.find(x=>x.id===leak.id), l=entry?.lesson;
   const amount=leak.kind==='quick_win'?leak.one_off_amount:leak.money_per_month;
   if(!entry||!l||amount===undefined||!Number.isFinite(amount)||!l.so_what||!l.steps.length||!l.help?.label||!l.check) return undefined;
@@ -25,7 +26,8 @@ export function cardFor(leak:Leak,currency:string):FixCard|undefined {
   if((l.help.link&&!validUrl(l.help.link))||l.sources.some(s=>!s.title||!validUrl(s.url)))return undefined;
   const fill=(s:string)=>s.replace(/\{top_pairs\}/g,String(leak.evidence.top_pairs||''));
   if(l.steps.some(s=>s.includes('{top_pairs}'))&&!leak.evidence.top_pairs)return undefined;
-  return {id:leak.id,title:entry.name,money:{amount,currency,period:leak.kind==='quick_win'?'now':'month',estimate:leak.kind!=='quick_win'},money_math:cardMath(leak,currency,amount,l.money_math),so_what:l.so_what,steps:l.steps.map(fill),help:l.help,check:{metric:l.check,how:'Compare this metric in 30 days.',days:30},sources:l.sources};
+  const evidencePeriod=leak.evidence.card_period;
+  return {id:leak.id,title:entry.name,money:{amount,currency,period:evidencePeriod==='year'?'year':evidencePeriod==='now'||leak.kind==='quick_win'?'now':'month',estimate:leak.kind!=='quick_win'},money_math:cardMath(leak,currency,amount,l.money_math),so_what:l.so_what,steps:l.steps.map(fill),help:l.help,check:{metric:l.check,how:'Compare this metric in 30 days.',days:30},sources:l.sources};
 }
 export const SETS_SINGLE_SHARE=0.60, SETS_MIN_MONTHLY=20;
 export function micropaymentSaving(gross:number):number { return gross<26.67?Math.max(0,0.40-0.015*gross):0; }

@@ -3,7 +3,7 @@ import type { Analysis } from './types';
 
 // Deliberately no free-text fields: a product title can itself contain a name or email.
 const finite = z.number().finite().min(-1e12).max(1e12);
-const leakId = z.enum(['one_time_buyers','refunds_one_item','small_order_fees','sets','cross_border_fees','below_cost_items','fewer_new_buyers','subscription_failed_payments']);
+const leakId = z.enum(['one_time_buyers','lapsed_buyers','refunds_one_item','small_order_fees','sets','cross_border_fees','below_cost_items','fewer_new_buyers','subscription_failed_payments']);
 export const aggregateSchema = z.object({
   currency:z.string().regex(/^[A-Z]{3}$/),
   money_map:z.object({came_in:finite,paypal_fees:finite,refunds:finite,costs:finite,ad_spend:finite,kept:finite}).strict(),
@@ -84,7 +84,7 @@ export function renderReadDraft(text:string,payload:ReadAggregate):string|null {
 }
 export function buildReadPrompt(payload:ReadAggregate):string {
  const a=aggregateSchema.parse(payload),values=readPlaceholders(a);
- const topNames:Record<string,string>={one_time_buyers:'buyers who have not returned',refunds_one_item:'refunds on an item',small_order_fees:'small-order fees',sets:'items offered together',cross_border_fees:'cross-border fees',below_cost_items:'items sold below cost',fewer_new_buyers:'fewer new buyers',subscription_failed_payments:'failed subscription payments'};
+ const topNames:Record<string,string>={one_time_buyers:'buyers who have not returned',lapsed_buyers:'quiet regular buyers',refunds_one_item:'refunds on an item',small_order_fees:'small-order fees',sets:'items offered together',cross_border_fees:'cross-border fees',below_cost_items:'items sold below cost',fewer_new_buyers:'fewer new buyers',subscription_failed_payments:'failed subscription payments'};
  const top=a.ranked_leaks[0]?topNames[a.ranked_leaks[0].id]:undefined;
  return `Write short, complete, plain-language sentences with no bullets or headings. Use each listed placeholder exactly once and only as written: ${Object.keys(values).map(key=>`{{${key}}}`).join(', ')}. Placeholders are amounts or counts only, not nouns: include the words around them. Never write digits or number words yourself. Currency placeholders already contain symbols. First sentence: state sales of {{SALES}} and money kept of {{KEPT}} after included deductions, which may not include all business costs.${top?' Next sentence: describe the estimated opportunity of {{TOP_MONTHLY}} per month for '+top+' and say it depends on an assumption.':''}${a.quick_win&&a.quick_win.invoices>0?' Final sentence: say {{UNPAID}} is waiting in {{INVOICES}} unpaid invoices.':''} Keep the words sales, kept${top?', per month':''}${a.quick_win&&a.quick_win.invoices>0?', and unpaid invoices':''}. Do not infer causes, invent advice, or claim an estimate is guaranteed.`;
 }

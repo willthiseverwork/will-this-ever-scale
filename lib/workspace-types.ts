@@ -2,7 +2,7 @@ import {z} from 'zod';
 const id=z.string().uuid();
 const date=z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine(s=>!Number.isNaN(Date.parse(s+'T00:00:00Z'))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s);
 const number=z.number().finite().min(-1e12).max(1e12);
-const findingId=z.enum(['one_time_buyers','unpaid_invoices','refunds_one_item','small_order_fees','cross_border_fees','one_item_dependence','below_cost_items','fewer_new_buyers','subscription_failed_payments','sets','held_money']);
+const findingId=z.enum(['one_time_buyers','lapsed_buyers','unpaid_invoices','refunds_one_item','small_order_fees','cross_border_fees','one_item_dependence','below_cost_items','fewer_new_buyers','subscription_failed_payments','sets','held_money']);
 const month=z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
 const count=z.number().int().nonnegative().max(1e9);
 const monthly=z.object({month,cameIn:number,fees:number,refunds:number,costs:number,ads:number,kept:number,orders:count.optional()}).strict();

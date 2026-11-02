@@ -9,14 +9,18 @@
       }
     },
     "small_order_fees": {
-      "shown": false,
-      "money": null,
-      "facts": {}
+      "shown": true,
+      "money": 144,
+      "facts": {
+        "method": "Adding one currency unit to every completed order below 10 units, annualised from this file."
+      }
     },
     "lapsed_buyers": {
-      "shown": false,
-      "money": null,
-      "facts": {}
+      "shown": true,
+      "money": 74.53,
+      "facts": {
+        "method": "One more order from each regular buyer whose usual ordering gap has passed."
+      }
     },
     "items_stopped": {
       "shown": false,

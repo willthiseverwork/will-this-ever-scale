@@ -23,15 +23,17 @@ test('sets need actual cart evidence and pairs, not single item titles',()=>{
 test('demo lesson cards carry every required part and do not suggest prohibited payment methods',()=>{
   const a=analyze(demoTransactions(),{asOf:DEMO_AS_OF,homeCountry:'US'});
   for(const id of ['one_time_buyers','refunds_one_item','small_order_fees','sets','held_money','unpaid_invoices']) assert.ok(a.cards?.find(c=>c.id===id),id);
-  for(const c of a.cards||[]){assert.ok(c.title&&c.so_what&&c.steps.length&&c.help.label&&c.check.metric);assert.ok(Number.isFinite(c.money.amount));assert.equal(c.check.days,30);assert.doesNotMatch(JSON.stringify(c),/Friends and Family/i);}
+  for(const c of a.cards||[]){assert.ok(c.title&&c.so_what&&c.steps.length&&c.help.label&&c.check.metric);assert.ok(Number.isFinite(c.money.amount));assert.equal(c.check.days,c.id==='lapsed_buyers'?14:30);assert.doesNotMatch(JSON.stringify(c),/Friends and Family/i);}
 });
 test('demo keeps its ordered story and exposes both action findings',()=>{
   const a=analyze(demoTransactions(),{asOf:DEMO_AS_OF,homeCountry:'US'});
   assert.equal(a.ranked_leaks[0].id,'one_time_buyers');
   const next=a.ranked_leaks.slice(1).find(l=>!l.label);
-  assert.equal(next?.id,'refunds_one_item');
-  assert.equal(next?.money_per_month,75);
-  assert.match(next?.card?.money_math||'',/\$450\.00 refunded over 3 months ÷ 3 × 50% prevented ≈ \$75\.00/);
+  assert.equal(next?.id,'lapsed_buyers');
+  assert.ok((next?.money_per_month||0)>=10);
+  const refunds=a.ranked_leaks.find(l=>l.id==='refunds_one_item');
+  assert.equal(refunds?.money_per_month,75);
+  assert.match(refunds?.card?.money_math||'',/\$450\.00 refunded over 3 months ÷ 3 × 50% prevented ≈ \$75\.00/);
   assert.ok(a.risks?.some(r=>r.id==='one_item_dependence'&&Number(r.evidence.share)>50));
   assert.ok(a.small_leaks.length>0);
   assert.equal(a.quick_win?.id,'unpaid_invoices');assert.equal(a.quick_win?.one_off_amount,540);
