@@ -220,7 +220,7 @@
     {
       "id": "refunds_one_item",
       "kind": "monthly",
-      "name": "One item keeps coming back",
+      "name": "Most refunds come from one item",
       "why": "A refund loses the sale and usually costs you more on top: fees, shipping and your time.",
       "questions": [
         {

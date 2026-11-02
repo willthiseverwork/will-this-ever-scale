@@ -39,7 +39,7 @@ export function wholePercent(value:number) {
 
 export function inOneHundred(value:number) { return `${Math.round(value)} in 100`; }
 
-export function titleLowercase(value:string) { return value?value[0].toLocaleLowerCase()+value.slice(1):value; }
+export function titleLowercase(value:string) { return value&&value.length>1&&/[A-Z]/.test(value[0])&&/[A-Z]/.test(value[1])?value:value?value[0].toLocaleLowerCase()+value.slice(1):value; }
 
 export function localMonth(clock=new Date()) { return `${clock.getFullYear()}-${String(clock.getMonth()+1).padStart(2,'0')}`; }
 
@@ -65,7 +65,7 @@ export function worthLine(id:string) {
 
 export function evidenceLine(leak:Leak,currency:string,readCard=false) {
   const e=leak.evidence;
-  if(leak.id==='one_time_buyers'&&typeof e.current_share==='number'&&typeof e.target_share==='number')return readCard?`${inOneHundred(e.current_share)} buyers came back in the last 3 months, ${inOneHundred(e.target_share)} in ${String(e.best_window||'your best window')}.`:`${inOneHundred(e.current_share)} buyers came back recently, ${inOneHundred(e.target_share)} in your best months.`;
+  if(leak.id==='one_time_buyers'&&typeof e.current_share==='number'&&typeof e.target_share==='number'){const observed=e.target_is_observed===1;return readCard?`${inOneHundred(e.current_share)} buyers came back in the last 3 months, ${inOneHundred(e.target_share)} ${observed?`in ${String(e.best_window||'your best window')}`:'in this five-point test'}.`:`${inOneHundred(e.current_share)} buyers came back recently, ${inOneHundred(e.target_share)} ${observed?'in your best months':'in this five-point test'}.`;}
   if(leak.id==='refunds_one_item'&&typeof e.item==='string')return typeof e.refund_rate==='number'?`${e.item}: refunded ${wholePercent(e.refund_rate)} of the time.`:`${money(Number(e.refunds||0),currency)} refunded on ${e.item} in the last 3 months.`;
   if(leak.id==='small_order_fees'&&typeof e.threshold==='number')return `On qualifying orders under ${new Intl.NumberFormat('en-US',{style:'currency',currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(e.threshold)}.`;
   if(leak.id==='below_cost_items'&&typeof e.item==='string')return `Each sale of ${e.item} loses money after your costs and fees.`;
@@ -89,7 +89,7 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
   if(leak.id==='one_time_buyers'&&n('additional_orders')!==undefined&&n('average_order')!==undefined&&n('kept_share')!==undefined) {const buyersBack=Number((n('additional_orders')!/3).toFixed(1)),averageOrder=n('average_order')!,keptShare=Math.round(n('kept_share')!),shownResult=money(buyersBack*averageOrder*keptShare/100,c);return [
     `Buyers, last 3 months: ${n('buyers')}`,
     `Came back, last 3 months: ${inOneHundred(n('current_share')||0)}`,
-    `Came back, ${e.best_window||'best window'}: ${inOneHundred(n('target_share')||0)}`,
+    `Came back, ${e.target_is_observed===1?(e.best_window||'best window'):'five-point test'}: ${inOneHundred(n('target_share')||0)}`,
     `More buyers back each month: ${buyersBack.toFixed(1)}`,
     `Average order: ${exact(averageOrder)}`,
     `Kept after fees and refunds, all months: ${keptShare}%`,
