@@ -1,0 +1,7 @@
+Date,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title,Country,Quantity,Reference Txn ID
+2026-11-01,Payment Received,Completed,GBP,19.66,-1.37,18.29,buyer-119@example.test,after-sta-7-119,Vintage bead notebook,IE,1,
+2026-11-08,Payment Received,Completed,GBP,23.25,-1.30,21.95,buyer-232@example.test,after-sta-7-244,Set of 3 notebooks in parcel,GB,1,
+2026-11-15,Payment Received,Completed,GBP,13.01,-0.94,12.07,buyer-192@example.test,after-sta-7-192,Vintage bead notebook,GB,1,
+2026-11-22,Payment Received,Completed,GBP,4.43,-0.64,3.79,buyer-47@example.test,after-sta-7-47,Sticker sheet,GB,1,
+2026-11-29,Payment Received,Completed,GBP,5.16,-0.67,4.49,buyer-180@example.test,after-sta-7-180,Sticker sheet,GB,1,
+2026-12-06,Payment Received,Completed,GBP,20.28,-1.20,19.08,buyer-142@example.test,after-sta-7-238,Set of 3 notebooks in parcel,GB,1,

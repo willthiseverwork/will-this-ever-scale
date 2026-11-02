@@ -1,0 +1,7 @@
+Date,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title,Country,Quantity,Reference Txn ID
+2026-11-01,Payment Received,Completed,GBP,21.71,-1.25,20.46,buyer-155@example.test,after-jew-7-155,Initial necklace,GB,1,
+2026-11-08,Payment Received,Completed,GBP,32.39,-1.62,30.77,buyer-71@example.test,after-jew-7-177,Initial necklace,GB,1,
+2026-11-15,Payment Received,Completed,GBP,11.78,-0.90,10.88,buyer-88@example.test,after-jew-7-88,Silver earrings,GB,1,
+2026-11-22,Payment Received,Completed,GBP,3.21,-0.60,2.61,buyer-144@example.test,after-jew-7-162,Gift pouch,GB,1,
+2026-11-29,Payment Received,Completed,GBP,19.23,-1.16,18.07,buyer-108@example.test,after-jew-7-108,Silver earrings,GB,1,
+2026-12-06,Payment Received,Completed,GBP,29.66,-1.53,28.13,buyer-114@example.test,after-jew-7-114,Stacking ring,GB,1,

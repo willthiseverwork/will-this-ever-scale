@@ -1,0 +1,91 @@
+{
+  "preset": "candle-maker",
+  "cards": {
+    "one_time_buyers": {
+      "shown": true,
+      "money": 7.18,
+      "facts": {
+        "method": "With new buyers held steady, reach the best observed three-month returning-buyer share. Each extra returning buyer places one average order."
+      }
+    },
+    "small_order_fees": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "lapsed_buyers": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "items_stopped": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "item_jumped": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "best_month": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "refunds_one_item": {
+      "shown": true,
+      "money": 0.88,
+      "facts": {
+        "method": "Half the last three months of refunds on the most-refunded named item group, averaged per month."
+      }
+    },
+    "sets": {
+      "shown": true,
+      "money": 28.91,
+      "facts": {
+        "method": "Single-piece orders per month × 10% × average second-piece price × 90%: added sales."
+      }
+    },
+    "best_sellers": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "cross_border_fees": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "one_item_dependence": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "below_cost_items": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "fewer_new_buyers": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "subscription_failed_payments": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "held_money": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    },
+    "unpaid_invoices": {
+      "shown": false,
+      "money": null,
+      "facts": {}
+    }
+  }
+}

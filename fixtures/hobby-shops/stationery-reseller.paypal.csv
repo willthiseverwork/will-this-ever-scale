@@ -1,0 +1,274 @@
+Date,Time,TimeZone,Name,Type,Status,Currency,Gross,Fee,Net,From Email Address,To Email Address,Transaction ID,Address Status,Sales Tax,Reference Txn ID,Invoice Number,Receipt ID,Balance,Contact Phone Number,Subject,Note,Country Code
+02/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.66,-1.37,18.29,buyer-119@example.test,seller@example.test,sta-7-119,Confirmed,,,,,,,Vintage bead notebook,,IE
+05/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.25,-1.30,21.95,buyer-232@example.test,seller@example.test,sta-7-244,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+08/11/2025,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-19.66,0.00,-19.66,,seller@example.test,refund-sta-7-119,Confirmed,,sta-7-119,,,,,Vintage bead notebook,,
+09/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.01,-0.94,12.07,buyer-192@example.test,seller@example.test,sta-7-192,Confirmed,,,,,,,Vintage bead notebook,,GB
+09/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.43,-0.64,3.79,buyer-47@example.test,seller@example.test,sta-7-47,Confirmed,,,,,,,Sticker sheet,,GB
+10/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.16,-0.67,4.49,buyer-180@example.test,seller@example.test,sta-7-180,Confirmed,,,,,,,Sticker sheet,,GB
+10/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.28,-1.20,19.08,buyer-142@example.test,seller@example.test,sta-7-238,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+10/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.83,-0.62,3.21,buyer-218@example.test,seller@example.test,sta-7-245,Confirmed,,,,,,,Sticker sheet,,GB
+11/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.77,-0.66,4.11,buyer-93@example.test,seller@example.test,sta-7-93,Confirmed,,,,,,,Sticker sheet,,GB
+14/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.82,-0.66,4.16,buyer-164@example.test,seller@example.test,sta-7-164,Confirmed,,,,,,,Pencil,,GB
+14/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.94,-1.05,14.89,buyer-59@example.test,seller@example.test,sta-7-242,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+18/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.03,-0.63,3.40,buyer-217@example.test,seller@example.test,sta-7-217,Confirmed,,,,,,,Sticker sheet,,GB
+18/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.41,-0.61,2.80,buyer-51@example.test,seller@example.test,sta-7-51,Confirmed,,,,,,,Pencil,,GB
+21/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.22,-0.64,3.58,buyer-209@example.test,seller@example.test,sta-7-209,Confirmed,,,,,,,Sticker sheet,,GB
+21/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.50,-1.10,16.40,buyer-218@example.test,seller@example.test,sta-7-218,Confirmed,,,,,,,Vintage bead notebook,,GB
+23/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.80,-0.62,3.18,buyer-25@example.test,seller@example.test,sta-7-25,Confirmed,,,,,,,Pencil,,GB
+26/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.17,-0.98,13.19,buyer-30@example.test,seller@example.test,sta-7-30,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+28/11/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.30,-0.67,4.63,buyer-153@example.test,seller@example.test,sta-7-153,Confirmed,,,,,,,Sticker sheet,,GB
+01/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.48,-0.61,2.87,buyer-122@example.test,seller@example.test,sta-7-122,Confirmed,,,,,,,Sticker sheet,,GB
+01/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.68,-0.58,2.10,buyer-196@example.test,seller@example.test,sta-7-196,Confirmed,,,,,,,Pencil,,GB
+06/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.47,-0.79,7.68,buyer-163@example.test,seller@example.test,sta-7-163,Confirmed,,,,,,,Vintage bead notebook,,GB
+06/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.09,-0.60,2.49,buyer-91@example.test,seller@example.test,sta-7-91,Confirmed,,,,,,,Sticker sheet,,GB
+09/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.29,-1.06,15.23,buyer-39@example.test,seller@example.test,sta-7-39,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+11/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.45,-1.13,17.32,buyer-80@example.test,seller@example.test,sta-7-253,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+14/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.08,-1.02,14.06,buyer-5@example.test,seller@example.test,sta-7-5,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+15/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.04,-1.22,19.82,buyer-59@example.test,seller@example.test,sta-7-59,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+17/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.15,-0.63,3.52,buyer-222@example.test,seller@example.test,sta-7-222,Confirmed,,,,,,,Sticker sheet,,GB
+18/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.92,-0.66,4.26,buyer-180@example.test,seller@example.test,sta-7-252,Confirmed,,,,,,,Sticker sheet,,GB
+18/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.80,-0.62,3.18,buyer-6@example.test,seller@example.test,sta-7-6,Confirmed,,,,,,,Sticker sheet,,GB
+19/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.66,-0.65,4.01,buyer-83@example.test,seller@example.test,sta-7-83,Confirmed,,,,,,,Sticker sheet,,GB
+20/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.92,-0.80,8.12,buyer-33@example.test,seller@example.test,sta-7-33,Confirmed,,,,,,,Vintage bead notebook,,GB
+20/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.10,-0.60,2.50,buyer-45@example.test,seller@example.test,sta-7-45,Confirmed,,,,,,,Pencil,,GB
+22/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,24.71,-1.35,23.36,buyer-102@example.test,seller@example.test,sta-7-102,Confirmed,,,,,,,Vintage bead notebook,,GB
+24/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,12.38,-0.92,11.46,buyer-150@example.test,seller@example.test,sta-7-247,Confirmed,,,,,,,Vintage bead notebook,,GB
+26/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.16,-1.09,16.07,buyer-123@example.test,seller@example.test,sta-7-123,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+31/12/2025,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.53,-0.96,12.57,buyer-131@example.test,seller@example.test,sta-7-131,Confirmed,,,,,,,Vintage bead notebook,,GB
+01/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,24.11,-1.33,22.78,buyer-133@example.test,seller@example.test,sta-7-133,Confirmed,,,,,,,Vintage bead notebook,,GB
+03/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.95,-0.66,4.29,buyer-179@example.test,seller@example.test,sta-7-179,Confirmed,,,,,,,Sticker sheet,,GB
+05/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.00,-0.94,12.06,buyer-144@example.test,seller@example.test,sta-7-144,Confirmed,,,,,,,Vintage bead notebook,,GB
+06/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.26,-0.78,7.48,buyer-156@example.test,seller@example.test,sta-7-156,Confirmed,,,,,,,Vintage bead notebook,,GB
+07/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.77,-1.21,19.56,buyer-193@example.test,seller@example.test,sta-7-193,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+07/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.14,-0.56,1.58,buyer-197@example.test,seller@example.test,sta-7-197,Confirmed,,,,,,,Pencil,,GB
+07/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.55,-0.65,3.90,buyer-44@example.test,seller@example.test,sta-7-44,Confirmed,,,,,,,Pencil,,GB
+08/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.24,-0.57,1.67,buyer-77@example.test,seller@example.test,sta-7-249,Confirmed,,,,,,,Pencil,,GB
+09/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.22,-0.67,4.55,buyer-212@example.test,seller@example.test,sta-7-212,Confirmed,,,,,,,Sticker sheet,,GB
+11/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,11.25,-0.88,10.37,buyer-129@example.test,seller@example.test,sta-7-129,Confirmed,,,,,,,Vintage bead notebook,,GB
+12/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.09,-1.53,21.56,buyer-79@example.test,seller@example.test,sta-7-248,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+12/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.74,-0.62,3.12,buyer-28@example.test,seller@example.test,sta-7-28,Confirmed,,,,,,,Sticker sheet,,GB
+12/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.30,-0.61,2.69,buyer-90@example.test,seller@example.test,sta-7-90,Confirmed,,,,,,,Sticker sheet,,GB
+14/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.91,-1.16,13.75,buyer-46@example.test,seller@example.test,sta-7-46,Confirmed,,,,,,,Vintage bead notebook,,IE
+15/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.68,-1.28,16.40,buyer-157@example.test,seller@example.test,sta-7-157,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+15/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.67,-1.11,16.56,buyer-205@example.test,seller@example.test,sta-7-205,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+15/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.16,-0.95,12.21,buyer-127@example.test,seller@example.test,sta-7-246,Confirmed,,,,,,,Vintage bead notebook,,GB
+18/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.24,-1.23,20.01,buyer-154@example.test,seller@example.test,sta-7-154,Confirmed,,,,,,,Vintage bead notebook,,GB
+18/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.56,-0.65,2.91,buyer-48@example.test,seller@example.test,sta-7-48,Confirmed,,,,,,,Pencil,,IE
+19/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.23,-0.57,1.66,buyer-16@example.test,seller@example.test,sta-7-16,Confirmed,,,,,,,Pencil,,GB
+21/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.77,-1.01,13.76,buyer-72@example.test,seller@example.test,sta-7-72,Confirmed,,,,,,,Vintage bead notebook,,GB
+23/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.41,-0.68,4.73,buyer-116@example.test,seller@example.test,sta-7-116,Confirmed,,,,,,,Sticker sheet,,GB
+24/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.51,-1.07,15.44,buyer-57@example.test,seller@example.test,sta-7-57,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+27/01/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.08,-0.60,2.48,buyer-26@example.test,seller@example.test,sta-7-26,Confirmed,,,,,,,Sticker sheet,,GB
+29/01/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-14.77,0.00,-14.77,,seller@example.test,refund-sta-7-72,Confirmed,,sta-7-72,,,,,Vintage bead notebook,,
+01/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.96,-1.15,17.81,buyer-198@example.test,seller@example.test,sta-7-198,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+01/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.99,-0.66,4.33,buyer-70@example.test,seller@example.test,sta-7-70,Confirmed,,,,,,,Pencil,,GB
+02/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.48,-0.65,2.83,buyer-104@example.test,seller@example.test,sta-7-104,Confirmed,,,,,,,Sticker sheet,,IE
+02/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.98,-1.25,15.73,buyer-142@example.test,seller@example.test,sta-7-142,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+09/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.70,-0.62,3.08,buyer-132@example.test,seller@example.test,sta-7-132,Confirmed,,,,,,,Pencil,,GB
+09/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.19,-0.67,4.52,buyer-137@example.test,seller@example.test,sta-7-137,Confirmed,,,,,,,Sticker sheet,,GB
+11/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.61,-0.70,3.91,buyer-76@example.test,seller@example.test,sta-7-76,Confirmed,,,,,,,Sticker sheet,,IE
+12/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.87,-0.63,3.24,buyer-201@example.test,seller@example.test,sta-7-201,Confirmed,,,,,,,Pencil,,GB
+14/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.21,-0.57,1.64,buyer-75@example.test,seller@example.test,sta-7-75,Confirmed,,,,,,,Pencil,,GB
+15/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.58,-0.65,3.93,buyer-45@example.test,seller@example.test,sta-7-256,Confirmed,,,,,,,Sticker sheet,,GB
+15/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.58,-0.61,2.97,buyer-62@example.test,seller@example.test,sta-7-62,Confirmed,,,,,,,Sticker sheet,,GB
+17/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.02,-1.01,14.01,buyer-155@example.test,seller@example.test,sta-7-155,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+18/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.08,-0.63,3.45,buyer-174@example.test,seller@example.test,sta-7-174,Confirmed,,,,,,,Sticker sheet,,GB
+18/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.33,-0.57,1.76,buyer-60@example.test,seller@example.test,sta-7-60,Confirmed,,,,,,,Pencil,,GB
+21/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.62,-0.69,4.93,buyer-219@example.test,seller@example.test,sta-7-219,Confirmed,,,,,,,Sticker sheet,,GB
+22/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.80,-1.15,17.65,buyer-33@example.test,seller@example.test,sta-7-236,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+23/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.01,-0.63,3.38,buyer-195@example.test,seller@example.test,sta-7-195,Confirmed,,,,,,,Pencil,,GB
+23/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.49,-0.65,3.84,buyer-36@example.test,seller@example.test,sta-7-257,Confirmed,,,,,,,Sticker sheet,,GB
+26/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.43,-1.27,21.16,buyer-172@example.test,seller@example.test,sta-7-172,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+26/02/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.53,-1.21,19.32,buyer-100@example.test,seller@example.test,sta-7-260,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+01/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.12,-1.30,21.82,buyer-206@example.test,seller@example.test,sta-7-206,Confirmed,,,,,,,Vintage bead notebook,,GB
+03/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.66,-1.14,17.52,buyer-15@example.test,seller@example.test,sta-7-15,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+04/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.17,-1.02,14.15,buyer-67@example.test,seller@example.test,sta-7-67,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+05/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.09,-0.67,3.42,buyer-41@example.test,seller@example.test,sta-7-41,Confirmed,,,,,,,Sticker sheet,,IE
+06/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.55,-1.21,19.34,buyer-56@example.test,seller@example.test,sta-7-56,Confirmed,,,,,,,Vintage bead notebook,,GB
+13/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.85,-0.97,12.88,buyer-187@example.test,seller@example.test,sta-7-187,Confirmed,,,,,,,Vintage bead notebook,,GB
+15/03/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-20.55,0.00,-20.55,,seller@example.test,refund-sta-7-56,Confirmed,,sta-7-56,,,,,Vintage bead notebook,,
+16/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.64,-0.62,3.02,buyer-176@example.test,seller@example.test,sta-7-176,Confirmed,,,,,,,Pencil,,GB
+16/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.51,-1.17,18.34,buyer-22@example.test,seller@example.test,sta-7-22,Confirmed,,,,,,,Vintage bead notebook,,GB
+17/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.70,-0.65,4.05,buyer-143@example.test,seller@example.test,sta-7-143,Confirmed,,,,,,,Sticker sheet,,GB
+17/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.92,-0.70,5.22,buyer-31@example.test,seller@example.test,sta-7-31,Confirmed,,,,,,,Sticker sheet,,GB
+18/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.63,-0.58,2.05,buyer-149@example.test,seller@example.test,sta-7-149,Confirmed,,,,,,,Pencil,,GB
+18/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.79,-1.04,14.75,buyer-71@example.test,seller@example.test,sta-7-71,Confirmed,,,,,,,Vintage bead notebook,,GB
+19/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.69,-1.07,15.62,buyer-24@example.test,seller@example.test,sta-7-24,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+20/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.39,-0.57,1.82,buyer-126@example.test,seller@example.test,sta-7-126,Confirmed,,,,,,,Pencil,,GB
+21/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.23,-0.64,3.59,buyer-37@example.test,seller@example.test,sta-7-37,Confirmed,,,,,,,Sticker sheet,,GB
+23/03/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-15.79,0.00,-15.79,,seller@example.test,refund-sta-7-71,Confirmed,,sta-7-71,,,,,Vintage bead notebook,,
+23/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.55,-1.10,16.45,buyer-216@example.test,seller@example.test,sta-7-216,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+24/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.88,-0.63,3.25,buyer-184@example.test,seller@example.test,sta-7-184,Confirmed,,,,,,,Pencil,,GB
+24/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.11,-0.56,1.55,buyer-89@example.test,seller@example.test,sta-7-255,Confirmed,,,,,,,Pencil,,GB
+25/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.59,-0.65,3.94,buyer-221@example.test,seller@example.test,sta-7-221,Confirmed,,,,,,,Pencil,,GB
+25/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.97,-1.12,16.85,buyer-91@example.test,seller@example.test,sta-7-258,Confirmed,,,,,,,Vintage bead notebook,,GB
+29/03/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,11.88,-0.90,10.98,buyer-134@example.test,seller@example.test,sta-7-134,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.87,-0.66,4.21,buyer-140@example.test,seller@example.test,sta-7-140,Confirmed,,,,,,,Pencil,,GB
+02/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.50,-0.65,3.85,buyer-4@example.test,seller@example.test,sta-7-4,Confirmed,,,,,,,Pencil,,GB
+03/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.11,-0.98,13.13,buyer-82@example.test,seller@example.test,sta-7-82,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+05/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.90,-0.75,5.15,buyer-89@example.test,seller@example.test,sta-7-89,Confirmed,,,,,,,Sticker sheet,,IE
+07/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.59,-0.65,3.94,buyer-188@example.test,seller@example.test,sta-7-188,Confirmed,,,,,,,Pencil,,GB
+09/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.87,-1.11,16.76,buyer-177@example.test,seller@example.test,sta-7-177,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+10/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.23,-1.13,13.10,buyer-109@example.test,seller@example.test,sta-7-109,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+11/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.04,-0.60,2.44,buyer-87@example.test,seller@example.test,sta-7-87,Confirmed,,,,,,,Sticker sheet,,GB
+13/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.80,-1.42,19.38,buyer-185@example.test,seller@example.test,sta-7-185,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+16/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.54,-1.46,20.08,buyer-194@example.test,seller@example.test,sta-7-194,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+16/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.99,-0.66,4.33,buyer-54@example.test,seller@example.test,sta-7-54,Confirmed,,,,,,,Pencil,,GB
+18/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.07,-0.67,4.40,buyer-146@example.test,seller@example.test,sta-7-146,Confirmed,,,,,,,Sticker sheet,,GB
+22/04/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-5.07,0.00,-5.07,,seller@example.test,refund-sta-7-146,Confirmed,,sta-7-146,,,,,Sticker sheet,,
+22/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.97,-0.63,3.34,buyer-11@example.test,seller@example.test,sta-7-11,Confirmed,,,,,,,Sticker sheet,,GB
+22/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,12.49,-0.93,11.56,buyer-232@example.test,seller@example.test,sta-7-232,Confirmed,,,,,,,Vintage bead notebook,,GB
+24/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,11.86,-0.90,10.96,buyer-130@example.test,seller@example.test,sta-7-130,Confirmed,,,,,,,Vintage bead notebook,,GB
+24/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.02,-0.67,4.35,buyer-186@example.test,seller@example.test,sta-7-186,Confirmed,,,,,,,Sticker sheet,,GB
+24/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.05,-1.44,19.61,buyer-42@example.test,seller@example.test,sta-7-42,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+25/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.15,-0.60,2.55,buyer-84@example.test,seller@example.test,sta-7-84,Confirmed,,,,,,,Pencil,,GB
+30/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.02,-0.63,2.39,buyer-125@example.test,seller@example.test,sta-7-125,Confirmed,,,,,,,Pencil,,IE
+30/04/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,11.23,-0.88,10.35,buyer-178@example.test,seller@example.test,sta-7-178,Confirmed,,,,,,,Vintage bead notebook,,GB
+01/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.88,-0.66,4.22,buyer-81@example.test,seller@example.test,sta-7-81,Confirmed,,,,,,,Sticker sheet,,GB
+03/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.81,-0.59,2.22,buyer-127@example.test,seller@example.test,sta-7-127,Confirmed,,,,,,,Pencil,,GB
+03/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.87,-1.18,18.69,buyer-170@example.test,seller@example.test,sta-7-170,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+08/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.66,-1.32,22.34,buyer-166@example.test,seller@example.test,sta-7-166,Confirmed,,,,,,,Vintage bead notebook,,GB
+08/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.72,-0.62,3.10,buyer-208@example.test,seller@example.test,sta-7-208,Confirmed,,,,,,,Pencil,,GB
+10/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.15,-1.44,19.71,buyer-182@example.test,seller@example.test,sta-7-182,Confirmed,,,,,,,Vintage bead notebook,,IE
+10/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.46,-0.87,7.59,buyer-20@example.test,seller@example.test,sta-7-20,Confirmed,,,,,,,Vintage bead notebook,,IE
+14/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.30,-1.13,17.17,buyer-148@example.test,seller@example.test,sta-7-148,Confirmed,,,,,,,Vintage bead notebook,,GB
+15/05/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-23.66,0.00,-23.66,,seller@example.test,refund-sta-7-166,Confirmed,,sta-7-166,,,,,Vintage bead notebook,,
+20/05/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-8.46,0.00,-8.46,,seller@example.test,refund-sta-7-20,Confirmed,,sta-7-20,,,,,Vintage bead notebook,,
+20/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.66,-1.18,18.48,buyer-100@example.test,seller@example.test,sta-7-100,Confirmed,,,,,,,Vintage bead notebook,,GB
+20/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.58,-1.03,14.55,buyer-7@example.test,seller@example.test,sta-7-7,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+21/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.61,-0.62,2.99,buyer-124@example.test,seller@example.test,sta-7-124,Confirmed,,,,,,,Pencil,,GB
+24/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.57,-1.14,17.43,buyer-112@example.test,seller@example.test,sta-7-112,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+26/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.02,-0.63,3.39,buyer-108@example.test,seller@example.test,sta-7-108,Confirmed,,,,,,,Sticker sheet,,GB
+27/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.43,-0.61,2.82,buyer-191@example.test,seller@example.test,sta-7-191,Confirmed,,,,,,,Sticker sheet,,GB
+28/05/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.41,-1.17,18.24,buyer-173@example.test,seller@example.test,sta-7-173,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.92,-1.19,18.73,buyer-83@example.test,seller@example.test,sta-7-234,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.41,-0.99,13.42,buyer-58@example.test,seller@example.test,sta-7-58,Confirmed,,,,,,,Vintage bead notebook,,GB
+04/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.48,-1.03,14.45,buyer-43@example.test,seller@example.test,sta-7-43,Confirmed,,,,,,,Vintage bead notebook,,GB
+08/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.39,-1.18,14.21,buyer-228@example.test,seller@example.test,sta-7-228,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+08/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.72,-1.04,14.68,buyer-88@example.test,seller@example.test,sta-7-88,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+09/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.67,-0.62,3.05,buyer-210@example.test,seller@example.test,sta-7-210,Confirmed,,,,,,,Sticker sheet,,GB
+11/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.87,-1.22,19.65,buyer-169@example.test,seller@example.test,sta-7-169,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+12/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.51,-0.69,3.82,buyer-103@example.test,seller@example.test,sta-7-103,Confirmed,,,,,,,Sticker sheet,,IE
+15/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.44,-0.87,7.57,buyer-181@example.test,seller@example.test,sta-7-181,Confirmed,,,,,,,Vintage bead notebook,,IE
+15/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.48,-1.03,14.45,buyer-97@example.test,seller@example.test,sta-7-97,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+20/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.49,-1.14,17.35,buyer-198@example.test,seller@example.test,sta-7-239,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+20/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.45,-0.65,3.80,buyer-36@example.test,seller@example.test,sta-7-36,Confirmed,,,,,,,Sticker sheet,,GB
+20/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.96,-1.08,15.88,buyer-79@example.test,seller@example.test,sta-7-79,Confirmed,,,,,,,Vintage bead notebook,,GB
+21/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.99,-0.63,3.36,buyer-199@example.test,seller@example.test,sta-7-199,Confirmed,,,,,,,Sticker sheet,,GB
+21/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.25,-0.64,3.61,buyer-3@example.test,seller@example.test,sta-7-3,Confirmed,,,,,,,Sticker sheet,,GB
+22/06/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.01,-1.29,21.72,buyer-38@example.test,seller@example.test,sta-7-38,Confirmed,,,,,,,Vintage bead notebook,,GB
+01/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.64,-0.69,4.95,buyer-128@example.test,seller@example.test,sta-7-128,Confirmed,,,,,,,Sticker sheet,,GB
+01/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.53,-1.28,21.25,buyer-80@example.test,seller@example.test,sta-7-80,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.83,-0.66,4.17,buyer-225@example.test,seller@example.test,sta-7-225,Confirmed,,,,,,,Pencil,,GB
+02/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.76,-1.07,15.69,buyer-49@example.test,seller@example.test,sta-7-49,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+05/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.97,-0.59,2.38,buyer-110@example.test,seller@example.test,sta-7-110,Confirmed,,,,,,,Pencil,,GB
+06/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.72,-1.18,18.54,buyer-160@example.test,seller@example.test,sta-7-160,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+06/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.92,-0.70,5.22,buyer-168@example.test,seller@example.test,sta-7-168,Confirmed,,,,,,,Sticker sheet,,GB
+06/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.25,-0.60,2.65,buyer-215@example.test,seller@example.test,sta-7-215,Confirmed,,,,,,,Pencil,,GB
+10/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.41,-0.64,3.77,buyer-113@example.test,seller@example.test,sta-7-251,Confirmed,,,,,,,Pencil,,GB
+11/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.51,-1.31,22.20,buyer-23@example.test,seller@example.test,sta-7-23,Confirmed,,,,,,,Vintage bead notebook,,GB
+14/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.53,-0.65,3.88,buyer-139@example.test,seller@example.test,sta-7-139,Confirmed,,,,,,,Sticker sheet,,GB
+19/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.17,-1.26,20.91,buyer-204@example.test,seller@example.test,sta-7-204,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+20/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.43,-0.61,2.82,buyer-167@example.test,seller@example.test,sta-7-167,Confirmed,,,,,,,Pencil,,GB
+24/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.07,-1.12,16.95,buyer-10@example.test,seller@example.test,sta-7-10,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+27/07/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.00,-0.63,3.37,buyer-140@example.test,seller@example.test,sta-7-259,Confirmed,,,,,,,Pencil,,GB
+01/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,10.27,-0.85,9.42,buyer-202@example.test,seller@example.test,sta-7-202,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.47,-0.61,2.86,buyer-32@example.test,seller@example.test,sta-7-241,Confirmed,,,,,,,Sticker sheet,,GB
+04/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,13.85,-0.97,12.88,buyer-230@example.test,seller@example.test,sta-7-230,Confirmed,,,,,,,Vintage bead notebook,,GB
+05/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.41,-0.64,3.77,buyer-138@example.test,seller@example.test,sta-7-138,Confirmed,,,,,,,Sticker sheet,,GB
+06/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.98,-1.19,18.79,buyer-120@example.test,seller@example.test,sta-7-120,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+07/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,9.10,-0.81,8.29,buyer-135@example.test,seller@example.test,sta-7-135,Confirmed,,,,,,,Vintage bead notebook,,GB
+08/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.26,-0.60,2.66,buyer-227@example.test,seller@example.test,sta-7-227,Confirmed,,,,,,,Sticker sheet,,GB
+11/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.69,-1.07,15.62,buyer-226@example.test,seller@example.test,sta-7-226,Confirmed,,,,,,,Vintage bead notebook,,GB
+12/08/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-10.27,0.00,-10.27,,seller@example.test,refund-sta-7-202,Confirmed,,sta-7-202,,,,,Vintage bead notebook,,
+12/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.19,-0.67,4.52,buyer-145@example.test,seller@example.test,sta-7-145,Confirmed,,,,,,,Sticker sheet,,GB
+14/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.95,-1.01,13.94,buyer-34@example.test,seller@example.test,sta-7-34,Confirmed,,,,,,,Vintage bead notebook,,GB
+16/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.96,-1.33,22.63,buyer-118@example.test,seller@example.test,sta-7-118,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+18/08/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-9.10,0.00,-9.10,,seller@example.test,refund-sta-7-135,Confirmed,,sta-7-135,,,,,Vintage bead notebook,,
+22/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.68,-1.28,21.40,buyer-171@example.test,seller@example.test,sta-7-171,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+22/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.16,-0.68,3.48,buyer-190@example.test,seller@example.test,sta-7-190,Confirmed,,,,,,,Sticker sheet,,IE
+28/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.43,-0.64,3.79,buyer-113@example.test,seller@example.test,sta-7-113,Confirmed,,,,,,,Pencil,,GB
+28/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.77,-0.62,3.15,buyer-165@example.test,seller@example.test,sta-7-165,Confirmed,,,,,,,Pencil,,GB
+28/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.15,-0.63,3.52,buyer-223@example.test,seller@example.test,sta-7-223,Confirmed,,,,,,,Sticker sheet,,GB
+29/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.31,-0.61,2.70,buyer-17@example.test,seller@example.test,sta-7-17,Confirmed,,,,,,,Pencil,,GB
+29/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.92,-0.70,5.22,buyer-2@example.test,seller@example.test,sta-7-2,Confirmed,,,,,,,Sticker sheet,,GB
+29/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.44,-0.61,2.83,buyer-78@example.test,seller@example.test,sta-7-78,Confirmed,,,,,,,Sticker sheet,,GB
+30/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.81,-0.62,3.19,buyer-116@example.test,seller@example.test,sta-7-240,Confirmed,,,,,,,Pencil,,GB
+30/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.86,-0.71,4.15,buyer-63@example.test,seller@example.test,sta-7-63,Confirmed,,,,,,,Sticker sheet,,IE
+31/08/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.43,-0.61,2.82,buyer-229@example.test,seller@example.test,sta-7-229,Confirmed,,,,,,,Pencil,,GB
+01/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.73,-0.66,4.07,buyer-152@example.test,seller@example.test,sta-7-152,Confirmed,,,,,,,Sticker sheet,,GB
+01/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.90,-0.70,5.20,buyer-183@example.test,seller@example.test,sta-7-183,Confirmed,,,,,,,Sticker sheet,,GB
+01/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.21,-0.60,2.61,buyer-220@example.test,seller@example.test,sta-7-220,Confirmed,,,,,,,Sticker sheet,,GB
+02/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.36,-0.99,13.37,buyer-213@example.test,seller@example.test,sta-7-213,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.75,-0.66,4.09,buyer-32@example.test,seller@example.test,sta-7-32,Confirmed,,,,,,,Sticker sheet,,GB
+02/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.21,-1.27,20.94,buyer-94@example.test,seller@example.test,sta-7-94,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+02/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.11,-0.56,1.55,buyer-95@example.test,seller@example.test,sta-7-95,Confirmed,,,,,,,Pencil,,GB
+03/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,12.75,-1.06,11.69,buyer-141@example.test,seller@example.test,sta-7-141,Confirmed,,,,,,,Vintage bead notebook,,IE
+03/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.92,-1.43,19.49,buyer-38@example.test,seller@example.test,sta-7-254,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+04/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.48,-1.31,22.17,buyer-50@example.test,seller@example.test,sta-7-50,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+04/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,12.99,-0.94,12.05,buyer-86@example.test,seller@example.test,sta-7-86,Confirmed,,,,,,,Vintage bead notebook,,GB
+05/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.26,-1.27,20.99,buyer-121@example.test,seller@example.test,sta-7-121,Confirmed,,,,,,,Vintage bead notebook,,GB
+05/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.44,-0.68,4.76,buyer-18@example.test,seller@example.test,sta-7-18,Confirmed,,,,,,,Sticker sheet,,GB
+06/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.33,-1.16,18.17,buyer-175@example.test,seller@example.test,sta-7-175,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+06/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.21,-1.09,16.12,buyer-29@example.test,seller@example.test,sta-7-29,Confirmed,,,,,,,Vintage bead notebook,,GB
+07/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.12,-0.67,4.45,buyer-207@example.test,seller@example.test,sta-7-207,Confirmed,,,,,,,Sticker sheet,,GB
+07/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.92,-1.32,22.60,buyer-21@example.test,seller@example.test,sta-7-21,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+08/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.76,-1.38,18.38,buyer-96@example.test,seller@example.test,sta-7-96,Confirmed,,,,,,,Set of 3 notebooks in parcel,,IE
+09/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.37,-0.57,1.80,buyer-224@example.test,seller@example.test,sta-7-224,Confirmed,,,,,,,Pencil,,GB
+09/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.66,-1.28,21.38,buyer-52@example.test,seller@example.test,sta-7-52,Confirmed,,,,,,,Vintage bead notebook,,GB
+09/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.94,-0.80,8.14,buyer-61@example.test,seller@example.test,sta-7-61,Confirmed,,,,,,,Vintage bead notebook,,GB
+09/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.03,-0.77,7.26,buyer-9@example.test,seller@example.test,sta-7-9,Confirmed,,,,,,,Vintage bead notebook,,GB
+10/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,17.70,-1.11,16.59,buyer-106@example.test,seller@example.test,sta-7-106,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+11/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.07,-0.60,2.47,buyer-111@example.test,seller@example.test,sta-7-111,Confirmed,,,,,,,Sticker sheet,,GB
+11/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.25,-0.64,3.61,buyer-13@example.test,seller@example.test,sta-7-13,Confirmed,,,,,,,Sticker sheet,,GB
+11/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.70,-1.07,15.63,buyer-161@example.test,seller@example.test,sta-7-161,Confirmed,,,,,,,Vintage bead notebook,,GB
+12/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.06,-0.63,3.43,buyer-151@example.test,seller@example.test,sta-7-151,Confirmed,,,,,,,Sticker sheet,,GB
+12/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,23.75,-1.56,22.19,buyer-159@example.test,seller@example.test,sta-7-159,Confirmed,,,,,,,Vintage bead notebook,,IE
+12/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.28,-0.64,3.64,buyer-27@example.test,seller@example.test,sta-7-27,Confirmed,,,,,,,Sticker sheet,,GB
+13/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,21.22,-1.23,19.99,buyer-105@example.test,seller@example.test,sta-7-105,Confirmed,,,,,,,Vintage bead notebook,,GB
+13/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,14.54,-1.00,13.54,buyer-117@example.test,seller@example.test,sta-7-117,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+13/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.18,-0.64,3.54,buyer-211@example.test,seller@example.test,sta-7-211,Confirmed,,,,,,,Pencil,,GB
+13/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.78,-0.69,5.09,buyer-77@example.test,seller@example.test,sta-7-77,Confirmed,,,,,,,Sticker sheet,,GB
+14/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.15,-0.60,2.55,buyer-1@example.test,seller@example.test,sta-7-1,Confirmed,,,,,,,Sticker sheet,,GB
+14/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.24,-1.20,19.04,buyer-136@example.test,seller@example.test,sta-7-136,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+14/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.97,-1.08,15.89,buyer-133@example.test,seller@example.test,sta-7-243,Confirmed,,,,,,,Vintage bead notebook,,GB
+14/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,22.76,-1.28,21.48,buyer-69@example.test,seller@example.test,sta-7-69,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+15/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.45,-0.58,1.87,buyer-92@example.test,seller@example.test,sta-7-92,Confirmed,,,,,,,Pencil,,GB
+16/09/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-4.28,0.00,-4.28,,seller@example.test,refund-sta-7-27,Confirmed,,sta-7-27,,,,,Sticker sheet,,
+16/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.61,-0.62,2.99,buyer-101@example.test,seller@example.test,sta-7-101,Confirmed,,,,,,,Sticker sheet,,GB
+16/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.05,-0.67,3.38,buyer-85@example.test,seller@example.test,sta-7-85,Confirmed,,,,,,,Sticker sheet,,IE
+17/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.02,-1.19,18.83,buyer-209@example.test,seller@example.test,sta-7-235,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+19/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.56,-0.65,3.91,buyer-231@example.test,seller@example.test,sta-7-231,Confirmed,,,,,,,Pencil,,GB
+20/09/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-16.70,0.00,-16.70,,seller@example.test,refund-sta-7-161,Confirmed,,sta-7-161,,,,,Vintage bead notebook,,
+20/09/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-8.94,0.00,-8.94,,seller@example.test,refund-sta-7-61,Confirmed,,sta-7-61,,,,,Vintage bead notebook,,
+20/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,20.71,-1.21,19.50,buyer-64@example.test,seller@example.test,sta-7-64,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+20/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.07,-0.60,2.47,buyer-99@example.test,seller@example.test,sta-7-99,Confirmed,,,,,,,Sticker sheet,,GB
+21/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.18,-1.12,17.06,buyer-190@example.test,seller@example.test,sta-7-237,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+22/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.79,-0.66,4.13,buyer-115@example.test,seller@example.test,sta-7-115,Confirmed,,,,,,,Pencil,,GB
+22/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,19.54,-1.17,18.37,buyer-14@example.test,seller@example.test,sta-7-14,Confirmed,,,,,,,Vintage bead notebook,,GB
+22/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,24.67,-1.35,23.32,buyer-19@example.test,seller@example.test,sta-7-19,Confirmed,,,,,,,Vintage bead notebook,,GB
+22/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.22,-0.57,1.65,buyer-200@example.test,seller@example.test,sta-7-200,Confirmed,,,,,,,Pencil,,GB
+22/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.02,-0.63,3.39,buyer-93@example.test,seller@example.test,sta-7-250,Confirmed,,,,,,,Pencil,,GB
+23/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.19,-0.57,1.62,buyer-158@example.test,seller@example.test,sta-7-158,Confirmed,,,,,,,Pencil,,GB
+23/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.62,-0.69,4.93,buyer-189@example.test,seller@example.test,sta-7-189,Confirmed,,,,,,,Sticker sheet,,GB
+23/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.19,-0.67,4.52,buyer-66@example.test,seller@example.test,sta-7-66,Confirmed,,,,,,,Sticker sheet,,GB
+23/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,4.24,-0.64,3.60,buyer-73@example.test,seller@example.test,sta-7-73,Confirmed,,,,,,,Sticker sheet,,GB
+24/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.78,-0.62,3.16,buyer-53@example.test,seller@example.test,sta-7-53,Confirmed,,,,,,,Sticker sheet,,GB
+25/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,10.20,-0.85,9.35,buyer-147@example.test,seller@example.test,sta-7-147,Confirmed,,,,,,,Vintage bead notebook,,GB
+27/09/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.70,-0.62,3.08,buyer-35@example.test,seller@example.test,sta-7-35,Confirmed,,,,,,,Sticker sheet,,GB
+02/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,15.68,-1.04,14.64,buyer-162@example.test,seller@example.test,sta-7-162,Confirmed,,,,,,,Vintage bead notebook,,GB
+02/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.55,-0.58,1.97,buyer-20@example.test,seller@example.test,sta-7-233,Confirmed,,,,,,,Pencil,,GB
+02/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.46,-0.61,2.85,buyer-55@example.test,seller@example.test,sta-7-55,Confirmed,,,,,,,Pencil,,GB
+04/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.17,-0.57,1.60,buyer-150@example.test,seller@example.test,sta-7-150,Confirmed,,,,,,,Pencil,,GB
+04/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.92,-1.08,15.84,buyer-98@example.test,seller@example.test,sta-7-98,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+05/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.03,-1.05,14.98,buyer-203@example.test,seller@example.test,sta-7-203,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+06/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,16.83,-1.08,15.75,buyer-107@example.test,seller@example.test,sta-7-107,Confirmed,,,,,,,Set of 3 notebooks in parcel,,GB
+07/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,2.25,-0.57,1.68,buyer-214@example.test,seller@example.test,sta-7-214,Confirmed,,,,,,,Pencil,,GB
+07/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.28,-0.60,2.68,buyer-74@example.test,seller@example.test,sta-7-74,Confirmed,,,,,,,Sticker sheet,,GB
+11/10/2026,12:00:00,GMT,Synthetic buyer,Refund,Completed,GBP,-15.68,0.00,-15.68,,seller@example.test,refund-sta-7-162,Confirmed,,sta-7-162,,,,,Vintage bead notebook,,
+11/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,12.31,-0.92,11.39,buyer-8@example.test,seller@example.test,sta-7-8,Confirmed,,,,,,,Vintage bead notebook,,GB
+17/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,8.89,-0.80,8.09,buyer-12@example.test,seller@example.test,sta-7-12,Confirmed,,,,,,,Vintage bead notebook,,GB
+17/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,18.34,-1.13,17.21,buyer-40@example.test,seller@example.test,sta-7-40,Confirmed,,,,,,,Vintage bead notebook,,GB
+17/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.25,-0.60,2.65,buyer-65@example.test,seller@example.test,sta-7-65,Confirmed,,,,,,,Pencil,,GB
+22/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,5.84,-0.69,5.15,buyer-114@example.test,seller@example.test,sta-7-114,Confirmed,,,,,,,Sticker sheet,,GB
+24/10/2026,12:00:00,GMT,Synthetic buyer,Payment Received,Completed,GBP,3.22,-0.60,2.62,buyer-68@example.test,seller@example.test,sta-7-68,Confirmed,,,,,,,Pencil,,GB

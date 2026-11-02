@@ -1,0 +1,7 @@
+Date,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title,Country,Quantity,Reference Txn ID
+2026-11-01,Payment Received,Completed,GBP,7.53,-0.75,6.78,buyer-69@example.test,after-can-7-90,Candle refill,GB,1,
+2026-11-08,Payment Received,Completed,GBP,27.65,-1.45,26.20,buyer-19@example.test,after-can-7-19,Soy candle,GB,1,
+2026-11-15,Payment Received,Completed,GBP,4.59,-0.65,3.94,buyer-9@example.test,after-can-7-87,Gift box,GB,1,
+2026-11-22,Payment Received,Completed,GBP,6.86,-0.73,6.13,buyer-5@example.test,after-can-7-5,Candle refill,GB,1,
+2026-11-29,Payment Received,Completed,GBP,4.80,-0.66,4.14,buyer-6@example.test,after-can-7-6,Gift box,GB,1,
+2026-12-06,Payment Received,Completed,GBP,5.10,-0.67,4.43,buyer-47@example.test,after-can-7-47,Gift box,GB,1,

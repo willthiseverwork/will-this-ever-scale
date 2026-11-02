@@ -1,0 +1,7 @@
+Date,Type,Status,Currency,Gross,Fee,Net,From Email Address,Transaction ID,Item Title,Country,Quantity,Reference Txn ID
+2026-11-01,Payment Received,Completed,USD,69.18,-2.90,66.28,buyer-19@example.test,after-vin-7-19,Vintage dress,US,1,
+2026-11-08,Payment Received,Completed,USD,49.84,-2.23,47.61,buyer-30@example.test,after-vin-7-60,Denim jacket,US,1,
+2026-11-15,Payment Received,Completed,USD,28.78,-1.49,27.29,buyer-5@example.test,after-vin-7-5,Denim jacket,US,1,
+2026-11-22,Payment Received,Completed,USD,14.66,-1.00,13.66,buyer-6@example.test,after-vin-7-6,Scarf,US,1,
+2026-11-29,Payment Received,Completed,USD,15.66,-1.04,14.62,buyer-47@example.test,after-vin-7-47,Scarf,US,1,
+2026-12-06,Payment Received,Completed,USD,48.11,-2.17,45.94,buyer-39@example.test,after-vin-7-39,Denim jacket,US,1,
