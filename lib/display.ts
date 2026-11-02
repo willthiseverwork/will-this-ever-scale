@@ -53,6 +53,13 @@ export function sentenceCaseItem(value:string) {
 
 export function localMonth(clock=new Date()) { return `${clock.getFullYear()}-${String(clock.getMonth()+1).padStart(2,'0')}`; }
 
+export function bestMonthAction(month:string,clock=new Date()) {
+ const index=Number(month.slice(5,7))-1,ahead=(index-clock.getMonth()+12)%12;
+ const label=(i:number)=>new Intl.DateTimeFormat('en-GB',{month:'long',timeZone:'UTC'}).format(new Date(Date.UTC(2000,i,1)));
+ return ahead<=2?`${label(index)} is your best month: start now.`:`Add a reminder for 1 ${label((index+11)%12)}.`;
+}
+export function bestMonthReady(month:string,clock=new Date()) {return (Number(month.slice(5,7))-1-clock.getMonth()+12)%12<=2;}
+
 export function headlineMonth(analysis:Analysis, sellerClock=new Date()) {
   const latest=analysis.months.at(-1);
   if(!latest) return undefined;
@@ -76,9 +83,9 @@ export function worthLine(id:string) {
 export function evidenceLine(leak:Leak,currency:string,readCard=false) {
   const e=leak.evidence;
   if(leak.id==='one_time_buyers'&&typeof e.current_share==='number'&&typeof e.target_share==='number'){const observed=e.target_is_observed===1;return readCard?`${inOneHundred(e.current_share)} buyers came back in the last 3 months, ${inOneHundred(e.target_share)} ${observed?`in ${String(e.best_window||'your best window')}`:'in this five-point test'}.`:`${inOneHundred(e.current_share)} buyers came back recently, ${inOneHundred(e.target_share)} ${observed?'in your best months':'in this five-point test'}.`;}
-  if(leak.id==='refunds_one_item'&&typeof e.item==='string')return typeof e.refund_rate==='number'?`${e.item}: refunded ${wholePercent(e.refund_rate)} of the time.`:`${money(Number(e.refunds||0),currency)} refunded on ${e.item} in the last 3 months.`;
+  if(leak.id==='refunds_one_item'&&typeof e.item==='string')return typeof e.refund_rate==='number'?`${sentenceCaseItem(e.item)}: refunded ${wholePercent(e.refund_rate)} of the time.`:`${money(Number(e.refunds||0),currency)} refunded on ${sentenceCaseItem(e.item)} in the last 3 months.`;
   if(leak.id==='small_order_fees'&&typeof e.threshold==='number')return `On qualifying orders under ${new Intl.NumberFormat('en-US',{style:'currency',currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(e.threshold)}.`;
-  if(leak.id==='below_cost_items'&&typeof e.item==='string')return `Each sale of ${e.item} loses money after your costs and fees.`;
+  if(leak.id==='below_cost_items'&&typeof e.item==='string')return `Each sale of ${sentenceCaseItem(e.item).toLowerCase()} loses money after your costs and fees.`;
   if(leak.id==='fewer_new_buyers'&&typeof e.recent_new==='number'&&typeof e.previous_new==='number')return `${e.recent_new} new buyers in the last 3 months, ${e.previous_new} in the 3 before.`;
   if(leak.id==='subscription_failed_payments'&&typeof e.n_failed==='number')return `${e.n_failed} subscription payments failed in the last 3 months.`;
   return '';

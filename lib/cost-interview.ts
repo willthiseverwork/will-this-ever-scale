@@ -18,11 +18,11 @@ export function parseRoughAmount(input:string,percent=false):number|undefined {
 export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:number;fee:number;units:number;ordersPerMonth:number}) : CostResult {
  const {kind,answers,cameIn,fee,units,ordersPerMonth}=input;
  const helpers=(answers.helpers||0)/Math.max(1,ordersPerMonth);
- const material=kind==='maker'&&answers.batch!==undefined&&answers.pieces?answers.batch/(answers.pieces*Math.max(.01,1-(answers.waste||0))):undefined;
+ const material=kind==='maker'&&answers.batch!==undefined&&answers.pieces?answers.batch/(answers.pieces*Math.max(.01,1-(answers.waste??0))):undefined;
  const goods=kind==='maker'?material:answers.buy;
  const cost=(goods===undefined?0:goods*units)+(answers.post||0)+(answers.pay||0)+helpers;
  const keep=cameIn-fee-cost;
  const negativeRaise=keep<0?Math.ceil((-keep/Math.max(.01,1-fee/Math.max(cameIn,.01)))*2)/2:undefined;
- const wasteGain=kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste?answers.batch/(answers.pieces*(1-answers.waste))-answers.batch/(answers.pieces*(1-answers.waste/2)):undefined;
+ const wasteGain=kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste?(answers.batch/(answers.pieces*Math.max(.01,1-answers.waste))-answers.batch/(answers.pieces*Math.max(.01,1-answers.waste/2)))*units:undefined;
  return {cost,keep,fee,cameIn,parts:[{label:kind==='maker'?'Materials':'Buying',value:goods===undefined?undefined:goods*units},{label:'Posting',value:answers.post},{label:'Your time',value:answers.pay},{label:'Help',value:helpers}],...(negativeRaise===undefined?{}:{negativeRaise}),...(wasteGain===undefined?{}:{wasteGain})};
 }
