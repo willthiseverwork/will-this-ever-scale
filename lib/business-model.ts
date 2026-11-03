@@ -3,8 +3,8 @@ import {z} from 'zod';
 export type Compartment='seller_file'|'demo'|'sandbox'|'verified_live';
 export type FactState='confirmed'|'unknown'|'not_applicable';
 export type FactBasis='unit'|'order'|'batch'|'month'|'share';
-export type FactField='buy'|'batch'|'pieces'|'waste'|'post'|'pay'|'helpers'|'trading_start';
-export const factSchema=z.object({id:z.string().uuid(),operationId:z.string().uuid(),businessId:z.string().uuid(),productId:z.string().uuid().nullable(),field:z.enum(['buy','batch','pieces','waste','post','pay','helpers','trading_start']),state:z.enum(['confirmed','unknown','not_applicable']),value:z.union([z.number().finite().min(0).max(1e12),z.string().max(10)]).nullable(),currency:z.string().regex(/^[A-Z]{3}$/).nullable(),basis:z.enum(['unit','order','batch','month','share']).nullable(),validFrom:z.string(),validTo:z.string().nullable(),confirmedAt:z.string().datetime(),source:z.enum(['seller_confirmed','observed','assumed','benchmark']),supersedes:z.array(z.string().uuid()).max(20)}).strict();
+export type FactField='buy'|'batch'|'pieces'|'waste'|'post'|'pay'|'helpers'|'units'|'trading_start';
+export const factSchema=z.object({id:z.string().uuid(),operationId:z.string().uuid(),businessId:z.string().uuid(),productId:z.string().uuid().nullable(),field:z.enum(['buy','batch','pieces','waste','post','pay','helpers','units','trading_start']),state:z.enum(['confirmed','unknown','not_applicable']),value:z.union([z.number().finite().min(0).max(1e12),z.string().max(10)]).nullable(),currency:z.string().regex(/^[A-Z]{3}$/).nullable(),basis:z.enum(['unit','order','batch','month','share']).nullable(),validFrom:z.string(),validTo:z.string().nullable(),confirmedAt:z.string().datetime(),source:z.enum(['seller_confirmed','observed','assumed','benchmark']),precision:z.enum(['exact','approximate']).optional(),supersedes:z.array(z.string().uuid()).max(20)}).strict();
 export type Fact=z.infer<typeof factSchema>;
 export type Business={id:string;compartment:Compartment;label:string};
 export type FactResolution={state:'missing'}|{state:'contested';facts:Fact[]}|{state:'resolved';fact:Fact;facts:Fact[]};
@@ -14,13 +14,14 @@ function dateValid(value:string){return datePattern.test(value)&&Number.isFinite
 export function addFact(facts:Fact[],fact:Fact):Fact[]{
  fact=factSchema.parse(fact);
  if(!dateValid(fact.validFrom)||(fact.validTo!==null&&(!dateValid(fact.validTo)||fact.validTo<fact.validFrom)))throw new Error('Invalid effective dates.');
- const allowed:Record<FactField,Array<FactBasis|null>>={buy:['unit'],batch:['batch'],pieces:['batch'],waste:['share'],post:['order'],pay:['unit','order'],helpers:['month'],trading_start:[null]};
+ const allowed:Record<FactField,Array<FactBasis|null>>={buy:['unit'],batch:['batch'],pieces:['batch'],waste:['share'],post:['order'],pay:['unit','order'],helpers:['month'],units:['order'],trading_start:[null]};
  if(!allowed[fact.field].includes(fact.basis))throw new Error('Invalid fact basis.');
  const monetary=['buy','batch','post','pay','helpers'].includes(fact.field);if(monetary!==Boolean(fact.currency))throw new Error('Invalid fact currency.');
  if(fact.field==='helpers'||fact.field==='trading_start'){if(fact.productId!==null)throw new Error('Invalid fact scope.');}else if(!fact.productId)throw new Error('Invalid fact scope.');
  if(fact.state==='confirmed'&&(fact.field==='trading_start'?typeof fact.value!=='string'||!dateValid(fact.value):typeof fact.value!=='number'))throw new Error('Invalid confirmed value.');
- if(fact.field==='pieces'&&fact.state==='confirmed'&&(!Number.isSafeInteger(fact.value)||Number(fact.value)<1))throw new Error('Invalid batch yield.');
+ if((fact.field==='pieces'||fact.field==='units')&&fact.state==='confirmed'&&(!Number.isSafeInteger(fact.value)||Number(fact.value)<1))throw new Error('Invalid quantity or batch yield.');
  if(fact.state!=='confirmed'&&fact.value!==null)throw new Error('Unknown facts cannot contain values.');
+ if(fact.state==='not_applicable'&&!['post','pay','helpers'].includes(fact.field))throw new Error('Not applicable is invalid for this fact.');
  if(fact.field==='waste'&&typeof fact.value==='number'&&fact.value>1)throw new Error('Invalid waste fraction.');
  const prior=facts.find(x=>x.operationId===fact.operationId);if(prior){if(JSON.stringify(prior)!==JSON.stringify(fact))throw new Error('Operation conflict.');return facts;}
  if(facts.some(x=>x.id===fact.id))throw new Error('Fact already exists.');

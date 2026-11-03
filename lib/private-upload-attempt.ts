@@ -1,0 +1,6 @@
+/** Keep only an opaque fingerprint and retry identity on this device, never file contents. */
+export async function privateUploadAttempt(salt:string,contents:string){const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(`${salt}\0${contents}`)),fingerprint=Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join(''),key=`wtes-upload-attempt-${fingerprint}`;let existing:{id:string;uploadedAt:string}|null=null;try{existing=JSON.parse(localStorage.getItem(key)||'null')}catch{}if(!existing||!/^[0-9a-f-]{36}$/i.test(existing.id)||!Number.isFinite(Date.parse(existing.uploadedAt))){existing={id:crypto.randomUUID(),uploadedAt:new Date().toISOString()};localStorage.setItem(key,JSON.stringify(existing));}return {...existing,complete:()=>{}};}
+
+export function clearPrivateUploadAttempts(){for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(key?.startsWith('wtes-upload-attempt-'))localStorage.removeItem(key)}}
+
+export function forgetPrivateUploadAttempt(id:string){for(let i=localStorage.length-1;i>=0;i--){const key=localStorage.key(i);if(!key?.startsWith('wtes-upload-attempt-'))continue;try{if(JSON.parse(localStorage.getItem(key)||'null')?.id===id)localStorage.removeItem(key)}catch{}}}

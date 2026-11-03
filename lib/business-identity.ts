@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {workspaceProductLabel} from './workspace-types';
 const uuid=z.string().uuid();
 const aliasSchema=z.object({id:uuid,operationId:uuid,productId:uuid,source:z.enum(['seller_file','demo','sandbox','verified_live']),sourceKey:z.string().regex(/^b_[a-f0-9]{64}$/),validFrom:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),validTo:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable()}).strict();
-const productSchema=z.object({id:uuid,label:workspaceProductLabel}).strict();
+const productSchema=z.object({id:uuid,label:workspaceProductLabel,kind:z.enum(['maker','reseller']).optional()}).strict();
 export const businessSchema=z.object({id:uuid,label:workspaceProductLabel,compartment:z.enum(['seller_file','demo','sandbox','verified_live']),products:z.array(productSchema).max(200),aliases:z.array(aliasSchema).max(1000)}).strict().refine(b=>new Set(b.products.map(p=>p.id)).size===b.products.length&&new Set(b.aliases.map(a=>a.id)).size===b.aliases.length&&new Set(b.aliases.map(a=>a.operationId)).size===b.aliases.length&&b.aliases.every(a=>a.source===b.compartment&&b.products.some(p=>p.id===a.productId)),'Invalid business identity.');
 export type BusinessIdentity=z.infer<typeof businessSchema>;export type ProductAlias=z.infer<typeof aliasSchema>;
 function validDate(date:string){return Number.isFinite(Date.parse(date+'T00:00:00Z'))&&new Date(date+'T00:00:00Z').toISOString().slice(0,10)===date}

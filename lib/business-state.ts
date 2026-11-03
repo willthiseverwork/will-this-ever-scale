@@ -3,26 +3,44 @@ import {addFact,factSchema} from './business-model';
 import {businessSchema,confirmAlias,type ProductAlias} from './business-identity';
 import {workspaceProductLabel} from './workspace-types';
 const uuid=z.string().uuid();
-export const businessStateSchema=z.object({version:z.literal(1),revision:z.number().int().nonnegative().safe(),businesses:z.array(businessSchema).max(20),facts:z.array(factSchema).max(2000)}).strict().refine(s=>new Set(s.businesses.map(b=>b.id)).size===s.businesses.length&&new Set(s.facts.map(f=>f.id)).size===s.facts.length&&new Set(s.facts.map(f=>f.operationId)).size===s.facts.length&&s.facts.every(f=>s.businesses.some(b=>b.id===f.businessId&&(f.productId===null||b.products.some(p=>p.id===f.productId)))),'Invalid business state.');
+const minor=z.number().int().safe();
+const monthlyResult=z.object({month:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/),currency:z.string().regex(/^[A-Z]{3}$/),grossMinor:minor,feeMinor:minor,refundMinor:minor,goodsMinor:minor,postMinor:minor,payMinor:minor,helpersMinor:minor.nullable(),leftAfterKnownMinor:minor,orders:z.number().int().nonnegative(),feeOrders:z.number().int().nonnegative(),selectedOrders:z.number().int().nonnegative(),costedOrders:z.number().int().nonnegative(),estimatedQuantityOrders:z.number().int().nonnegative().default(0),unknownStatus:z.number().int().nonnegative(),ambiguousEvents:z.number().int().nonnegative(),missing:z.array(z.string().max(120)).max(20)}).strict();
+const monthlyView=z.object({id:uuid,operationId:uuid,businessId:uuid,productId:uuid,sourceIds:z.array(uuid).max(50),inputRevision:z.number().int().nonnegative().safe(),createdAt:z.string().datetime(),inputDigest:z.string().regex(/^[a-f0-9]{64}$/),fullMonthCovered:z.boolean(),result:monthlyResult}).strict();
+export const businessStateSchema=z.object({version:z.literal(1),revision:z.number().int().nonnegative().safe(),selectedBusinessId:uuid.nullable().default(null),businesses:z.array(businessSchema).max(20),facts:z.array(factSchema).max(2000),views:z.array(monthlyView).max(120).default([]),imports:z.array(z.object({uploadId:uuid,businessId:uuid,source:z.enum(['seller_file','sandbox'])}).strict()).max(50).default([])}).strict().refine(s=>(s.selectedBusinessId===null||s.businesses.some(b=>b.id===s.selectedBusinessId))&&new Set(s.businesses.map(b=>b.id)).size===s.businesses.length&&new Set(s.facts.map(f=>f.id)).size===s.facts.length&&new Set(s.facts.map(f=>f.operationId)).size===s.facts.length&&new Set(s.views.map(v=>v.id)).size===s.views.length&&new Set(s.views.map(v=>v.operationId)).size===s.views.length&&s.views.every(v=>s.businesses.some(b=>b.id===v.businessId&&b.products.some(p=>p.id===v.productId)))&&new Set(s.imports.map(i=>i.uploadId)).size===s.imports.length&&s.imports.every(i=>s.businesses.some(b=>b.id===i.businessId&&b.compartment===i.source))&&s.facts.every(f=>s.businesses.some(b=>b.id===f.businessId&&(f.productId===null||b.products.some(p=>p.id===f.productId)))),'Invalid business state.');
 export type BusinessState=z.infer<typeof businessStateSchema>;
-export function emptyBusinessState():BusinessState{return {version:1,revision:0,businesses:[],facts:[]}}
-const commandSchema=z.discriminatedUnion('type',[
+/** A compatible rollback can serve retained facts read-only while deletion stays available. */
+export function businessReadOnly(){return process.env.WTES_BUSINESS_READ_ONLY==='true'}
+export function emptyBusinessState():BusinessState{return {version:1,revision:0,selectedBusinessId:null,businesses:[],facts:[],views:[],imports:[]}}
+export const businessCommandSchema=z.discriminatedUnion('type',[
  z.object({type:z.literal('create_business'),id:uuid,label:workspaceProductLabel,compartment:z.enum(['seller_file','demo','sandbox'])}).strict(),
- z.object({type:z.literal('create_product'),businessId:uuid,id:uuid,label:workspaceProductLabel}).strict(),
+ z.object({type:z.literal('select_business'),id:uuid}).strict(),
+ z.object({type:z.literal('assign_import'),uploadId:uuid,businessId:uuid,source:z.enum(['seller_file','sandbox']),legacyConfirmed:z.boolean().default(false)}).strict(),
+ z.object({type:z.literal('create_product'),businessId:uuid,id:uuid,label:workspaceProductLabel,kind:z.enum(['maker','reseller']).optional()}).strict(),
  z.object({type:z.literal('confirm_alias'),businessId:uuid,alias:z.object({id:uuid,operationId:uuid,productId:uuid,source:z.enum(['seller_file','demo','sandbox','verified_live']),sourceKey:z.string().regex(/^b_[a-f0-9]{64}$/),validFrom:z.string(),validTo:z.string().nullable()}).strict()}).strict(),
  z.object({type:z.literal('confirm_fact'),fact:factSchema}).strict()
+ ,z.object({type:z.literal('save_interview'),businessId:uuid,product:z.object({id:uuid,label:workspaceProductLabel,kind:z.enum(['maker','reseller'])}).strict(),alias:z.object({id:uuid,operationId:uuid,productId:uuid,source:z.enum(['seller_file','demo','sandbox']),sourceKey:z.string().regex(/^b_[a-f0-9]{64}$/),validFrom:z.string(),validTo:z.string().nullable()}).strict(),facts:z.array(factSchema).max(8)}).strict()
 ]);
 /** Apply explicit commands only; the caller supplies owner, entitlement and CAS checks. */
 export function applyBusinessCommand(value:BusinessState,raw:unknown):BusinessState{
- const state=businessStateSchema.parse(value),command=commandSchema.parse(raw);let next=state;
+ const state=businessStateSchema.parse(value),command=businessCommandSchema.parse(raw);let next=state;
  if(command.type==='create_business'){
   const existing=state.businesses.find(b=>b.id===command.id);if(existing){if(existing.label!==command.label||existing.compartment!==command.compartment)throw new Error('Business conflict.');return state;}
-  next={...state,businesses:[...state.businesses,{id:command.id,label:command.label,compartment:command.compartment,products:[],aliases:[]}]};
+  next={...state,selectedBusinessId:command.id,businesses:[...state.businesses,{id:command.id,label:command.label,compartment:command.compartment,products:[],aliases:[]}]};
+ }else if(command.type==='select_business'){
+  if(!state.businesses.some(b=>b.id===command.id))throw new Error('Business not found.');if(state.selectedBusinessId===command.id)return state;next={...state,selectedBusinessId:command.id};
+ }else if(command.type==='assign_import'){
+  const business=state.businesses.find(b=>b.id===command.businessId);if(!business||business.compartment!==command.source)throw new Error('Import outside business.');const existing=state.imports.find(i=>i.uploadId===command.uploadId);if(existing){if(existing.businessId!==command.businessId||existing.source!==command.source)throw new Error('Import assignment conflict.');return state;}next={...state,imports:[...state.imports,{uploadId:command.uploadId,businessId:command.businessId,source:command.source}]};
  }else if(command.type==='create_product'){
-  const business=state.businesses.find(b=>b.id===command.businessId);if(!business)throw new Error('Business not found.');const existing=business.products.find(p=>p.id===command.id);if(existing){if(existing.label!==command.label)throw new Error('Product conflict.');return state;}
-  next={...state,businesses:state.businesses.map(b=>b.id===business.id?{...b,products:[...b.products,{id:command.id,label:command.label}]}:b)};
+  const business=state.businesses.find(b=>b.id===command.businessId);if(!business)throw new Error('Business not found.');const existing=business.products.find(p=>p.id===command.id);if(existing){if(existing.label!==command.label||existing.kind!==command.kind)throw new Error('Product conflict.');return state;}
+  next={...state,businesses:state.businesses.map(b=>b.id===business.id?{...b,products:[...b.products,{id:command.id,label:command.label,...(command.kind?{kind:command.kind}:{})}]}:b)};
  }else if(command.type==='confirm_alias'){
   const business=state.businesses.find(b=>b.id===command.businessId);if(!business)throw new Error('Business not found.');const updated=confirmAlias(business,command.alias as ProductAlias);if(JSON.stringify(updated)===JSON.stringify(business))return state;next={...state,businesses:state.businesses.map(b=>b.id===business.id?updated:b)};
+ }else if(command.type==='save_interview'){
+  const business=state.businesses.find(b=>b.id===command.businessId);if(!business||state.selectedBusinessId!==business.id||business.compartment!==command.alias.source||command.alias.productId!==command.product.id)throw new Error('Interview outside selected business.');
+  const priorProduct=business.products.find(p=>p.id===command.product.id);if(priorProduct&&(priorProduct.label!==command.product.label||priorProduct.kind!==command.product.kind))throw new Error('Product conflict.');
+  const withProduct=priorProduct?business:{...business,products:[...business.products,command.product]};const updated=confirmAlias(withProduct,command.alias);let facts=state.facts;
+  for(const fact of command.facts){if(fact.businessId!==business.id||(fact.productId!==null&&fact.productId!==command.product.id)||fact.source!=='seller_confirmed')throw new Error('Fact outside business.');facts=addFact(facts,fact);}
+  if(JSON.stringify(updated)===JSON.stringify(business)&&facts===state.facts)return state;next={...state,businesses:state.businesses.map(b=>b.id===business.id?updated:b),facts};
  }else{
   const fact=command.fact,business=state.businesses.find(b=>b.id===fact.businessId);if(!business||(fact.productId!==null&&!business.products.some(p=>p.id===fact.productId)))throw new Error('Fact outside business.');if(fact.source!=='seller_confirmed')throw new Error('Seller confirmation required.');const facts=addFact(state.facts,fact);if(facts===state.facts)return state;next={...state,facts};
  }

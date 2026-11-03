@@ -4,7 +4,7 @@ import {costResult,parseRoughAmount,estimatedPayPalFee,missingCostComponents} fr
 test('unknown and impossible maker yields remain unresolved instead of inventing materials cost',()=>{for(const waste of [undefined,1]){const result=costResult({kind:'maker',answers:{batch:40,pieces:20,waste},cameIn:20,fee:1,units:1,ordersPerMonth:0});assert.equal(result.parts[0].value,undefined);assert.equal(result.parts[3].value,undefined)}const known=costResult({kind:'maker',answers:{batch:40,pieces:20,waste:0,helpers:0},cameIn:20,fee:1,units:1,ordersPerMonth:1});assert.equal(known.parts[0].value,2);assert.equal(known.parts[3].value,0)});
 
 test('parses the interview’s plain-language amounts without AI',()=>{
- assert.equal(parseRoughAmount('a fiver'),5);assert.equal(parseRoughAmount('5-ish'),5);assert.equal(parseRoughAmount('3 to 5'),4);assert.equal(parseRoughAmount('a third',true),.33);assert.equal(parseRoughAmount("don't know"),undefined);
+ assert.equal(parseRoughAmount('a fiver'),5);assert.equal(parseRoughAmount('5-ish'),5);assert.equal(parseRoughAmount('3 to 5'),undefined);assert.equal(parseRoughAmount('between three and five pounds'),undefined);assert.equal(parseRoughAmount('£3–£5'),undefined);assert.equal(parseRoughAmount('$3 to $5'),undefined);assert.equal(parseRoughAmount('a third',true),1/3);assert.equal(parseRoughAmount("don't know"),undefined);
 });
 test('calculates reseller and maker costs including waste and a negative result',()=>{
  const reseller=costResult({kind:'reseller',answers:{buy:8,post:3,pay:2,helpers:20},cameIn:20,fee:1,units:1,ordersPerMonth:20});
@@ -50,3 +50,6 @@ test('item fee estimate uses the shop-wide fee rate, not an item-specific rate',
 });
 
 test('unknown waste is identified as missing materials in a partial remainder',()=>{const result=costResult({kind:'maker',answers:{batch:100,pieces:10,post:0,pay:0,helpers:0},cameIn:20,fee:0,units:1,ordersPerMonth:1});assert.equal(result.keep,20);assert.deepEqual(missingCostComponents(result),['materials']);});
+test('confirmed per-piece pay scales with quantity and per-order pay applies once',()=>{const base={kind:'reseller' as const,cameIn:40,fee:1,units:2,ordersPerMonth:10};assert.equal(costResult({...base,answers:{buy:8,post:3,pay:2,payBasis:'unit',helpers:0}}).parts[2].value,4);assert.equal(costResult({...base,answers:{buy:8,post:3,pay:2,payBasis:'order',helpers:0}}).parts[2].value,2)});
+test('unconfirmed quantity does not invent goods or per-piece pay',()=>{const result=costResult({kind:'reseller',answers:{buy:8,pay:2,payBasis:'unit',post:3,helpers:0},cameIn:55,fee:2.83,units:undefined,ordersPerMonth:10});assert.equal(result.parts[0].value,undefined);assert.equal(result.parts[2].value,undefined);assert.deepEqual(missingCostComponents(result),['buying','your time'])});
+test('shared resolver respects currency minor units',()=>{const result=costResult({kind:'reseller',answers:{buy:8,post:3,pay:0,helpers:0},cameIn:55,fee:2.83,units:1,ordersPerMonth:20,currency:'JPY'});assert.equal(result.fee,3);assert.equal(result.keep,41)});

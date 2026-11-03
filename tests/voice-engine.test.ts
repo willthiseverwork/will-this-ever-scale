@@ -24,3 +24,4 @@ test('cost readbacks describe singular products, batches, and waste clearly',()=
  const initial=confirmValue(proposeValue(newInterview('maker'),'batch',{value:40,basis:'batch',said:''},necklace).state,'batch');
  assert.match(proposeValue(initial,'pieces',{value:20,basis:'batch',said:''},{...necklace,pricePerUnit:30}).reason!,/£2 a piece is low for a necklace\. Does one £40 batch really make 20\?/);
 });
+test('fractional item quantities cannot be confirmed as whole pieces',()=>{const result=proposeValue(newInterview('reseller'),'units',{value:1.5,basis:'order',said:'one and a half'},shop).state;assert.equal(result.slots.units.status,'checking');assert.equal(confirmedAnswers(confirmValue(result,'units')).units,undefined)});

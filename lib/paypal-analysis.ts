@@ -15,6 +15,10 @@ export function projectSandboxReanalysisRow(row:Txn,pseudonymize:(id:string)=>st
  if(typeof row.country==='string'&&/^[A-Za-z]{2}$/.test(row.country))result.country=row.country;
  if(typeof row.invoice_id==='string'&&/^[A-Za-z0-9-]{1,100}$/.test(row.invoice_id))result.invoice_id=row.invoice_id;
  if(typeof row.quantity==='number'&&Number.isFinite(row.quantity)&&row.quantity>0)result.quantity=row.quantity;
+ if(typeof row.quantity_known==='boolean')result.quantity_known=row.quantity_known;
+ if(typeof row.fee_known==='boolean')result.fee_known=row.fee_known;
+ if(typeof row.hold_confirmed==='boolean')result.hold_confirmed=row.hold_confirmed;
+ if(typeof row.tracking_present==='boolean')result.tracking_present=row.tracking_present;
  if(typeof row.status==='string'&&['completed','pending','unpaid','sent','paid','cancelled','denied','unknown','S','P','D','V'].includes(row.status))result.status=row.status;
  if(Array.isArray(row.cart_items))result.cart_items=row.cart_items.filter(item=>typeof item.name==='string'&&Number.isFinite(item.quantity)&&item.quantity>0&&Number.isFinite(item.unit_price)&&item.unit_price>=0).map(item=>({name:item.name,quantity:item.quantity,unit_price:item.unit_price}));
  return result;
