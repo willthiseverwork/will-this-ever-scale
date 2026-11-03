@@ -3,13 +3,16 @@ import {currencyScale,toMinor,remainderMinor} from './partial-money';
 import {resolveOrderEconomics} from './business-economics';
 import type {Fact,FactBasis,FactField} from './business-model';
 import type {Txn} from './types';
+import {isAmountRange,type Amount,type AmountRange} from './amount-range';
 export type SellerKind='maker'|'reseller';
-export type CostAnswers={kind?:SellerKind;units?:number;buy?:number;batch?:number;pieces?:number;waste?:number;post?:number;pay?:number;payBasis?:'unit'|'order';helpers?:number;notApplicable?:Array<'post'|'pay'|'helpers'>};
-export type CostResult={cost:number;keep:number;fee:number;cameIn:number;parts:Array<{label:string;value:number|undefined}>;negativeRaise?:number;wasteGain?:number};
-export function missingCostComponents(result:CostResult){return result.parts.filter(part=>part.value===undefined).map(part=>part.label.toLowerCase());}
+export type CostAnswers={kind?:SellerKind;units?:number;buy?:number;batch?:number;pieces?:number;waste?:number;post?:number;pay?:number;payBasis?:'unit'|'order';helpers?:number;notApplicable?:Array<'post'|'pay'|'helpers'>;ranges?:Partial<Record<'units'|'buy'|'batch'|'pieces'|'waste'|'post'|'pay'|'helpers',AmountRange>>};
+export type CostResult={cost:number;keep:number;fee:number|null;cameIn:number;parts:Array<{label:string;value:number|undefined;range?:AmountRange}>;keepRange?:AmountRange;negativeRaise?:number;wasteGain?:number};
+export function missingCostComponents(result:CostResult){return result.parts.filter(part=>part.value===undefined&&!part.range).map(part=>part.label.toLowerCase());}
 
 /** Ranges are left unresolved until they can be stored with both endpoints. */
 export function hasAmountRange(input:string){const number='(?:[$£€]\\s*)?(?:\\d+(?:\\.\\d+)?|zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty)(?:\\s*(?:pounds?|dollars?|euros?|quid))?';return new RegExp(`${number}\\s*(?:to|through|or|-|–|—)\\s*${number}\\b|\\bbetween\\s+${number}\\s+and\\s+${number}\\b`,'i').test(input)}
+/** Explicit typed bounds only; ambiguous wording remains unresolved. */
+export function parseAmountRange(input:string,percent=false):AmountRange|undefined{const text=input.trim().replace(/,/g,''),match=text.match(/^(?:(?:about|roughly|around|approximately)\s+)?(?:between\s+)?[£$€]?\s*(\d+(?:\.\d+)?)\s*(%?)\s*(?:to|through|and|[-–—])\s*[£$€]?\s*(\d+(?:\.\d+)?)\s*(%?)(?:\s+(?:per\s+(?:item|piece|order|batch|month)|each|for\s+(?:all\s+)?\d+))?$/i);if(!match||(!percent&&(match[2]||match[4])))return undefined;const hasPercent=percent||!!match[2]||!!match[4],factor=hasPercent?100:1,min=Number(match[1])/factor,max=Number(match[3])/factor;if(!Number.isFinite(min)||!Number.isFinite(max)||min<0||min>max)return undefined;return {min,max}}
 /** Parse the deliberately small vocabulary used in the interview before considering AI. */
 export function parseRoughAmount(input:string,percent=false):number|undefined {
  const text=input.trim().toLowerCase().replace(/,/g,'');
@@ -29,20 +32,20 @@ export function parseRoughAmount(input:string,percent=false):number|undefined {
 /** Estimate this order's fee using the selected shop's aggregate fee rate. */
 export function estimatedPayPalFee(shopFees:number,shopSales:number,itemGross:number,itemOrders:number){return shopFees/Math.max(1,shopSales)*itemGross/Math.max(1,itemOrders)}
 
-export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:number;fee:number;units:number|undefined;ordersPerMonth:number;currency?:string}) : CostResult {
+export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:number;fee:number|null;units:number|undefined;ordersPerMonth:number;currency?:string;singleItemOrder?:boolean}) : CostResult {
  const {kind,answers,units,ordersPerMonth}=input;
  const currency=input.currency||'USD',scale=currencyScale(currency),cents=(value:number)=>toMinor(value,currency);
- const cameInCents=cents(input.cameIn),feeCents=cents(input.fee);
- const helpers=answers.notApplicable?.includes('helpers')?0:answers.helpers!==undefined&&ordersPerMonth>0?answers.helpers/ordersPerMonth:undefined;
+ const cameInCents=cents(input.cameIn),feeCents=input.fee===null?null:cents(input.fee);
+ const helpInput=answers.ranges?.helpers??answers.helpers;const helpers=answers.notApplicable?.includes('helpers')?0:helpInput!==undefined&&ordersPerMonth>0?(isAmountRange(helpInput)?{min:helpInput.min/ordersPerMonth,max:helpInput.max/ordersPerMonth}:helpInput/ordersPerMonth):undefined;
  const businessId='00000000-0000-4000-8000-000000000001',productId='00000000-0000-4000-8000-000000000002';let sequence=10;const facts:Fact[]=[];
- const add=(field:FactField,value:number|undefined,basis:FactBasis,monetary:boolean)=>{if(value===undefined||!Number.isFinite(value)||value<0)return;const id=`00000000-0000-4000-8000-${String(sequence++).padStart(12,'0')}`;facts.push({id,operationId:id,businessId,productId,field,state:'confirmed',value,currency:monetary?currency:null,basis,validFrom:'2000-01-01',validTo:null,confirmedAt:'2000-01-01T00:00:00Z',source:'seller_confirmed',supersedes:[]})};
- if(kind==='maker'){add('batch',answers.batch,'batch',true);add('pieces',answers.pieces,'batch',false);add('waste',answers.waste,'share',false)}else add('buy',answers.buy,'unit',true);add('post',answers.notApplicable?.includes('post')?0:answers.post,'order',true);add('pay',answers.notApplicable?.includes('pay')?0:answers.pay,answers.payBasis||'order',true);
- const resolved=resolveOrderEconomics({businessId,productId,currency,date:'2000-01-01',kind,quantity:units??null,cameInMinor:cameInCents,feeMinor:feeCents,singleItemOrder:true,facts});const rounded=[resolved.goodsMinor??undefined,resolved.postMinor??undefined,resolved.payMinor??undefined,helpers===undefined?undefined:cents(helpers)];
+ const add=(field:FactField,value:Amount|undefined,basis:FactBasis,monetary:boolean)=>{if(value===undefined||typeof value==='number'&&(!Number.isFinite(value)||value<0))return;const id=`00000000-0000-4000-8000-${String(sequence++).padStart(12,'0')}`;facts.push({id,operationId:id,businessId,productId,field,state:'confirmed',value,currency:monetary?currency:null,basis,validFrom:'2000-01-01',validTo:null,confirmedAt:'2000-01-01T00:00:00Z',source:'seller_confirmed',supersedes:[]})};
+ if(kind==='maker'){add('batch',answers.ranges?.batch??answers.batch,'batch',true);add('pieces',answers.ranges?.pieces??answers.pieces,'batch',false);add('waste',answers.ranges?.waste??answers.waste,'share',false)}else add('buy',answers.ranges?.buy??answers.buy,'unit',true);add('post',answers.notApplicable?.includes('post')?0:answers.ranges?.post??answers.post,'order',true);add('pay',answers.notApplicable?.includes('pay')?0:answers.ranges?.pay??answers.pay,answers.payBasis||'order',true);
+ const resolved=resolveOrderEconomics({businessId,productId,currency,date:'2000-01-01',kind,quantity:answers.ranges?.units??units??null,cameInMinor:cameInCents,feeMinor:feeCents,singleItemOrder:input.singleItemOrder!==false,facts});const helpRange=helpers===undefined?null:isAmountRange(helpers)?{min:cents(helpers.min),max:cents(helpers.max)}:{min:cents(helpers),max:cents(helpers)},ranges=[resolved.goodsRangeMinor,resolved.postRangeMinor,resolved.payRangeMinor,helpRange],rounded=ranges.map(range=>range&&range.min===range.max?range.min:undefined);
  const costCents=rounded.reduce<number>((sum,value)=>sum+(value??0),0),keepCents=remainderMinor(cameInCents,[feeCents,...rounded]);
- const cost=costCents/scale,keep=keepCents/scale,fee=feeCents/scale,cameIn=cameInCents/scale;
- const negativeRaise=keep<0?Math.ceil((-keep/Math.max(.01,1-fee/Math.max(cameIn,.01)))*2)/2:undefined;
- const wasteGain=kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste!==undefined&&answers.waste>0&&answers.waste<1&&units!==undefined?(answers.batch/(answers.pieces*(1-answers.waste))-answers.batch/(answers.pieces*(1-answers.waste/2)))*units:undefined;
- return {cost,keep,fee,cameIn,parts:rounded.map((value,index)=>({label:[kind==='maker'?'Materials':'Buying','Posting','Your time','Help'][index],value:value===undefined?undefined:value/scale})),...(negativeRaise===undefined?{}:{negativeRaise}),...(wasteGain===undefined?{}:{wasteGain})};
+ const cost=costCents/scale,keep=keepCents/scale,fee=feeCents===null?null:feeCents/scale,cameIn=cameInCents/scale,hasRange=ranges.some(range=>range&&range.min!==range.max),keepRange=hasRange?{min:(cameInCents-(feeCents??0)-ranges.reduce((sum,range)=>sum+(range?.max??0),0))/scale,max:(cameInCents-(feeCents??0)-ranges.reduce((sum,range)=>sum+(range?.min??0),0))/scale}:undefined;
+ const negativeRaise=!hasRange&&fee!==null&&keep<0?Math.ceil((-keep/Math.max(.01,1-fee/Math.max(cameIn,.01)))*2)/2:undefined;
+ const wasteGain=!hasRange&&kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste!==undefined&&answers.waste>0&&answers.waste<1&&units!==undefined?(answers.batch/(answers.pieces*(1-answers.waste))-answers.batch/(answers.pieces*(1-answers.waste/2)))*units:undefined;
+ return {cost,keep,fee,cameIn,parts:rounded.map((value,index)=>({label:[kind==='maker'?'Materials':'Buying','Posting','Your time','Help'][index],value:value===undefined?undefined:value/scale,...(ranges[index]&&ranges[index]!.min!==ranges[index]!.max?{range:{min:ranges[index]!.min/scale,max:ranges[index]!.max/scale}}:{})})),...(keepRange?{keepRange}:{}),...(negativeRaise===undefined?{}:{negativeRaise}),...(wasteGain===undefined?{}:{wasteGain})};
 }
 
 /** Turn common product-category plurals into a usable one-item label. */

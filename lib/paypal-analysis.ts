@@ -21,6 +21,7 @@ export function projectSandboxReanalysisRow(row:Txn,pseudonymize:(id:string)=>st
  if(typeof row.hold_confirmed==='boolean')result.hold_confirmed=row.hold_confirmed;
  if(typeof row.tracking_present==='boolean')result.tracking_present=row.tracking_present;
  if(typeof row.status==='string'&&['completed','pending','unpaid','sent','paid','cancelled','denied','unknown','S','P','D','V'].includes(row.status))result.status=row.status;
+ if(typeof row.cart_complete==='boolean')result.cart_complete=row.cart_complete;
  if(Array.isArray(row.cart_items))result.cart_items=row.cart_items.filter(item=>typeof item.name==='string'&&Number.isFinite(item.quantity)&&item.quantity>0&&Number.isFinite(item.unit_price)&&item.unit_price>=0).map(item=>({name:item.name,quantity:item.quantity,unit_price:item.unit_price}));
  return result;
 }
