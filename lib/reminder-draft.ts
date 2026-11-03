@@ -1,6 +1,6 @@
 import {createHmac,timingSafeEqual} from 'node:crypto';
 import {reminderNote} from './paypal-actions';
-export type NoteSource='demo'|'connected';
+export type NoteSource='demo'|'connected'|'login';
 // Whole grammatical sentences are the allowed unit, not a bag of safe words.
 // Keep these patterns narrow: no names, claims, deadlines, amounts or links.
 const notePattern=/^(?:Hi|Hello), (?:a|just a) (?:friendly|gentle|quick) reminder about your (?:custom )?order\. (?:You can pay (?:any time|whenever you are ready)|When you are ready, you can pay) (?:with|using) the (?:payment )?link in this email\. (?:Thank you|Thanks(?: for your support)?)[.!]$/i;

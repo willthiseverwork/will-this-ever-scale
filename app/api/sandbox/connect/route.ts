@@ -17,7 +17,7 @@ export async function POST(r:Request){
   // Invoke the read inside this invocation. Own keys remain only in server memory;
   // the initial read does not depend on Vercel routing a second request here.
   const {POST:readSandbox}=await import('../analyze/route');const url=new URL('/api/sandbox/analyze',r.url);
-  const snapshot=await readSandbox(new Request(url,{method:'POST',headers:{origin:url.origin,cookie:`paypal_session=${id}`,'content-type':'application/json',...(r.headers.get('x-vercel-forwarded-for')?{'x-vercel-forwarded-for':r.headers.get('x-vercel-forwarded-for')!}:{})},body:JSON.stringify({source:'connected'})}));
+  const snapshot=await readSandbox(new Request(url,{method:'POST',headers:{origin:url.origin,cookie:[...(r.headers.get('cookie')||'').split(';').map(x=>x.trim()).filter(x=>x&&!x.startsWith('paypal_session=')),`paypal_session=${id}`].join('; '),'content-type':'application/json',...(r.headers.get('x-vercel-forwarded-for')?{'x-vercel-forwarded-for':r.headers.get('x-vercel-forwarded-for')!}:{})},body:JSON.stringify({source:'connected'})}));
   const data=await snapshot.json();const res=NextResponse.json({...data,connected:true,environment:'sandbox',source:'connected'},{headers:{'Cache-Control':'no-store'}});
   res.cookies.set('paypal_session',id,{httpOnly:true,sameSite:'strict',secure:new URL(r.url).protocol==='https:',path:'/',maxAge:1800});return res;
  }catch{return NextResponse.json({error:'Could not connect to PayPal sandbox. Check credentials and permissions.'},{status:400});}

@@ -1,3 +1,4 @@
+import {paypalLoginCookie} from '../../../../lib/paypal-login';
 import {readLimitedJson} from '../../../../lib/request';
 import {randomBytes} from 'node:crypto';
 import {z} from 'zod';
@@ -14,7 +15,8 @@ export async function POST(r:Request){
  if(!sameOrigin(r))return NextResponse.json({error:'Invalid request origin.'},{status:403});
  const secret=process.env.PAYPAL_ACTION_SIGNING_SECRET;if(!secret||Buffer.byteLength(secret)<32)return NextResponse.json({error:'Sandbox action signing is not configured.'},{status:503});
  try{
-  const body=z.object({source:z.enum(['connected','demo']),noteToken:z.string().max(4096).optional(),review:z.array(z.object({id:z.string().max(100),currency:z.string().regex(/^[A-Z]{3}$/),amount:z.number().finite().positive()}).strict()).max(20).optional()}).passthrough().parse(await readLimitedJson(r,8192));const source=body.source,session=source==='connected'?sessionId(r)||'':'';
+  const body=z.object({source:z.enum(['connected','demo','login']),noteToken:z.string().max(4096).optional(),review:z.array(z.object({id:z.string().max(100),currency:z.string().regex(/^[A-Z]{3}$/),amount:z.number().finite().positive()}).strict()).max(20).optional()}).passthrough().parse(await readLimitedJson(r,8192));const source=body.source,session=source==='connected'?sessionId(r)||'':source==='login'?paypalLoginCookie(r)||'':'';
+  if(source==='login'&&!session)return NextResponse.json({error:'PayPal login expired. Connect again.'},{status:401});
   if(source==='connected'&&!getSession(session))return NextResponse.json({error:'Sandbox session expired. Connect again.'},{status:401});
   const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
   if(source==='demo'&&(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')){

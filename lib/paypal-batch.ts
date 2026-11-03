@@ -4,11 +4,11 @@ import {execute,executeReminder,proposalHash,type Proposal} from './paypal-actio
 import type {Credentials} from './paypal-session';
 export type ReminderResult={action:'send_invoice_reminder';id:string;requestedId:string;status:'waiting'|'sending'|'confirmed'|'not_confirmed'|'stopped';invoiceStatus?:string;reused?:boolean};
 export type VerifiedInvoice={id:string;requestedId:string;title:string;currency:string;amount:number;age_days:number};
-export type ActionRecord={version:1;owner:string;source:'demo'|'connected';session:string;expires:number;proposal:Proposal;steps:ReminderResult[];started:boolean;stopped:boolean;invoices?:VerifiedInvoice[];otherResult?:unknown;otherStarted?:boolean};
+export type ActionRecord={version:1;owner:string;source:'demo'|'connected'|'login';session:string;expires:number;proposal:Proposal;steps:ReminderResult[];started:boolean;stopped:boolean;invoices?:VerifiedInvoice[];otherResult?:unknown;otherStarted?:boolean};
 type ReminderReceipt={result:ReminderResult;sentAt:number};
 const DEMO_REMINDER_COOLDOWN_MS=2*60_000;
 const pathFor=(id:string)=>{if(!/^[a-f0-9]{64}$/.test(id))throw new Error('Invalid proposal');return `paypal-actions/${id}.json`;};
-export async function createAction(owner:string,proposal:Proposal,source:'demo'|'connected',session:string,secret:string,store=actionStore(),invoices?:VerifiedInvoice[]){
+export async function createAction(owner:string,proposal:Proposal,source:'demo'|'connected'|'login',session:string,secret:string,store=actionStore(),invoices?:VerifiedInvoice[]){
  const proposalId=randomBytes(32).toString('hex'),expires=Date.now()+300000;
  const ids=proposal.action==='send_invoice_reminders'?proposal.input.invoiceIds:proposal.action==='send_invoice_reminder'?[proposal.input.invoiceId]:[];
  const record:ActionRecord={version:1,owner,source,session,expires,proposal,steps:ids.map(id=>({action:'send_invoice_reminder',id,requestedId:id,status:'waiting'})),started:false,stopped:false,...(invoices?{invoices}:{})};

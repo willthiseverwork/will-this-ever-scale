@@ -1,0 +1,12 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {GET} from '../app/api/paypal/login/callback/route';
+import {signLoginCookie} from '../lib/paypal-login';import {judgeCookie} from '../lib/access';
+test('callback rechecks state and access and matches payer ID or verified email',async()=>{
+ const names=['PAYPAL_ACTION_SIGNING_SECRET','PAYPAL_LOGIN_CLIENT_ID','PAYPAL_LOGIN_CLIENT_SECRET','PAYPAL_SANDBOX_DEMO_MERCHANT_ID','PAYPAL_SANDBOX_DEMO_MERCHANT_EMAIL','WTES_BILLING_SECRET'];const previous=Object.fromEntries(names.map(n=>[n,process.env[n]]));Object.assign(process.env,{PAYPAL_ACTION_SIGNING_SECRET:'s'.repeat(32),PAYPAL_LOGIN_CLIENT_ID:'id',PAYPAL_LOGIN_CLIENT_SECRET:'secret',PAYPAL_SANDBOX_DEMO_MERCHANT_ID:'P1',PAYPAL_SANDBOX_DEMO_MERCHANT_EMAIL:'demo@example.com',WTES_BILLING_SECRET:'b'.repeat(32)});
+ const state=signLoginCookie('state','abc',Date.now()+60000,process.env.PAYPAL_ACTION_SIGNING_SECRET!);const judge=judgeCookie().split(';')[0];const request=(query:string,access=true)=>new Request('https://app.willthiseverscale.com/api/paypal/login/callback?'+query,{headers:{cookie:`paypal_login_state=${state}${access?'; '+judge:''}`}});const original=globalThis.fetch;let calls=0,info:any={payer_id:'P1'};globalThis.fetch=async()=>{calls++;return Response.json(calls%2?{access_token:'token'}:info)};
+ try{assert.match((await GET(request('state=wrong&code=abc'))).headers.get('location')!,/paypal=error/);assert.equal(calls,0);assert.match((await GET(request('error=access_denied'))).headers.get('location')!,/paypal=error/);assert.equal(calls,0);assert.match((await GET(request('state=abc&code=abc',false))).headers.get('location')!,/paypal=error/);assert.equal(calls,0);
+  let response=await GET(request('state=abc&code=abc'));assert.match(response.headers.get('location')!,/paypal=connected/);assert.match(response.headers.get('set-cookie')!,/paypal_login=/);
+  info={email:'DEMO@example.com',email_verified:true};response=await GET(request('state=abc&code=abc'));assert.match(response.headers.get('location')!,/paypal=connected/);
+  info={email:'other@example.com',email_verified:true};response=await GET(request('state=abc&code=abc'));assert.match(response.headers.get('location')!,/paypal=no_match/);
+ }finally{globalThis.fetch=original;for(const name of names){const value=previous[name];if(value===undefined)delete process.env[name];else process.env[name]=value}}
+});
