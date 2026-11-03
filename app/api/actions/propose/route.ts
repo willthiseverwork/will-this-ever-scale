@@ -21,8 +21,10 @@ export async function POST(r:Request){
   const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);if(p.action==='create_payment_link'&&process.env.WTES_PAYPAL_SET_LINK_ENABLED!=='true')return NextResponse.json({error:'Payment links are unavailable.'},{status:403});const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
   if(source==='demo'&&(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')){
    const mapped=(process.env.PAYPAL_SANDBOX_DEMO_INVOICE_IDS||'').split(',').map(x=>x.trim()).filter(Boolean);
-   if(mapped.length!==3||new Set(mapped).size!==3||mapped.some(x=>!/^INV2-[A-Z0-9-]+$/.test(x)))return NextResponse.json({error:'Demo invoice mapping is not configured. The sample invoice IDs are fictional.'},{status:503});
-   const resolve=(invoiceId:string)=>{const index=/^INV-([0-2])$/.exec(invoiceId);const id=index?mapped[Number(index[1])]:invoiceId;if(!mapped.includes(id))throw new Error('Invalid demo invoice');return id;};
+   const hasSample=requested.some(id=>/^INV-[0-2]$/.test(id));
+   if(hasSample&&(mapped.length!==3||new Set(mapped).size!==3||mapped.some(x=>!/^INV2-[A-Z0-9-]+$/.test(x))))return NextResponse.json({error:'Demo invoice mapping is not configured. The sample invoice IDs are fictional.'},{status:503});
+   if(requested.some(id=>!/^INV-[0-2]$/.test(id)&&!/^INV2-[A-Z0-9-]+$/.test(id)))return NextResponse.json({error:'Invalid demo invoice.'},{status:400});
+   const resolve=(invoiceId:string)=>{const index=/^INV-([0-2])$/.exec(invoiceId);return index?mapped[Number(index[1])]:invoiceId;};
    p=p.action==='send_invoice_reminder'?{...p,input:{...p.input,invoiceId:resolve(p.input.invoiceId)}}:{...p,input:{...p.input,invoiceIds:p.input.invoiceIds.map(resolve)}};
   }
   const selectedNote=noteToken?verifyReminderNote(noteToken,source,secret):undefined;
