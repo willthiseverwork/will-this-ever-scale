@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {costResult,parseRoughAmount} from '../lib/cost-interview';
+import {costResult,parseRoughAmount,estimatedPayPalFee} from '../lib/cost-interview';
 
 test('parses the interview’s plain-language amounts without AI',()=>{
  assert.equal(parseRoughAmount('a fiver'),5);assert.equal(parseRoughAmount('5-ish'),5);assert.equal(parseRoughAmount('3 to 5'),4);assert.equal(parseRoughAmount('a third',true),.33);assert.equal(parseRoughAmount("don't know"),undefined);
@@ -39,4 +39,11 @@ test('shown amounts reconcile to the penny for maker and reseller results',()=>{
  assert.equal(reseller.keep,41.17);
  const multi=costResult({kind:'reseller',answers:{buy:8,post:3,pay:2,helpers:0},cameIn:40,fee:1.234,units:2,ordersPerMonth:20});
  assert.equal(multi.parts[0].value,16);assert.equal(multi.fee,1.23);assert.equal(multi.keep,17.77);
+});
+
+test('item fee estimate uses the shop-wide fee rate, not an item-specific rate',()=>{
+ const estimate=estimatedPayPalFee(51.45,1000,1760,32);
+ assert.equal(Math.round(estimate*100)/100,2.83);
+ const result=costResult({kind:'reseller',answers:{buy:8,post:3},cameIn:55,fee:estimate,units:1,ordersPerMonth:20});
+ assert.equal(result.fee,2.83);assert.equal(result.keep,41.17);
 });

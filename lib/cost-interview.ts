@@ -19,6 +19,9 @@ export function parseRoughAmount(input:string,percent=false):number|undefined {
  return percent||/%/.test(text)?number/100:number;
 }
 
+/** Estimate this order's fee using the selected shop's aggregate fee rate. */
+export function estimatedPayPalFee(shopFees:number,shopSales:number,itemGross:number,itemOrders:number){return shopFees/Math.max(1,shopSales)*itemGross/Math.max(1,itemOrders)}
+
 export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:number;fee:number;units:number;ordersPerMonth:number}) : CostResult {
  const {kind,answers,units,ordersPerMonth}=input;
  const cents=(value:number)=>Math.round((value+Number.EPSILON)*100);
