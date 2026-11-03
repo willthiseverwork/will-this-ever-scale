@@ -1,0 +1,2 @@
+/** Keep every character while limiting each Polly request. */
+export function speechChunks(text:string,max=1400){const result:string[]=[];let rest=text;while(rest.length>max){const candidate=rest.slice(0,max),space=candidate.lastIndexOf(' ');let cut=space>max/2?space+1:max;if(cut<rest.length&&/[\uD800-\uDBFF]/.test(rest[cut-1])&&/[\uDC00-\uDFFF]/.test(rest[cut]))cut--;result.push(rest.slice(0,cut));rest=rest.slice(cut)}if(rest)result.push(rest);return result}
