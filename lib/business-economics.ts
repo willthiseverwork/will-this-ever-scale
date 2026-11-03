@@ -1,5 +1,5 @@
 import {resolveFact,type Fact,type FactBasis,type FactField} from './business-model';
-import {toMinor,remainderMinor} from './partial-money';
+import {outwardMinor,remainderMinor} from './partial-money';
 import {bounds,isAmountRange,type Amount,type AmountRange} from './amount-range';
 export type MinorRange={min:number;max:number};
 export type OrderEconomics={currency:string;cameInMinor:number;feeMinor:number|null;goodsMinor:number|null;postMinor:number|null;payMinor:number|null;goodsRangeMinor:MinorRange|null;postRangeMinor:MinorRange|null;payRangeMinor:MinorRange|null;leftRangeMinor:MinorRange|null;leftAfterKnownMinor:number;missing:string[];notApplicable:string[];sources:Record<string,string[]>};
@@ -9,7 +9,7 @@ export function resolveOrderEconomics(input:{businessId:string;productId:string;
  const validQuantity=(v:Amount)=>{const b=bounds(v);return Number.isSafeInteger(b.min)&&Number.isSafeInteger(b.max)&&b.min>=1&&b.min<=b.max};if((quantity!==null&&!validQuantity(quantity))||!Number.isSafeInteger(cameInMinor)||cameInMinor<0||(feeMinor!==null&&(!Number.isSafeInteger(feeMinor)||feeMinor<0)))throw new Error('Invalid order.');
  const sources:Record<string,string[]>={},missing:string[]=[],notApplicable:string[]=[];
  function amount(field:FactField,basis:FactBasis,monetary:boolean):Amount|null{const result=resolveFact(facts,{businessId,productId,field,basis,currency:monetary?currency:null,date});if(result.state!=='resolved'||!result.facts.every(f=>f.source==='seller_confirmed'||f.source==='observed')){missing.push(field);return null}if(result.fact.state==='not_applicable'&&field==='post'){sources[field]=result.facts.map(f=>f.id);notApplicable.push(field);return 0}if(result.fact.state!=='confirmed'||!(typeof result.fact.value==='number'||isAmountRange(result.fact.value))){missing.push(field);return null}sources[field]=result.facts.map(f=>f.id);return result.fact.value;}
- const roundRange=(v:AmountRange):MinorRange=>({min:toMinor(v.min,currency),max:toMinor(v.max,currency)}),q=quantity===null?null:bounds(quantity);let goodsRangeMinor:MinorRange|null=null;
+ const roundRange=(v:AmountRange):MinorRange=>outwardMinor(v.min,v.max,currency),q=quantity===null?null:bounds(quantity);let goodsRangeMinor:MinorRange|null=null;
  if(kind==='reseller'){const buy=amount('buy','unit',true);if(buy!==null&&q){const b=bounds(buy);goodsRangeMinor=roundRange({min:b.min*q.min,max:b.max*q.max})}else if(!q)missing.push('quantity')}
  else{const batch=amount('batch','batch',true),pieces=amount('pieces','batch',false),waste=amount('waste','share',false);if(batch!==null&&pieces!==null&&waste!==null&&q){const b=bounds(batch),p=bounds(pieces),w=bounds(waste);if(p.min>0&&w.max<1)goodsRangeMinor=roundRange({min:b.min*q.min/(p.max*(1-w.min)),max:b.max*q.max/(p.min*(1-w.max))});else missing.push('yield')}else missing.push('yield')}
  const post=amount('post','order',true),postRangeMinor=post!==null&&singleItemOrder?roundRange(bounds(post)):null;if(post!==null&&!singleItemOrder)missing.push('post allocation');
