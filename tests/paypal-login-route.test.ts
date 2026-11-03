@@ -21,6 +21,7 @@ test('login rejects malformed client IDs to the sandbox keys form and preserves 
   assert.equal(destination.origin,'https://www.sandbox.paypal.com');
   assert.equal(destination.pathname,'/signin/authorize');
   assert.equal(destination.searchParams.get('client_id'),valid);
+  assert.deepEqual(destination.searchParams.get('scope')!.split(' '),['openid','email','https://uri.paypal.com/services/paypalattributes']);
   assert.equal(destination.searchParams.get('redirect_uri'),'https://app.willthiseverscale.com/api/paypal/login/callback');
   assert.match(response.headers.get('set-cookie')!,/paypal_login_state=/);
   assert.equal((await GET(request(false))).headers.get('location'),'https://app.willthiseverscale.com/access');
