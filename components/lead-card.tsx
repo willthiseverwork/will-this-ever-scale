@@ -2,7 +2,7 @@
 
 import {useMemo,useState} from 'react';
 import type {Analysis,Leak,ProductGroupingSummary} from '../lib/types';
-import {money} from '../lib/display';
+import {money,sentenceCaseItem} from '../lib/display';
 
 type Answers=Record<string,string>;
 type Props={analysis:Analysis;leak:Leak;grouping?:ProductGroupingSummary;answers:Answers;save:(answers:Answers)=>void};
@@ -14,7 +14,7 @@ const endOfMonthAfter=(d:Date)=>new Intl.DateTimeFormat('en-GB',{day:'numeric',m
 
 function values(analysis:Analysis,leak:Leak){const e=leak.evidence,n=(key:string)=>Number(e[key]||0);const months=n('months'),back=n('people_back'),avg=n('average_order'),once=n('once_buyers'),buyers=n('buyers'),returning=n('returning_buyers'),share=n('returning_sales_share'),orders=n('orders'),smallShop=back<3;return {months,back,avg,once,buyers,returning,share,orders,smallShop,money:smallShop?12*avg:back*avg,unit:smallShop||months>=12?'a year':'more in sales',period:`${months} ${months===1?'month':'months'} · ${orders} ${orders===1?'order':'orders'}`,short:months<6&&typeof e.median_days_between_orders==='number'?`${returning} buyers already came back, about ${Math.max(1,Math.round(n('median_days_between_orders')/30))===1?'a month':`${Math.round(n('median_days_between_orders')/30)} months`} after their first order.`:'',};}
 export function leadCardPreview(analysis:Analysis,leak:Leak){const v=values(analysis,leak);return {amount:money(v.money,analysis.currency),unit:v.unit,back:v.back,once:v.once};}
-function shopDescription(grouping:ProductGroupingSummary|undefined,analysis:Analysis){const value=(grouping?.shop||analysis.item_groups.slice(0,3).map(x=>x.name).join(', ')).replace(/^this shop sells\s*/i,'').replace(/[.\s]+$/,'');return /^the items listed in its paypal activity$/i.test(value)?'':value;}
+function shopDescription(grouping:ProductGroupingSummary|undefined,analysis:Analysis){const value=(grouping?.shop||analysis.item_groups.slice(0,3).map(x=>sentenceCaseItem(x.name)).join(', ')).replace(/^this shop sells\s*/i,'').replace(/[.\s]+$/,'');return /^the items listed in its paypal activity$/i.test(value)?'':value;}
 function guess(text:string){return consumable.test(text)?'useup':gift.test(text)?'gift':'lasts';}
 const parcelCopy={useup:['For when you run out','Your next order ships free. Just write BACK in the order note.'],lasts:['Thank you for your order','Your next one ships free, for you or as a gift. Just write BACK in the order note.'],gift:['For your next gift','Free postage on your next order. Just write BACK in the order note.']} as const;
 
