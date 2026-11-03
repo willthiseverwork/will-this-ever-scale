@@ -13,7 +13,7 @@ if(probe){
   try{if(await present())throw new Error('existing')}catch{throw new Error('Fallback probe namespace is not empty or could not be checked; reconcile before running.');}
   let failedPhase=null,failureCategory='unclassified',phase='setup',cleanupConfirmed=false;
   const {runFallbackStorageProbe,categorizeFallbackProbeError}=await import('../lib/fallback-storage-probe.ts');
-  try{await runFallbackStorageProbe(probe.owner,probe.probeId,value=>{phase=value;console.log(`Fallback storage probe phase: ${value}.`)})}catch(error){failedPhase=phase;failureCategory=categorizeFallbackProbeError(error)}
+  try{await runFallbackStorageProbe(probe.owner,probe.probeId,value=>{phase=value;console.log(`Fallback storage probe phase: ${value}.`)},event=>console.log('Fallback storage probe comparison:',JSON.stringify(event)))}catch(error){failedPhase=phase;failureCategory=categorizeFallbackProbeError(error)}
   try{await cleanup();cleanupConfirmed=true}catch{}
   if(failedPhase||!cleanupConfirmed)throw new Error(`Fallback storage probe failed in ${failedPhase||'cleanup'} (${failureCategory}); cleanup ${cleanupConfirmed?'readback passed; prior writes may still be in flight':'unconfirmed'}.`);
   console.log('Fallback storage probe: synthetic storage passed.');
