@@ -10,8 +10,8 @@ import {beginAccountDeletion,getWorkspace,saveWorkspace,setWorkspaceStoreForTest
 
 test('account deletion is origin and session bound, gated, and safe to retry after provider failure',async()=>{
  const names=['WTES_WORKOS_CLIENT_ID','WTES_WORKOS_API_KEY','WTES_SESSION_SECRET','WTES_APP_ORIGIN','WTES_WORKSPACE_SECRET','WTES_ACCOUNT_DELETION_ENABLED','WTES_WORKOS_DELETION_API_KEY','WTES_BILLING_ENABLED'] as const;
- const old=names.map(n=>process.env[n]),oldFetch=globalThis.fetch;let record:{body:string;etag:string}|null=null,version=0,calls:string[]=[];
- const store:WorkspaceStore={async read(){return record},async write(_path,body,etag){if((record?.etag??null)!==etag)throw new WorkspaceConflict();record={body,etag:String(++version)}}};
+ const old=names.map(n=>process.env[n]),oldFetch=globalThis.fetch;const records=new Map<string,{body:string;etag:string}>();let version=0,calls:string[]=[];
+ const store:WorkspaceStore={async read(path){return records.get(path)??null},async write(path,body,etag){if((records.get(path)?.etag??null)!==etag)throw new WorkspaceConflict();records.set(path,{body,etag:String(++version)})}};
  Object.assign(process.env,{WTES_WORKOS_CLIENT_ID:'client_test',WTES_WORKOS_API_KEY:'signin-only',WTES_SESSION_SECRET:'s'.repeat(40),WTES_APP_ORIGIN:'https://example.com',WTES_WORKSPACE_SECRET:'w'.repeat(40),WTES_ACCOUNT_DELETION_ENABLED:'false',WTES_WORKOS_DELETION_API_KEY:'dedicated-delete-key',WTES_BILLING_ENABLED:'false'});
  setWorkspaceStoreForTests(store);let lifecycleRecord:{body:string;etag:string}|null=null;let lifecycleVersion=0;const lifecycle:LifecycleStore={async read(){return lifecycleRecord},async write(_path,body,etag){if((lifecycleRecord?.etag??null)!==etag)throw new LifecycleConflict();lifecycleRecord={body,etag:String(++lifecycleVersion)}}};setLifecycleStoreForTests(lifecycle);
  const cookie='wtes_session='+encodeURIComponent(sealAction({userId:'user_A',emailVerified:true,expires:Date.now()+60000},process.env.WTES_SESSION_SECRET!));
