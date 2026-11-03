@@ -6,18 +6,24 @@ After a read, optional AI product grouping receives only unique item titles and 
 
 ## Try it
 
-Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). The sample jewelry shop is synthetic, dated 31 October 2026; PayPal actions use its separately identified sandbox test copies.
+Production: [app.willthiseverscale.com](https://app.willthiseverscale.com). Judges can enter `PAYPAL-JUDGE-2026` through **Hackathon judge? Use your access code** on the access screen, then choose **Open this demo shop**. The app attempts to read the demo sandbox; if PayPal does not answer or returns no sales, it opens the local sample and says so. The demo merchant's earlier months are generated history because sandbox accounts cannot hold past-dated sales. The seed script and actual sandbox results require the owner setup described in [docs/paypal.md](docs/paypal.md).
 
-Hackathon judges can open **Hackathon judge? Use your access code** on the trial screen, enter `PAYPAL-JUDGE-2026`, and receive full card-free access until 15 December 2026 at 23:59 Pacific Time. The deployed code is stored as `WTES_JUDGE_CODE` and can be changed by the project owner.
+Choose **Connect PayPal** to visit PayPal's sandbox login, or use the sales-file and developer-key links. Login identifies the account; it does not grant access to arbitrary sellers' financial data. Only the configured demo merchant is matched to the server-held demo sandbox credentials. Another login is told that its account cannot be read. Real sellers would need an approved PayPal partner onboarding and financial-data grant; neither is active here.
 
-1. Select **Open the demo shop**, then **Skip both** or enter item costs and monthly ad spend. The October read shows the money map, the largest monthly opportunity, three unpaid invoices totaling USD 540, other findings and an item concentration risk.
-2. Open **Show the math** to see AG Grid month and item tables and the calculation behind the first finding. Close with Escape, Back, or the close button.
-3. Choose **What to do about it**, answer the questions, and inspect the test, fixed lesson steps and 30-day check. **Add a calendar reminder** downloads an `.ics` file without collecting an email.
-4. Open **See your plan**, then **Remind them in PayPal**. The review reads the mapped invoices from PayPal and displays their real titles, balances, ages and exact reminder note. **Approve** sends the displayed batch in order. Keep the page open; **Stop the rest** cancels waiting rows. A successful result includes PayPal's real invoice ID. Unknown results are never called sent or silently replayed. Previously confirmed reminders are labeled **Already sent**.
-5. To try your own data, download the sample CSV and upload it on the start screen. Anonymous CSV rows remain in browser memory. For a signed-in seller with save access, filtered rows are kept in encrypted private storage so uploads can be merged later; the raw CSV, names, addresses, notes and contact details are never saved. CSV findings cannot send to a previously connected sandbox account.
-6. **Connect sandbox → Use the demo sandbox** reads the real test account without keys. Its shorter history has intentional empty states and follows the real 14-day invoice rule. Developers can instead enter their own sandbox app credentials. The initial connection and read happen together. Cost and ad changes use sanitized rows held only in browser memory for the visit; after a refresh, connect and read again to change those assumptions. A later provider action may require reconnecting if its server-memory session expires.
+The results include the money map and findings supported by the available data. Unpaid invoice reminders are reviewed before the seller approves them in PayPal. The set payment-link action is behind `WTES_PAYPAL_SET_LINK_ENABLED` until its sandbox probe succeeds. Quiet-regular offers produce messages for the seller to send; this app does not send those messages. The optional cost interview can be typed or, when both voice flags and services are available, spoken. Voice and payment-link live checks remain subject to the release record.
 
-No PayPal action runs on page load or when preparing a review. Approve is a real sandbox notification action, not a visual simulation. The existing seeded purchases and notifications must not be replayed as setup or verification.
+## How PayPal is used
+
+Every connected PayPal request is sandbox-only. The application and its owner-run sandbox tools use these APIs:
+
+- **OAuth and OpenID Connect:** sandbox OAuth token exchange and userinfo identify the demo merchant or authenticate the configured sandbox app. The login token alone does not authorize another seller's transaction data.
+- **Transaction Search:** reads the available sales history in bounded, paginated windows. Sandbox reporting can lag by up to three hours.
+- **Invoicing v2:** lists and reads invoices, reviews their balances, and sends seller-approved reminders. Existing optional sandbox actions and the owner seed can create and send sandbox invoices.
+- **Billing plans and subscriptions:** lists plans and reads identifiable subscription details where the returned transaction data supports them. Existing optional sandbox actions can create a catalog product and billing plan after approval.
+- **Payment Links and Buttons:** the flagged set action creates and reads back a payment resource after approval. An owner-only probe can create and delete one £1 test link; its result is not yet verified.
+- **Orders v2 and capture readback:** owner-run sandbox seed and verification tools create orders, require sandbox-buyer approval, capture approved orders, and read order/capture status. The seed has not been run as part of this work.
+
+CSV uploads are parsed in the browser. Signed-in sellers can save filtered, pseudonymous rows in encrypted private storage. Names, emails and raw CSVs are not saved; quiet-regular contact details are held only in browser memory for the visit. No PayPal action runs merely by opening results or preparing a review. The application does not send quiet-regular messages, move money, or use live PayPal credentials.
 
 ## Run locally
 
@@ -80,7 +86,7 @@ The app includes data chat, saved-workspace support and a public synthetic MCP d
 - `/workspace` keeps local reminders without sign-in. Account storage uses the dedicated WorkOS project and encrypted private store; real sign-in and consent persistence are verified; real saved-analysis and deletion lifecycles remain unverified. Signed-in uploads are filtered into encrypted private records: amounts and item titles are retained, direct identities are stable pseudonymous codes, and the raw CSV is not stored. Assistant workspace access and reviewed-product-label sharing are separate controls and both default off. Turning workspace sharing off blocks the next private assistant request.
 - `/connect` offers a downloadable plugin package and a public synthetic sample at `/mcp`. Private OAuth metadata is configured and anonymous private calls require authentication; Codex private access to the empty workspace is verified; Claude private reads and real saved-analysis reads remain unverified. A package download is not an installed or connected client.
 - `/billing` exposes the $14.99/month offer after a 30-day Paddle trial that requires a card at checkout. Billing remains off by default; no payment is collected without a configured provider and explicit checkout. The free demo remains unrestricted, and judges can use the access code above.
-- Live merchant PayPal access and daily refresh are not activated. The read-only transport and atomic snapshot orchestration are prepared, but require an approved merchant grant, secure storage and a configured daily job. CSV upload remains the current own-data entry point.
+- Live merchant PayPal access and daily refresh are not activated. The read-only transport and atomic snapshot orchestration require an approved merchant grant, secure storage and a configured daily job. The sandbox login matches only the demo merchant; CSV upload remains available for a seller’s own data.
 
 See `docs/workspace.md`, `docs/data-chat.md`, `docs/plugin.md`, `docs/live-paypal.md` and `docs/billing.md` for exact configuration and verification boundaries. Never reuse another product's provider credentials.
 

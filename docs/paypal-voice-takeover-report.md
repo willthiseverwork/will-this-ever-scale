@@ -61,3 +61,7 @@ Voice bootstrap follow-up: the app asks the maker/reseller question aloud, then 
 The mic sends a transcribed question into the existing answer path. The first successful mic use enables spoken answers unless the seller has already chosen a preference, which is remembered in this browser. Polly receives the same answer text, split into bounded chunks for longer answers; Stop aborts pending requests or pauses playback. The answer itself is unchanged. A limit response hides the mic and shows the typing notice. Local build passed 285 tests with two hosted voice component tests skipped locally; tests cover lossless chunking, including Unicode. Actual microphone, audio playback and Stop remain pending live browser verification. The privacy page describes the browser preference and voice processing.
 
 Customer strings: “Say answers out loud”; “Saying it out loud”; “Stop”; “Voice is used up for today. Typing works the same.” Existing mic and transcription messages remain in use.
+
+## README
+
+The README now explains the sandbox APIs, the demo-only login match and partner-onboarding boundary, generated earlier history, judge code, seller-approved actions and the unrun seed/probe. It no longer describes the retired three-card entry flow. The local build passed 285 tests with the two production-only voice component tests skipped. No product-interface strings were added.
