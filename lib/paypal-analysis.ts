@@ -17,6 +17,7 @@ export function projectSandboxReanalysisRow(row:Txn,pseudonymize:(id:string)=>st
  if(typeof row.quantity==='number'&&Number.isFinite(row.quantity)&&row.quantity>0)result.quantity=row.quantity;
  if(typeof row.quantity_known==='boolean')result.quantity_known=row.quantity_known;
  if(typeof row.fee_known==='boolean')result.fee_known=row.fee_known;
+ if(row.fee_adjustment==='T1108'||row.fee_adjustment==='T1109')result.fee_adjustment=row.fee_adjustment;
  if(typeof row.hold_confirmed==='boolean')result.hold_confirmed=row.hold_confirmed;
  if(typeof row.tracking_present==='boolean')result.tracking_present=row.tracking_present;
  if(typeof row.status==='string'&&['completed','pending','unpaid','sent','paid','cancelled','denied','unknown','S','P','D','V'].includes(row.status))result.status=row.status;
