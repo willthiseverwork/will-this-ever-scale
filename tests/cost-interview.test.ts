@@ -22,3 +22,11 @@ test('uses the seller-confirmed units, not an implausible upload quantity',()=>{
  assert.equal(Math.round(result.keep*100)/100,10.05);
  assert.equal(result.cost>result.cameIn*3,false);
 });
+
+test('unit count excludes refunds and failed sales while retaining real multi-item sales',async()=>{
+ const {averageItemUnits}=await import('../lib/cost-interview');
+ const row=(id:string,kind:any,quantity:number,status='completed')=>({id,date:'2026-01-01',kind,quantity,status,gross:40,fee:0,net:40,currency:'GBP',item_title:'Necklaces'});
+ assert.equal(averageItemUnits([row('1','sale',1),row('2','refund',1),row('3','sale',5,'failed')],'Necklaces','GBP',1),1);
+ assert.equal(averageItemUnits([row('1','sale',2),row('2','sale',1)],'Necklaces','GBP',2),1.5);
+ assert.equal(parseRoughAmount('a quarter',true),.25);
+});

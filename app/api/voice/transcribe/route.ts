@@ -3,13 +3,13 @@ import {awsCredentialsProvider} from '@vercel/oidc-aws-credentials-provider';
 import {sameOrigin} from '../../../../lib/paypal-session';
 import {hasPaidOrJudgeAccess} from '../../../../lib/access';
 import {voiceIdentity} from '../../../../lib/voice-identity';
-import {reserveVoiceClip,voiceAvailable} from '../../../../lib/voice-budget';
+import {reserveVoiceClip,voiceAvailable,voiceAvailabilityNotice} from '../../../../lib/voice-budget';
 
 export const runtime='nodejs';
 const maxBytes=60*16_000*2;
 const headers={'Cache-Control':'no-store'};
 
-export async function GET(request:Request){if((process.env.WTES_VOICE_ENABLED!=='true'||process.env.WTES_VOICE_TALKBACK_ENABLED!=='true')||!await hasPaidOrJudgeAccess(request))return Response.json({enabled:false},{headers});const identity=voiceIdentity(request);if(!identity)return Response.json({enabled:false,notice:'Voice is unavailable.'},{headers});const allowance=await voiceAvailable({identity});return Response.json({enabled:allowance.allowed,notice:allowance.allowed?undefined:'Voice is used up for today. Typing works the same.'},{headers});}
+export async function GET(request:Request){if((process.env.WTES_VOICE_ENABLED!=='true'||process.env.WTES_VOICE_TALKBACK_ENABLED!=='true')||!await hasPaidOrJudgeAccess(request))return Response.json({enabled:false},{headers});const identity=voiceIdentity(request);if(!identity)return Response.json({enabled:false,notice:'Voice is unavailable.'},{headers});const allowance=await voiceAvailable({identity});return Response.json({enabled:allowance.allowed,notice:voiceAvailabilityNotice(allowance)},{headers});}
 
 /** Audio is streamed to Transcribe and discarded; this route never persists or logs it. */
 export async function POST(request:Request){const started=performance.now();
