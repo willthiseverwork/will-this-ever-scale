@@ -15,6 +15,5 @@ if(process.env.VERCEL_ENV==='production'){
   for(const file of ['bundle.min.js','vad.worklet.bundle.min.js','silero_vad_legacy.onnx','silero_vad_v5.onnx','silero_vad_v6.onnx'])copyFileSync(join(vad,file),join(target,file));
   const ortFiles=readdirSync(ort).filter(x=>x==='ort.wasm.min.js'||x.endsWith('.wasm')||x.endsWith('.mjs'));if(!ortFiles.includes('ort.wasm.min.js')||!ortFiles.some(x=>x.endsWith('.wasm'))||!ortFiles.some(x=>x.endsWith('.mjs')))throw new Error('Voice runtime assets are incomplete');
   for(const file of ortFiles)copyFileSync(join(ort,file),join(target,file));
-  copyFileSync(join(temp,'package-lock.json'),join(target,'dependency-lock.json'));
  }finally{rmSync(temp,{recursive:true,force:true})}
 }
