@@ -30,3 +30,13 @@ test('unit count excludes refunds and failed sales while retaining real multi-it
  assert.equal(averageItemUnits([row('1','sale',2),row('2','sale',1)],'Necklaces','GBP',2),1.5);
  assert.equal(parseRoughAmount('a quarter',true),.25);
 });
+
+test('shown amounts reconcile to the penny for maker and reseller results',()=>{
+ const maker=costResult({kind:'maker',answers:{batch:40,pieces:20,waste:.25,post:2.5,pay:0,helpers:0},cameIn:32.54,fee:2.0170573225819055,units:1,ordersPerMonth:20});
+ assert.equal(maker.parts[0].value,2.67);assert.equal(maker.fee,2.02);assert.equal(maker.keep,25.35);
+ assert.equal(Math.round((maker.cameIn-maker.fee-maker.parts.reduce((sum,part)=>sum+(part.value??0),0))*100),Math.round(maker.keep*100));
+ const reseller=costResult({kind:'reseller',answers:{buy:8,post:3,pay:0,helpers:0},cameIn:55,fee:2.83,units:1,ordersPerMonth:20});
+ assert.equal(reseller.keep,41.17);
+ const multi=costResult({kind:'reseller',answers:{buy:8,post:3,pay:2,helpers:0},cameIn:40,fee:1.234,units:2,ordersPerMonth:20});
+ assert.equal(multi.parts[0].value,16);assert.equal(multi.fee,1.23);assert.equal(multi.keep,17.77);
+});
