@@ -8,6 +8,7 @@ export function parseRoughAmount(input:string,percent=false):number|undefined {
  if(!text||/don'?t know|not sure|skip/.test(text))return undefined;
  if(/\ba fiver\b/.test(text))return 5;
  if(/\ba tenner\b/.test(text))return 10;
+ const words:Record<string,number>={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,twenty:20};const spoken=text.match(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty)\s+(?:pounds?|dollars?|euros?|quid|pence|cents?)\b/);if(spoken){const amount=words[spoken[1]];return /pence|cents/.test(spoken[0])?amount/100:amount;}
  if(/\ba third\b/.test(text))return percent?.33:undefined;
  const range=text.match(/(-?\d+(?:\.\d+)?)\s*(?:to|-)\s*(-?\d+(?:\.\d+)?)/);
  const number=range?(Number(range[1])+Number(range[2]))/2:Number((text.match(/-?\d+(?:\.\d+)?/)||[])[0]);

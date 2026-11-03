@@ -1,18 +1,20 @@
-# Voice input
+# Voice input and talk-back
 
-Voice input uses Amazon Transcribe Streaming in `us-east-1`, through the same production Vercel OIDC role as Bedrock. It accepts one browser-captured 16 kHz mono PCM clip and immediately returns its text; audio and transcripts are not stored or logged.
+Voice input streams 16 kHz mono PCM to Amazon Transcribe in `us-east-1`. Turn-based talk-back uses Bedrock to interpret a seller's answer and Amazon Polly to speak code-checked replies. Audio and transcripts are not stored or logged. The interview engine chooses each field, checks values and requires confirmation before calculation. Typing retains confirmed answers if voice fails.
 
-The production flag is intentionally disabled until the role has this least-privilege policy in addition to its Bedrock permission:
+Both `WTES_VOICE_ENABLED=true` and `WTES_VOICE_TALKBACK_ENABLED=true` are required. `WTES_VOICE_CHECK_MODEL` defaults to `us.amazon.nova-2-lite-v1:0`; Nova reasoning is enabled at low effort. A refused configured Claude model falls back to Nova for that turn. Provider calls retain the production OIDC role and AI allowance. The role `wtes-bedrock-production` needs the following in addition to Bedrock access:
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [{
     "Effect": "Allow",
-    "Action": "transcribe:StartStreamTranscription",
+    "Action": ["transcribe:StartStreamTranscription", "polly:SynthesizeSpeech"],
     "Resource": "*"
   }]
 }
 ```
 
-After that policy is attached to `WTES_BEDROCK_ROLE_ARN`, set `WTES_VOICE_ENABLED=true` in the WTES production environment. Keep it false until the per-user/day and monthly-use Blob counters have been production-tested.
+Limits are 80 transcribed turns and 6,000 spoken characters per identity per UTC day, with monthly shared limits of 600 audio minutes and 300,000 spoken characters. Blob reservations occur before provider calls and are not refunded after failures. The identity is the existing signed-in user or judge-cookie identity. Polly uses Amy for GBP and Ruth otherwise.
+
+Production builds obtain pinned VAD and ONNX packages and copy their worklet, model, JavaScript and WASM assets under `/voice-assets/`; a missing asset fails the build. The browser uses one ONNX thread and same-origin asset paths. Local sandbox registry access was unavailable, so real asset loading, permission prompts, microphone capture, speech playback and end-to-end latency need production verification. An initial public `dependency-lock.json` is a temporary non-secret receipt for the generated package lock; capture it into `voice-assets/package-lock.json` and remove the receipt from future builds.

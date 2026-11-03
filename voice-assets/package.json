@@ -1,0 +1,10 @@
+{
+  "name": "wtes-voice-assets",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "@ricky0123/vad-web": "0.0.31",
+    "onnxruntime-web": "1.22.0",
+    "jsdom": "29.1.1"
+  }
+}

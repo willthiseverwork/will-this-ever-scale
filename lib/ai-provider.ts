@@ -29,3 +29,6 @@ export async function selectModel(env:Environment=process.env):Promise<LanguageM
  const settings={region,baseURL:`https://bedrock-runtime.${region}.amazonaws.com`,apiKey:bearer||'',...(!bearer?{credentialProvider:async()=>({accessKeyId:accessKeyId!,secretAccessKey:secretAccessKey!,...(sessionToken?{sessionToken}:{})})}:{})};
  return createAmazonBedrock(settings)(model);
 }
+
+/** Voice uses the same scoped Bedrock role and allowance with reasoning enabled. */
+export {voiceModel,novaVoiceModel,voiceWithFallback,voiceGenerationOptions} from './voice/model';
