@@ -1,5 +1,13 @@
 # PayPal and voice takeover record
 
+## Owner actions and outstanding checks
+
+1. Run the payment-link probe only with the demo sandbox credentials and a new private receipt: `node scripts/probe-payment-link.mjs --confirm --receipt /absolute/private/path/new-probe-receipt.json`. It creates and deletes one £1 sandbox item. If the outcome is uncertain, inspect the receipt and PayPal before another attempt. Keep `WTES_PAYPAL_SET_LINK_ENABLED` false until the probe succeeds and the link flow is verified.
+2. At least three hours before filming, with demo sandbox credentials and `PAYPAL_SANDBOX_DEMO_BUYERS` in the environment, run `node --import tsx scripts/seed-wtes-demo-sandbox.ts --phase create --confirm --receipt /absolute/private/path/wtes-seed.json`. Approve the 40 sandbox orders using their private receipt URLs, then run the same command with `--phase capture` and `--phase invoices`. Reconcile an uncertain write before retrying. Regenerate the earlier fixture using `node --import tsx scripts/generate-hobby-shop.ts --demo-history --end-date YYYY-MM-DD --seed 7`, with the day before the earliest seeded sale as the end date. Neither the probe nor seed has been run.
+3. Claude's live browser checks remain necessary: PayPal login and non-demo rejection, offer messages and draft, a confirmed two-item link after the successful probe, a complete spoken reseller interview with timing, and chat speech and Stop. Production HTTP checks and automated tests do not establish those journeys or visual fidelity.
+
+The GitHub integration rejected the main-branch tree write with 403; production deployments and local commits therefore do not imply that remote main contains the releases. See the release log for exact deployed snapshots and the final local HEAD.
+
 Deployment IDs and production checks are recorded in `docs/release-log.md`. A local commit and a passing build do not prove the corresponding live journey.
 
 ## B4: payment-link probe
