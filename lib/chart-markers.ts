@@ -1,0 +1,3 @@
+/** Legacy account-level tests are not attributed to a selected business. */
+export function mayUseAccountTests(business:unknown){return !!business&&typeof business==='object'&&'selectedBusinessId' in business&&Array.isArray((business as {businesses?:unknown}).businesses)&&(business as {selectedBusinessId:unknown}).selectedBusinessId===null}
+export function accountChartMarkers<T extends {status?:string}>(business:unknown,tests:unknown):T[]{if(!mayUseAccountTests(business)||!Array.isArray(tests))return [];return tests.filter((item):item is T=>!!item&&typeof item==='object'&&item.status==='running')}

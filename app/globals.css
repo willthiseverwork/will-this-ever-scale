@@ -82,3 +82,5 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 .best-sellers .money-row{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.best-sellers .money-row>span{display:block;overflow-wrap:anywhere}.best-sellers .money-row>b{text-align:left;white-space:normal;overflow-wrap:anywhere}.quiet-message{display:grid;gap:8px}.quiet-message textarea{width:100%;min-height:7em;resize:vertical;line-height:1.45}
 
 @media (max-width:420px){.monthly-chart .chart-bars>div:not(:nth-child(3n+1)):not(:last-child) small{display:none}.monthly-chart .chart-bars>div:last-child small{left:auto!important;right:0}}
+
+.quiet-regular-row{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}.quiet-regular-row>span{display:block;min-width:0;overflow-wrap:anywhere}
