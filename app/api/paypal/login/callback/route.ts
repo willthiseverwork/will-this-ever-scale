@@ -1,6 +1,6 @@
 import {NextResponse} from 'next/server';
 import {hasPaidOrJudgeAccess} from '../../../../../lib/access';
-import {demoIdentityMatch,signLoginCookie,verifyLoginCookie} from '../../../../../lib/paypal-login';
+import {demoIdentityMatch,signLoginCookie,verifyLoginCookie,userinfoFieldNames} from '../../../../../lib/paypal-login';
 export const runtime='nodejs';
 const callback='https://app.willthiseverscale.com/api/paypal/login/callback';
 function cookie(r:Request,name:string){return r.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(name+'='))?.slice(name.length+1)}
@@ -14,7 +14,7 @@ export async function GET(r:Request){
   if(!exchange.ok)throw new Error('exchange');const tokens=await exchange.json();if(typeof tokens.access_token!=='string')throw new Error('token');
   const response=await fetch('https://api-m.sandbox.paypal.com/v1/identity/openidconnect/userinfo?schema=openid',{headers:{Authorization:'Bearer '+tokens.access_token},cache:'no-store'});if(!response.ok)throw new Error('userinfo');
   const info=await response.json();if(!info||typeof info!=='object'||Array.isArray(info))throw new Error('userinfo');
-  console.info('paypal_login_userinfo_fields',Object.keys(info).sort());
+  const fields=userinfoFieldNames(info);if(fields)console.info('paypal_login_userinfo_fields',fields);
   if(!demoIdentityMatch(info,process.env.PAYPAL_SANDBOX_DEMO_MERCHANT_ID,process.env.PAYPAL_SANDBOX_DEMO_MERCHANT_EMAIL)){const result=finish(r,'no_match');const email=typeof info.email==='string'?info.email.slice(0,254):'';result.cookies.set('paypal_nomatch',signLoginCookie('nomatch',email,Date.now()+5*60_000,secret),{httpOnly:true,secure:true,sameSite:'lax',path:'/',maxAge:300});return result;}
   const result=finish(r,'connected');result.cookies.set('paypal_nomatch','',{httpOnly:true,secure:true,sameSite:'lax',path:'/',maxAge:0});result.cookies.set('paypal_login',signLoginCookie('login',JSON.stringify({demo:true,name:typeof info.name==='string'?info.name.slice(0,120):''}),Date.now()+30*60_000,secret),{httpOnly:true,secure:true,sameSite:'lax',path:'/',maxAge:1800});return result;
  }catch{return finish(r,'error')}

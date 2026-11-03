@@ -4,6 +4,7 @@ import { templateRead } from './read';
 import type { Analysis,Inputs,Txn } from './types';
 import { cardFor } from './fix-cards';
 import {createHmac,randomBytes} from 'node:crypto';
+import {joinDemoHistory} from './demo-history';
 /** Explicit browser allowlist; future normalizer fields cannot expand this response. */
 export function projectSandboxReanalysisRow(row:Txn,pseudonymize:(id:string)=>string):Txn{
  const result:Txn={id:pseudonymize(row.id),date:row.date,kind:row.kind,gross:row.gross,fee:row.fee,net:row.net,currency:row.currency};
@@ -19,9 +20,9 @@ export function projectSandboxReanalysisRow(row:Txn,pseudonymize:(id:string)=>st
  return result;
 }
 /** Ephemeral browser reanalysis only: normalized fields, never full provider objects or credentials. */
-export function sandboxReanalysisRows(raw:any[]|null,invoices:any[]|null):Txn[]{
- const salt=randomBytes(32),pseudonymize=(id:string)=>'t_'+createHmac('sha256',salt).update(id).digest('hex');
- const rows=raw?normalizeTransactions(raw).map(row=>projectSandboxReanalysisRow(row,pseudonymize)):[];
+export function sandboxReanalysisRows(raw:any[]|null,invoices:any[]|null,history:Txn[]=[],buyerSalt?:Buffer):Txn[]{
+ const salt=buyerSalt||randomBytes(32),pseudonymize=(id:string)=>'t_'+createHmac('sha256',salt).update(id).digest('hex');
+ const rows=raw?joinDemoHistory(normalizeTransactions(raw,buyerSalt),history).map(row=>projectSandboxReanalysisRow(row,pseudonymize)):[];
  for(const invoice of invoices||[]){
   const id=invoice.id,date=invoice.detail?.invoice_date,status=invoice.status,amount=Number(invoice.due_amount?.value),currency=invoice.due_amount?.currency_code;
   if(typeof id!=='string'||!/^[A-Za-z0-9-]{1,100}$/.test(id)||typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}(?:$|T)/.test(date)||!Number.isFinite(Date.parse(date))||!['SENT','UNPAID','PARTIALLY_PAID','PAID'].includes(status)||!Number.isFinite(amount)||amount<0||typeof currency!=='string'||!/^[A-Z]{3}$/.test(currency))continue;
@@ -29,8 +30,8 @@ export function sandboxReanalysisRows(raw:any[]|null,invoices:any[]|null):Txn[]{
  }
  return rows;
 }
-export function sandboxAnalysis(raw:any[]|null,invoices:any[]|null,inputs:Inputs={},now=new Date()):Analysis|null{
- const rows=raw?normalizeTransactions(raw):[];const sales=rows.filter(t=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&t.gross>0&&t.status==='completed');
+export function sandboxAnalysis(raw:any[]|null,invoices:any[]|null,inputs:Inputs={},now=new Date(),history:Txn[]=[],buyerSalt?:Buffer):Analysis|null{
+ const rows=raw?joinDemoHistory(normalizeTransactions(raw,buyerSalt),history):[];const sales=rows.filter(t=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&t.gross>0&&t.status==='completed');
  let analysis:Analysis;
  if(sales.length){analysis=analyze(rows,{...inputs,asOf:now.toISOString()});}else{
   const totals=new Map<string,number>();for(const i of invoices||[]){const a=i.due_amount;if(a?.currency_code&&Number(a.value)>0)totals.set(a.currency_code,(totals.get(a.currency_code)||0)+Number(a.value));}

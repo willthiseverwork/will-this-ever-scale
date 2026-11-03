@@ -4,6 +4,7 @@
  * US: https://www.paypal.com/us/business/paypal-business-fees
  */
 import {mkdirSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {resolve} from 'node:path';
 import {analyze} from '../lib/engine';
 import type {Txn} from '../lib/types';
@@ -37,6 +38,17 @@ export function generate(preset:Preset,seed=7):Txn[]{
  }
  return rows.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
 }
+/** Earlier demo history is synthetic; the supplied end date is inclusive. */
+export function generateDemoHistory(endDate:string,seed=7){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(endDate)||!Number.isFinite(Date.parse(endDate+'T12:00:00Z'))||iso(new Date(endDate+'T12:00:00Z'))!==endDate)throw new Error('Use a valid --end-date YYYY-MM-DD.');
+ const end=new Date(endDate+'T12:00:00Z'),start=new Date(end);start.setUTCFullYear(start.getUTCFullYear()-1);start.setUTCDate(start.getUTCDate()+1);
+ const startIso=iso(start),days=Math.floor((end.getTime()-start.getTime())/86400000),r=hash(seed),items:[string,number][]=[['Stud earrings',5],['Silver hoops',30],['Stacking rings',30],['Necklaces',55]];
+ const names=['Anna','Beth','Cara','Diane'],rows:Array<Txn & {buyer_email?:string}>=[];let id=0;
+ const add=(day:number,buyer:string,name:string|undefined)=>{const [item,gross]=items[Math.floor(r()*items.length)],fee=money(gross*.0349+.49);rows.push({id:`history-${seed}-${++id}`,date:plusDays(startIso,day),kind:'sale',gross,fee,net:money(gross-fee),currency:'USD',buyer_key:createHash('sha256').update(`demo-history:${seed}:${buyer}`).digest('hex'),...(name?{buyer_name:name,buyer_email:`${name.toLowerCase()}@example.com`}:{}),item_title:item,item_group:item,country:'US',quantity:1,status:'Completed',cart_items:[{name:item,quantity:1,unit_price:gross}]})};
+ for(let i=0;i<90;i++)add(Math.floor(r()*(days+1)),`history-buyer-${i}`,undefined);
+ for(let b=0;b<4;b++)for(let day=7+b*3;day<=days-120;day+=42+Math.floor(r()*15))add(day,`quiet-regular-${b+1}`,names[b]);
+ return rows.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+}
 function appCsv(rows:Txn[]){const header=['Date','Type','Status','Currency','Gross','Fee','Net','From Email Address','Transaction ID','Item Title','Country','Quantity','Reference Txn ID'];return [header,...rows.map(x=>[x.date,x.kind==='sale'?'Payment Received':'Refund',x.status||'Completed',x.currency,x.gross.toFixed(2),(-x.fee).toFixed(2),x.net.toFixed(2),x.buyer_key?`${x.buyer_key}@example.test`:'',x.id,x.item_title||'',x.country||'',x.quantity||1,x.reference_id||''])].map(r=>r.map(quote).join(',')).join('\n')+'\n';}
 function paypalCsv(rows:Txn[],us:boolean){const header=['Date','Time','TimeZone','Name','Type','Status','Currency','Gross','Fee','Net','From Email Address','To Email Address','Transaction ID','Address Status','Sales Tax','Reference Txn ID','Invoice Number','Receipt ID','Balance','Contact Phone Number','Subject','Note','Country Code'];const fmt=(value:string)=>{const [y,m,d]=value.split('-');return us?`${m}/${d}/${y}`:`${d}/${m}/${y}`;};return [header,...rows.map(x=>[fmt(x.date),'12:00:00',us?'PST':'GMT','Synthetic buyer',x.kind==='sale'?'Payment Received':'Refund',x.status||'Completed',x.currency,x.gross.toFixed(2),(-x.fee).toFixed(2),x.net.toFixed(2),x.buyer_key?`${x.buyer_key}@example.test`:'','seller@example.test',x.id,'Confirmed','',x.reference_id||'','','','','',x.item_title||'', '',x.country||''])].map(r=>r.map(quote).join(',')).join('\n')+'\n';}
 function expected(preset:Preset,rows:Txn[]){
@@ -47,6 +59,7 @@ function writePreset(preset:Preset,seed:number,dir:string){const rows=generate(p
 const arg=(name:string)=>{const i=process.argv.indexOf(name);return i<0?undefined:process.argv[i+1];};
 if(process.argv[1]?.endsWith('generate-hobby-shop.ts')){
  const requested=arg('--shop') as Preset|undefined, seed=Number(arg('--seed')||7), out=resolve(process.cwd(),'fixtures/hobby-shops');
+ if(process.argv.includes('--demo-history')){const end=arg('--end-date');if(!end)throw new Error('Provide --end-date YYYY-MM-DD.');mkdirSync(out,{recursive:true});writeFileSync(resolve(out,'demo-history.json'),JSON.stringify(generateDemoHistory(end,seed),null,2)+'\n');process.exit(0);}
  if(!Number.isSafeInteger(seed))throw new Error('Use an integer --seed.');mkdirSync(out,{recursive:true});
  for(const preset of requested?[requested]:Object.keys(configs) as Preset[]){if(!configs[preset])throw new Error(`Unknown shop preset: ${preset}`);writePreset(preset,seed,out);}
 }

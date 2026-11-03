@@ -20,3 +20,6 @@ export function paypalLoginCookie(request:Request){
  const value=verifyLoginCookie(raw,'login',process.env.PAYPAL_ACTION_SIGNING_SECRET);
  try{return value&&JSON.parse(value).demo===true?raw:undefined}catch{return undefined}
 }
+
+/** Field names only, for the first week after the 3 November rollout. */
+export function userinfoFieldNames(info:Record<string,unknown>,now=Date.now()){return now<Date.parse("2026-11-10T00:00:00Z")?Object.keys(info).sort():undefined;}
