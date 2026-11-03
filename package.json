@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/prepare-vad-assets.mjs && node scripts/verify-production-build.mjs && next build",
+    "build": "node scripts/probe-voice-blob-cas.mjs && node scripts/prepare-vad-assets.mjs && node scripts/verify-production-build.mjs && next build",
     "start": "next start",
     "test": "node --import tsx --test tests/*.test.ts"
   },

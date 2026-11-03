@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {parseSellerKind} from '../lib/voice/seller-kind';
+test('kind bootstrap accepts clear choices and never guesses ambiguous ones',()=>{assert.equal(parseSellerKind('I make them myself'),'maker');assert.equal(parseSellerKind('I buy them ready made'),'reseller');assert.equal(parseSellerKind('I make some and buy some'),undefined);assert.equal(parseSellerKind('not sure'),undefined)});
