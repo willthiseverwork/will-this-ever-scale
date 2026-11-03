@@ -2,10 +2,10 @@ import type {ProductGroupingSummary,Txn} from './types';
 type Pair={a:string;b:string;coOrders:number;coBuyers:number;singleA:number;priceA:number;priceB:number;min:number;max:number;price:number;saving:number;gain:number};
 const median=(values:number[])=>{const a=[...values].sort((x,y)=>x-y),m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2};
 export function bundleGain(singleA:number,price:number,priceA:number){return Math.max(1,Math.round(singleA/10))*(price-priceA)}
-export function bundleOffer(rows:Txn[],grouping?:ProductGroupingSummary):Pair|undefined{
+export function bundleOffer(rows:Txn[],grouping?:ProductGroupingSummary,currency?:string):Pair|undefined{
  const group=(name:string)=>grouping?.groups.find(g=>g.titles.includes(name))?.name||name;
  const orderGroups:string[][]=[];const singles=new Map<string,{prices:number[];orders:number}>(),pairs=new Map<string,{a:string;b:string;count:number;money:number;buyers:Set<string>}>();
- for(const row of rows){if(!['sale','invoice_payment','subscription_payment'].includes(row.kind)||row.gross<=0||/pending|failed|denied|refused|declined|cancelled|unpaid/i.test(row.status||'')||!row.cart_items?.length)continue;
+ for(const row of rows){if(currency&&row.currency!==currency)continue;if(!['sale','invoice_payment','subscription_payment'].includes(row.kind)||row.gross<=0||/pending|failed|denied|refused|declined|cancelled|unpaid/i.test(row.status||'')||!row.cart_items?.length)continue;
   const names=[...new Set(row.cart_items.filter(i=>i.name&&i.quantity>0&&i.unit_price>0).map(i=>group(i.name)))];
   orderGroups.push(names);
   if(names.length===1&&row.cart_items.reduce((n,i)=>n+i.quantity,0)===1){const item=row.cart_items[0],current=singles.get(names[0])||{prices:[],orders:0};current.orders++;current.prices.push(item.unit_price);singles.set(names[0],current)}
