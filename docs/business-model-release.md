@@ -18,6 +18,8 @@ Business and product assignment is explicit. Matching titles, account identity a
 
 Corrections retain prior facts and use their stated effective dates. Saved monthly versions preserve a calculation and input digest while its sources remain. Source deletion removes dependent views and import assignments; independently confirmed seller facts remain. The journal and export are bounded; the app refuses a write at the limit rather than silently evicting history.
 
+A seller can save a trading start date, but recommendation eligibility has not been integrated with that fact; no claim is made that all short-history questions are suppressed. A dedicated fixture-copy migration workflow is not yet implemented.
+
 The broader semantic conversation/model evaluation is Phase B and has not been performed. The explicit cost explanation is not evidence that arbitrary paraphrases are understood. No new model call or PayPal financial write is required for this Phase A path.
 
 ## Frozen draft reconciliation
