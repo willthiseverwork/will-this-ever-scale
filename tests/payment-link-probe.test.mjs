@@ -27,3 +27,16 @@ test('an uncertain create is journaled and never retried automatically', async (
     await assert.rejects(() => probePaymentLink({ clientId: 'sandbox', clientSecret: 'secret', confirmed: true, receiptPath, fetcher }), /Receipt already exists/); assert.equal(calls, 2);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('a rejected create records only sanitized allowlisted error details without retrying', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'wtes-probe-')); const receiptPath = join(dir, 'receipt.json'); let calls = 0;
+  const fetcher = async () => { calls++; if (calls === 1) return Response.json({ access_token: 'access-token-private' }); return Response.json({ name: 'NOT_AUTHORIZED', message: 'Denied for client-private and Bearer access-token-private', debug_id: 'debug123', details: [{ field: '/integration_mode', issue: 'NOT_ENABLED', description: 'Unavailable for seller@example.com', value: 'secret-private' }], token: 'access-token-private', extra: 'secret-private' }, {status: 403}); };
+  try {
+    await assert.rejects(() => probePaymentLink({ clientId: 'client-private', clientSecret: 'secret-private', confirmed: true, receiptPath, fetcher }), /Create not confirmed \(403\)/);
+    const text = readFileSync(receiptPath, 'utf8'); const receipt = JSON.parse(text);
+    assert.equal(receipt.create, 'not_confirmed'); assert.equal(receipt.createStatus, 403);
+    assert.deepEqual(receipt.createError, {name: 'NOT_AUTHORIZED', message: 'Denied for [redacted] and [redacted]', debug_id: 'debug123', details: [{field: '/integration_mode', issue: 'NOT_ENABLED', description: 'Unavailable for [redacted]'}]});
+    for (const sensitive of ['client-private', 'secret-private', 'access-token-private', 'seller@example.com']) assert.equal(text.includes(sensitive), false);
+    await assert.rejects(() => probePaymentLink({ clientId: 'client-private', clientSecret: 'secret-private', confirmed: true, receiptPath, fetcher }), /Receipt already exists/); assert.equal(calls, 2);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
