@@ -10,3 +10,6 @@ export function quietRegulars(rows:Txn[],currency?:string){
  const groups=new Map<string,Txn[]>();for(const row of sales){const key=row.buyer_key!;groups.set(key,[...(groups.get(key)||[]),row])}
  return [...groups.entries()].flatMap(([key,orders])=>{if(orders.length<2)return [];const first=Date.parse(orders[0].date),last=Date.parse(orders.at(-1)!.date),gap=(last-first)/(orders.length-1)/86400000,quiet=(Date.parse(latest)-last)/86400000;if(quiet<=Math.max(60,gap*2))return [];return [{key,orders:orders.length,last:orders.at(-1)!.date,average:orders.reduce((n,x)=>n+x.gross,0)/orders.length,gapWeeks:gap/7}]});
 }
+
+/** Require an observed transaction at or after the deadline before presenting a follow-up. */
+export function offerCoverageThrough(rows:Txn[],started:string,currency:string){const due=offerDate(started);return rows.some(row=>row.currency===currency&&row.date.slice(0,10)>=due);}
