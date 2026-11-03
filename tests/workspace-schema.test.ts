@@ -18,6 +18,9 @@ test('billing opt-out exception permits only withdrawal without workspace change
  assert.equal(isSharingOptOutOnly(current,input),false);
  const disabled={...current,settings:{shareWorkspaceWithAssistant:false,shareProductNamesWithAssistant:true}};
  assert.equal(isSharingOptOutOnly(disabled,input),false);
+ const withProfile={...current,profile:{helpersMonthly:100,items:{}}};
+ assert.equal(isSharingOptOutOnly(withProfile,{...input,settings:{...input.settings,shareWorkspaceWithAssistant:false}}),true);
+ assert.equal(isSharingOptOutOnly(withProfile,{...input,settings:{...input.settings,shareWorkspaceWithAssistant:false},profile:{helpersMonthly:0,items:{}}}),false);
 });
 
 

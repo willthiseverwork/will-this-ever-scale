@@ -21,5 +21,5 @@ export function isSharingOptOutOnly(current:Workspace,input:WorkspaceInput):bool
   (!after.shareWorkspaceWithAssistant || before.shareWorkspaceWithAssistant) &&
   (!after.shareProductNamesWithAssistant || before.shareProductNamesWithAssistant) &&
   (before.shareWorkspaceWithAssistant!==after.shareWorkspaceWithAssistant || before.shareProductNamesWithAssistant!==after.shareProductNamesWithAssistant) &&
-  JSON.stringify([input.snapshots,input.reminders,input.tests])===JSON.stringify([current.snapshots,current.reminders,current.tests]);
+  JSON.stringify([input.snapshots,input.reminders,input.tests,input.profile??current.profile])===JSON.stringify([current.snapshots,current.reminders,current.tests,current.profile]);
 }
