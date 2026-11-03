@@ -5,7 +5,7 @@ import {isAbsolute} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {api,token} from '../lib/paypal';
 type Buyer={email:string;payerId:string};
-type Slot={buyer:number;name:string;value:string;create?:{state:'pending'|'done';id?:string;approvalUrl?:string};capture?:{state:'pending'|'done'}};
+type Slot={buyer:number;name:string;value:string;pair?:boolean;create?:{state:'pending'|'done';id?:string;approvalUrl?:string};capture?:{state:'pending'|'done'}};
 type InvoiceSlot={create?:{state:'pending'|'done';id?:string};send?:{state:'pending'|'done'}};
 type Receipt={version:1;run:string;accountHash:string;slots:Slot[];invoices?:InvoiceSlot[]};
 const items=[['Stud earrings','5.00'],['Silver hoops','30.00'],['Stacking rings','30.00'],['Necklaces','55.00']] as const;
@@ -18,7 +18,7 @@ export async function seedDemoOrders(args:{clientId:string;clientSecret:string;b
  try{
   const accountHash=createHash('sha256').update(clientId+'\0'+buyers.map(b=>b.payerId).join('\0')).digest('hex');let receipt:Receipt;
   if(existsSync(receiptPath)){receipt=JSON.parse(readFileSync(receiptPath,'utf8'));if(receipt.version!==1||receipt.accountHash!==accountHash||!receipt.run||receipt.slots?.length!==40)throw new Error('Receipt does not match sandbox account and buyers.');}
-  else {if(phase!=='create')throw new Error('Create orders first.');receipt={version:1,run:randomUUID(),accountHash,slots:Array.from({length:40},(_,i)=>({buyer:i%buyers.length,name:items[i%items.length][0],value:items[i%items.length][1]}))};save(receiptPath,receipt)}
+  else {if(phase!=='create')throw new Error('Create orders first.');receipt={version:1,run:randomUUID(),accountHash,slots:Array.from({length:40},(_,i)=>({buyer:i%buyers.length,name:i<8?'Silver hoops':items[i%items.length][0],value:i<8?'60.00':items[i%items.length][1],...(i<8?{pair:true}:{})}))};save(receiptPath,receipt)}
   if(receipt.slots.some(s=>s.create?.state==='pending'||s.capture?.state==='pending')||receipt.invoices?.some(s=>s.create?.state==='pending'||s.send?.state==='pending'))throw new Error('A prior write has an unknown outcome. Inspect PayPal and reconcile the receipt before retrying.');
   const access=await token({clientId,clientSecret},fetcher);
   if(phase==='invoices'){
@@ -38,7 +38,7 @@ export async function seedDemoOrders(args:{clientId:string;clientSecret:string;b
    const slot=receipt.slots[i],requestId=createHash('sha256').update(`${receipt.run}:${phase}:${i}`).digest('hex').slice(0,32);
    if(phase==='create'){
     if(slot.create?.state==='done')continue;slot.create={state:'pending'};save(receiptPath,receipt);
-    const order=await api(access,'/v2/checkout/orders',fetcher,{method:'POST',headers:{'PayPal-Request-Id':requestId},body:JSON.stringify({intent:'CAPTURE',purchase_units:[{amount:{currency_code:'USD',value:slot.value,breakdown:{item_total:{currency_code:'USD',value:slot.value}}},items:[{name:slot.name,quantity:'1',unit_amount:{currency_code:'USD',value:slot.value}}]}]})});
+    const order=await api(access,'/v2/checkout/orders',fetcher,{method:'POST',headers:{'PayPal-Request-Id':requestId},body:JSON.stringify({intent:'CAPTURE',purchase_units:[{amount:{currency_code:'USD',value:slot.value,breakdown:{item_total:{currency_code:'USD',value:slot.value}}},items:slot.pair?[{name:'Silver hoops',quantity:'1',unit_amount:{currency_code:'USD',value:'30.00'}},{name:'Stacking rings',quantity:'1',unit_amount:{currency_code:'USD',value:'30.00'}}]:[{name:slot.name,quantity:'1',unit_amount:{currency_code:'USD',value:slot.value}}]}]})});
     const link=approvalUrl(order.links);if(typeof order.id!=='string'||!/^[-A-Za-z0-9]+$/.test(order.id)||!link)throw new Error('Create response lacks an ID or safe approval link. Inspect PayPal before retrying.');slot.create={state:'done',id:order.id,approvalUrl:link};save(receiptPath,receipt);
    }else{
     if(slot.capture?.state==='done')continue;const id=slot.create?.id;if(!id||slot.create?.state!=='done')throw new Error('Create all orders first.');
