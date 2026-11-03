@@ -63,3 +63,13 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 .connect-checks>div>span:first-child { display:flex; gap:12px; align-items:center; }
 .connect-checks>div>span:last-child { color:#c4c6cb; font-family:var(--font-geist-mono),monospace; font-size:13px; }
 .connect-checks i { display:grid; place-items:center; width:20px; height:20px; border-radius:50%; background:#c8ff4d; color:#08090a; font-style:normal; }
+
+/* Reminder review and completion */
+.plan .action-card{background:#0e0f11;border:1px solid #26292e;border-radius:14px;padding:20px 22px;gap:16px}
+.action-card .invoice{min-height:56px;align-items:center;padding:10px 0;border-bottom:1px solid #26292e}
+.action-card .invoice span{color:#f3f3f1;font-size:15px}
+.action-card .invoice b{color:#f3f3f1;font-family:'Geist Mono',monospace;font-size:14px}
+.action-card .quote{background:#0b0c0e;border-color:#1b1d21;border-radius:10px;padding:14px 16px}
+.action-card .button-row{grid-template-columns:1fr;gap:8px}
+.action-card .button{min-height:52px}
+.action-card .tag.lime{background:#c8ff4d;color:#08090a;border-color:#c8ff4d}
