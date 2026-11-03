@@ -26,15 +26,15 @@ export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:num
  const {kind,answers,units,ordersPerMonth}=input;
  const cents=(value:number)=>Math.round((value+Number.EPSILON)*100);
  const cameInCents=cents(input.cameIn),feeCents=cents(input.fee);
- const helpers=(answers.helpers||0)/Math.max(1,ordersPerMonth);
- const material=kind==='maker'&&answers.batch!==undefined&&answers.pieces?answers.batch/(answers.pieces*Math.max(.01,1-(answers.waste??0))):undefined;
+ const helpers=answers.helpers!==undefined&&ordersPerMonth>0?answers.helpers/ordersPerMonth:undefined;
+ const material=kind==='maker'&&answers.batch!==undefined&&answers.pieces!==undefined&&answers.pieces>0&&answers.waste!==undefined&&answers.waste>=0&&answers.waste<1?answers.batch/(answers.pieces*(1-answers.waste)):undefined;
  const goods=kind==='maker'?material:answers.buy;
  const amounts=[goods===undefined?undefined:goods*units,answers.post,answers.pay,helpers];
  const rounded=amounts.map(value=>value===undefined?undefined:cents(value));
  const costCents=rounded.reduce<number>((sum,value)=>sum+(value??0),0),keepCents=cameInCents-feeCents-costCents;
  const cost=costCents/100,keep=keepCents/100,fee=feeCents/100,cameIn=cameInCents/100;
  const negativeRaise=keep<0?Math.ceil((-keep/Math.max(.01,1-fee/Math.max(cameIn,.01)))*2)/2:undefined;
- const wasteGain=kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste?(answers.batch/(answers.pieces*Math.max(.01,1-answers.waste))-answers.batch/(answers.pieces*Math.max(.01,1-answers.waste/2)))*units:undefined;
+ const wasteGain=kind==='maker'&&answers.batch!==undefined&&answers.pieces&&answers.waste!==undefined&&answers.waste>0&&answers.waste<1?(answers.batch/(answers.pieces*(1-answers.waste))-answers.batch/(answers.pieces*(1-answers.waste/2)))*units:undefined;
  return {cost,keep,fee,cameIn,parts:rounded.map((value,index)=>({label:[kind==='maker'?'Materials':'Buying','Posting','Your time','Help'][index],value:value===undefined?undefined:value/100})),...(negativeRaise===undefined?{}:{negativeRaise}),...(wasteGain===undefined?{}:{wasteGain})};
 }
 

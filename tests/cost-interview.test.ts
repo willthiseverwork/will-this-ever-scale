@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {costResult,parseRoughAmount,estimatedPayPalFee} from '../lib/cost-interview';
+test('unknown and impossible maker yields remain unresolved instead of inventing materials cost',()=>{for(const waste of [undefined,1]){const result=costResult({kind:'maker',answers:{batch:40,pieces:20,waste},cameIn:20,fee:1,units:1,ordersPerMonth:0});assert.equal(result.parts[0].value,undefined);assert.equal(result.parts[3].value,undefined)}const known=costResult({kind:'maker',answers:{batch:40,pieces:20,waste:0,helpers:0},cameIn:20,fee:1,units:1,ordersPerMonth:1});assert.equal(known.parts[0].value,2);assert.equal(known.parts[3].value,0)});
 
 test('parses the interview’s plain-language amounts without AI',()=>{
  assert.equal(parseRoughAmount('a fiver'),5);assert.equal(parseRoughAmount('5-ish'),5);assert.equal(parseRoughAmount('3 to 5'),4);assert.equal(parseRoughAmount('a third',true),.33);assert.equal(parseRoughAmount("don't know"),undefined);
