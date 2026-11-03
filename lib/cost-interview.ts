@@ -3,6 +3,7 @@ import type {Txn} from './types';
 export type SellerKind='maker'|'reseller';
 export type CostAnswers={kind?:SellerKind;units?:number;buy?:number;batch?:number;pieces?:number;waste?:number;post?:number;pay?:number;helpers?:number};
 export type CostResult={cost:number;keep:number;fee:number;cameIn:number;parts:Array<{label:string;value:number|undefined}>;negativeRaise?:number;wasteGain?:number};
+export function missingCostComponents(result:CostResult){return result.parts.filter(part=>part.value===undefined).map(part=>part.label.toLowerCase());}
 
 /** Parse the deliberately small vocabulary used in the interview before considering AI. */
 export function parseRoughAmount(input:string,percent=false):number|undefined {

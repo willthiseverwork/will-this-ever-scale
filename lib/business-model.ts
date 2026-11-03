@@ -19,17 +19,18 @@ export function addFact(facts:Fact[],fact:Fact):Fact[]{
  const monetary=['buy','batch','post','pay','helpers'].includes(fact.field);if(monetary!==Boolean(fact.currency))throw new Error('Invalid fact currency.');
  if(fact.field==='helpers'||fact.field==='trading_start'){if(fact.productId!==null)throw new Error('Invalid fact scope.');}else if(!fact.productId)throw new Error('Invalid fact scope.');
  if(fact.state==='confirmed'&&(fact.field==='trading_start'?typeof fact.value!=='string'||!dateValid(fact.value):typeof fact.value!=='number'))throw new Error('Invalid confirmed value.');
+ if(fact.field==='pieces'&&fact.state==='confirmed'&&(!Number.isSafeInteger(fact.value)||Number(fact.value)<1))throw new Error('Invalid batch yield.');
  if(fact.state!=='confirmed'&&fact.value!==null)throw new Error('Unknown facts cannot contain values.');
  if(fact.field==='waste'&&typeof fact.value==='number'&&fact.value>1)throw new Error('Invalid waste fraction.');
  const prior=facts.find(x=>x.operationId===fact.operationId);if(prior){if(JSON.stringify(prior)!==JSON.stringify(fact))throw new Error('Operation conflict.');return facts;}
  if(facts.some(x=>x.id===fact.id))throw new Error('Fact already exists.');
- for(const id of fact.supersedes){const target=facts.find(x=>x.id===id);if(!target||target.businessId!==fact.businessId||target.productId!==fact.productId||target.field!==fact.field||target.basis!==fact.basis||target.currency!==fact.currency)throw new Error('Invalid correction target.');}
+ for(const id of fact.supersedes){const target=facts.find(x=>x.id===id);if(!target||target.businessId!==fact.businessId||target.productId!==fact.productId||target.field!==fact.field||(target.basis!==fact.basis&&fact.field!=='pay')||target.currency!==fact.currency)throw new Error('Invalid correction target.');}
  return [...facts,fact];
 }
 /** A correction supersedes its targets only during its own effective interval. */
 export function resolveFact(facts:Fact[],scope:{businessId:string;productId:string|null;field:FactField;currency:string|null;basis:FactBasis|null;date:string}):FactResolution{
  if(!dateValid(scope.date))throw new Error('Invalid effective date.');
- const eligible=facts.filter(f=>f.businessId===scope.businessId&&f.productId===scope.productId&&f.field===scope.field&&f.currency===scope.currency&&f.basis===scope.basis&&f.validFrom<=scope.date&&(f.validTo===null||f.validTo>=scope.date));
- const superseded=new Set(eligible.flatMap(f=>f.supersedes));const active=eligible.filter(f=>!superseded.has(f.id));if(!active.length)return {state:'missing'};
+ const eligible=facts.filter(f=>f.businessId===scope.businessId&&f.productId===scope.productId&&f.field===scope.field&&f.currency===scope.currency&&f.validFrom<=scope.date&&(f.validTo===null||f.validTo>=scope.date));
+ const superseded=new Set(eligible.flatMap(f=>f.supersedes));const active=eligible.filter(f=>f.basis===scope.basis&&!superseded.has(f.id));if(!active.length)return {state:'missing'};
  const values=new Set(active.map(f=>JSON.stringify([f.state,f.value])));return values.size>1?{state:'contested',facts:active}:{state:'resolved',fact:active[0],facts:active};
 }

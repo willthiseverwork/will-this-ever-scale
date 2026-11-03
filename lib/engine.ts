@@ -2,10 +2,11 @@ import { SMALL_LEAK_SHARE } from './brand';
 import type { Analysis, Inputs, Leak, Txn } from './types';
 import { cardFor, setsFinding } from './fix-cards';
 import { abroadFeesFinding, bestMonthFinding, jumpedItemFinding, lapsedBuyersFinding, smallOrdersFinding, stoppedItemsFinding } from './r1-cards';
+import {privateStatus} from './private-status';
 const n=(x:number)=>Math.round(x*100)/100;
 const month=(d:string)=>d.slice(0,7);
 const sum=(xs:number[])=>xs.reduce((a,b)=>a+b,0);
-const settled=(t:Txn)=>! /pending|failed|denied|refused|declined|cancel|unpaid/i.test(t.status||'');
+const settled=(t:Txn)=>! /pending|failed|denied|refused|declined|cancel|unpaid|unrecognized/i.test(privateStatus(t.status)||'');
 export const isSettledSale=(t:Txn)=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&settled(t)&&t.gross>0;
 const refund=(t:Txn)=>['refund','reversal','dispute'].includes(t.kind)&&settled(t);
 /** Use one transaction identity rule wherever stored uploads become seller-visible rows. */

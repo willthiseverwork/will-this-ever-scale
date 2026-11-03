@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import {costResult,parseRoughAmount,estimatedPayPalFee} from '../lib/cost-interview';
+import {costResult,parseRoughAmount,estimatedPayPalFee,missingCostComponents} from '../lib/cost-interview';
 test('unknown and impossible maker yields remain unresolved instead of inventing materials cost',()=>{for(const waste of [undefined,1]){const result=costResult({kind:'maker',answers:{batch:40,pieces:20,waste},cameIn:20,fee:1,units:1,ordersPerMonth:0});assert.equal(result.parts[0].value,undefined);assert.equal(result.parts[3].value,undefined)}const known=costResult({kind:'maker',answers:{batch:40,pieces:20,waste:0,helpers:0},cameIn:20,fee:1,units:1,ordersPerMonth:1});assert.equal(known.parts[0].value,2);assert.equal(known.parts[3].value,0)});
 
 test('parses the interview’s plain-language amounts without AI',()=>{
@@ -48,3 +48,5 @@ test('item fee estimate uses the shop-wide fee rate, not an item-specific rate',
  const result=costResult({kind:'reseller',answers:{buy:8,post:3},cameIn:55,fee:estimate,units:1,ordersPerMonth:20});
  assert.equal(result.fee,2.83);assert.equal(result.keep,41.17);
 });
+
+test('unknown waste is identified as missing materials in a partial remainder',()=>{const result=costResult({kind:'maker',answers:{batch:100,pieces:10,post:0,pay:0,helpers:0},cameIn:20,fee:0,units:1,ordersPerMonth:1});assert.equal(result.keep,20);assert.deepEqual(missingCostComponents(result),['materials']);});
