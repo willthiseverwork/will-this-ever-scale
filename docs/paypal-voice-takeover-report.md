@@ -35,3 +35,11 @@ Customer strings: “Regulars gone quiet”; “if these … regulars order one 
 ## B1: reminder review and done styling
 
 The existing invoice reminder review and completion card use the approved dark card, ruled invoice rows, inset message and full-width lime action styling. The proposal, approval, dispatch, stop and readback logic are unchanged. Build passed 260 tests. No customer strings were added. Rendered and live checks remain pending.
+
+The B2 follow-up is restricted to the selected currency and the 28-day offer window. It requires a same-currency observation at or beyond the deadline; stale data displays “Reconnect or upload newer sales to see who came back.” This conservative observation does not prove full provider coverage.
+
+## C engine and typed interview
+
+The typed interview now proposes candidates, runs code sense checks and requires an explicit readback confirmation before an answer enters the calculation. Skipped fields are listed as not counted. The code preserves `costResult` maths; both seller types are asked for pay per order, resolving the older maker question that said per piece while the calculation treated pay per order. The build passed 270 tests, including the 104-units ambiguity, invalid ranges, wrong-number readback and sense-check cases. Voice integration, model calls, all-field live checks and rendering remain pending.
+
+Customer strings added: “Checking this one”; “Please give a valid number.”; “Is that for one item or all of them?”; “That looks low for all of them. Is that amount for the whole quantity?”; “Which amount is that for?”; “That is more than the price of one item. Is it right?”; “That is more than half an average order. Is it right?”; “Is more than 90% of the batch wasted?”; “That is more than an average order. Is it right?”; “So it costs you nothing?”; “That looks low for each item. Is that batch size right?”; “That makes materials cost more than the price of one item. Is the batch size right?”; “For one …”; “For all …”; “Yes, that’s right”; “Change the number”; “Skip this one”; “Not counted”; “Not counted: … Add it to see the full picture.”; “Change a number”; “So …, is that right?”; “Do you pay yourself for making an order? About how much per order?”
