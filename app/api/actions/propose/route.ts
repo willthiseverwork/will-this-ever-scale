@@ -18,7 +18,7 @@ export async function POST(r:Request){
   const body=z.object({source:z.enum(['connected','demo','login']),noteToken:z.string().max(4096).optional(),review:z.array(z.object({id:z.string().max(100),currency:z.string().regex(/^[A-Z]{3}$/),amount:z.number().finite().positive()}).strict()).max(20).optional()}).passthrough().parse(await readLimitedJson(r,8192));const source=body.source,session=source==='connected'?sessionId(r)||'':source==='login'?paypalLoginCookie(r)||'':'';
   if(source==='login'&&!session)return NextResponse.json({error:'PayPal login expired. Connect again.'},{status:401});
   if(source==='connected'&&!getSession(session))return NextResponse.json({error:'Sandbox session expired. Connect again.'},{status:401});
-  const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
+  const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);if(p.action==='create_payment_link'&&process.env.WTES_PAYPAL_SET_LINK_ENABLED!=='true')return NextResponse.json({error:'Payment links are unavailable.'},{status:403});const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
   if(source==='demo'&&(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')){
    const mapped=(process.env.PAYPAL_SANDBOX_DEMO_INVOICE_IDS||'').split(',').map(x=>x.trim()).filter(Boolean);
    if(mapped.length!==3||new Set(mapped).size!==3||mapped.some(x=>!/^INV2-[A-Z0-9-]+$/.test(x)))return NextResponse.json({error:'Demo invoice mapping is not configured. The sample invoice IDs are fictional.'},{status:503});
