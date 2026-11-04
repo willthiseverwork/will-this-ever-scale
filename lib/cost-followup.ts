@@ -3,7 +3,7 @@ import type {Field,Interview} from './voice/interview-engine';
 import {fieldLabels,fieldOrder} from './voice/interview-engine';
 
 import type {FeeSelection} from './order-fee';
-export type CostFollowup={feeCoverage?:FeeSelection;item:string;currency:string;result:CostResult;notCounted:string[];notApplicable:string[];estimated:boolean};
+export type CostFollowup={originalItem?:string;feeCoverage?:FeeSelection;item:string;currency:string;result:CostResult;notCounted:string[];notApplicable:string[];estimated:boolean};
 /** The displayed calculation and skipped answers stay in the current browser session only. */
 export function costFollowupContext(item:string,currency:string,result:CostResult,interview:Interview,feeCoverage?:FeeSelection):CostFollowup{
  const notCounted=fieldOrder[interview.kind].filter((field:Field)=>!['confirmed','not_applicable'].includes(interview.slots[field].status)).map(field=>fieldLabels[field]);

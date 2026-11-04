@@ -1,0 +1,1 @@
+export function privateItemLabel(value:string){return value.replace(/[\u0000-\u001f\u007f-\u009f]/g,'').replace(/(?:\b[^\s@]+@[^\s@]+\.[^\s@]+\b|(?:https?:\/\/|www\.)\S+|(?:\+?\d[\d\s().-]{6,}\d))/gi,'').trim().slice(0,120);}
