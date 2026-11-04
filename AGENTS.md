@@ -22,4 +22,4 @@ For changes to public sample entry or access, test a cold signed-out visit from 
 
 ## Results presentation
 
-For changed findings, check that the displayed amount has its supported currency, period and condition, and that the detail reproduces it using the actual precision and population. Verify the same presentation on sample and ordinary partial-data results; do not infer missing evidence.
+For changed findings, inventory every requested card face and its detail, then inspect each rendered face for its supported currency, period and short condition; verify its detail reproduces the amount and carries the required counts and assumptions using the actual precision and population. Include restored analyses and a nearby unaffected finding. Verify the same presentation on sample and ordinary partial-data results; do not infer missing evidence.
