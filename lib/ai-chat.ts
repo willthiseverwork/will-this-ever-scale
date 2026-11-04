@@ -1,3 +1,4 @@
+import {wholeChatPlanSchema} from './whole-chat';
 import {z} from 'zod';
 import type {Txn, Inputs} from './types';
 import {sentenceCaseItem} from './display';
@@ -7,7 +8,8 @@ const groupBy=z.enum(['item','item_group','month','week','weekday','day','countr
 const filter=z.object({start:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),end:z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),items:z.array(z.string().min(1).max(160)).max(50).optional(),groups:z.array(z.string().min(1).max(160)).max(50).optional(),countries:z.array(z.string().min(2).max(2)).max(50).optional(),weekends:z.boolean().optional()}).strict();
 export const chatPlanSchema=z.object({measure,groupBy:groupBy.optional(),filters:filter.default({}),sort:z.enum(['asc','desc']).default('desc'),limit:z.number().int().min(1).max(20).default(8),compare:z.object({start:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),end:z.string().regex(/^\d{4}-\d{2}-\d{2}$/)}).strict().optional(),cannotAnswer:z.string().max(240).optional(),sentence:z.string().min(1).max(300)}).strict();
 export type ChatPlan=z.infer<typeof chatPlanSchema>;
-export const chatPlanRequestSchema=z.object({question:z.string().trim().min(1).max(500),titles:z.array(z.object({title:z.string().min(1).max(160),orders:z.number().int().nonnegative()}).strict()).max(200),lastDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),hasQuantity:z.boolean(),countries:z.array(z.string().length(2)).max(100)}).strict();
+export const intentPlanSchema=z.union([wholeChatPlanSchema,chatPlanSchema]);
+export const chatPlanRequestSchema=z.object({question:z.string().trim().min(1).max(500),titles:z.array(z.object({title:z.string().min(1).max(160),orders:z.number().int().nonnegative()}).strict()).max(200),lastDate:z.string().regex(/^\d{4}-\d{2}-\d{2}$/),hasQuantity:z.boolean(),contextMonth:z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/).optional(),contextOperation:z.enum(['left','missing','compare']).optional(),countries:z.array(z.string().length(2)).max(100)}).strict();
 export type ChatResult={status:'answer'|'unavailable';text:string;columns:string[];rows:Array<string[]>;dates?:string};
 const sale=(t:Txn)=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&t.gross>0;
 const refund=(t:Txn)=>['refund','reversal','dispute'].includes(t.kind);
