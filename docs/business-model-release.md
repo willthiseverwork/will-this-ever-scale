@@ -1,6 +1,6 @@
 # Business model release and recovery
 
-This record covers the released Phase A implementation and its operational limits. The current canonical deployment is READY `dpl_Crs4jiyQvbKdA1mpLCb1bsHrumqq`, application source `695f67ba153947c785374b7f42450fd6ba7e9b00` at `app.willthiseverscale.com`. It supersedes `dpl_GHmWgBCpPHhxYuxVNiR985aGUBFY`. Subsequent harness and documentation changes do not alter the deployed application. Codex owns verification and the release owner controls deployment. No filming is planned.
+This record covers the released Phase A implementation and its operational limits. The current canonical deployment is READY `dpl_C9PTCX44wnPezqMzyAWPRbWxQkvr`, application source `7297d9dbfb12f808ff9f6ed54c8b976789bbe45a` at `app.willthiseverscale.com`. It supersedes `dpl_Crs4jiyQvbKdA1mpLCb1bsHrumqq`. Subsequent harness and documentation changes do not alter the deployed application. Codex owns verification and the release owner controls deployment. No filming is planned.
 
 ## Compatibility and rollback
 
@@ -27,6 +27,10 @@ The broader semantic conversation/model evaluation is Phase B and has not been p
 ## Frozen draft reconciliation
 
 The four paused semantic-draft files were backed up byte-for-byte in `work/frozen-semantic-preflight-20261103-201516` under the parent task workspace. `app/api/chat/plan/route.ts` was restored to the existing lookup route; `components/data-chat.tsx` was rebuilt around the existing lookup path and an explicit cost explanation, then extended for scoped saving; `lib/cost-followup.ts` retains the deterministic explanation renderer without the phrase matcher; the untracked `lib/semantic-chat.ts` working copy was moved to the external backup and is not part of this candidate. The backup also contains the original tracked patch and hashes.
+
+## Anonymous sample entry
+
+The fictional bundled sample is accessible without sign-in at `https://app.willthiseverscale.com/?sample=1`. It performs local deterministic analysis without a grouping model, private save, sandbox or provider action. Protected own-data and entitled sandbox flows retain their guards. Cold hosted entry and direct-link checks passed with real read-only anonymous account/access responses and all effects blocked; separate mocked cases covered expiry, entitled routing and private-session renewal. The local build passed 440 tests with two skips. The release log records exact verification and performance limits.
 
 ## Shared finding presentation and plan recovery
 
