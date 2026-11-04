@@ -100,3 +100,5 @@ h1,h2,h3,.big-number{font-weight:600}.button{font-weight:500}.sandbox-intro{disp
 .lead-choices{display:flex;flex-wrap:wrap;gap:8px}.lead-choices .button[aria-pressed=true]{border-color:var(--lime);background:rgba(200,255,77,.1);color:var(--text)}
 
 .best-seller-leader{display:grid;gap:6px}.best-seller-leader h3{margin:0;font-size:21px}.best-seller-leader strong{font-size:32px;line-height:1.1;color:var(--lime)}.best-seller-leader p{margin:0}.quiet-message-row details{grid-column:1 / -1}
+/* The Plan's finding condition can wrap on narrow screens. */
+.plan-left{min-width:0}.small-leak>span{white-space:normal;flex-shrink:1;min-width:0;text-align:right}.small-leak>span small{overflow-wrap:anywhere}

@@ -23,3 +23,7 @@ For changes to public sample entry or access, test a cold signed-out visit from 
 ## Results presentation
 
 For changed findings, inventory every requested card face and its detail, then inspect each rendered face for its supported currency, period and short condition; verify its detail reproduces the amount and carries the required counts and assumptions using the actual precision and population. Include restored analyses and a nearby unaffected finding. Verify the same presentation on sample and ordinary partial-data results; do not infer missing evidence.
+
+## Plan and Results route parity
+
+When changing a finding or action, verify the real journey from Results and from Plan through its finding link, including the same supported amount, period, condition, available action, answers and persisted test state. Cover sample invoice details, partial and older saved evidence, and a nearby different finding. The earlier checks exercised playbook functions with hand-supplied values and individual page faces, so they did not detect the engine-to-Plan contract mismatch or duplicated invoice copy. Use `scripts/local-qa/plan-evidence.ts` with synthetic fixtures and blocked external effects; inspect the rendered phone and desktop captures as well as its result.
