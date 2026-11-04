@@ -1,0 +1,2 @@
+/** A hosted run uses only the explicitly selected canonical or Vercel HTTPS origin. */
+export function qaTarget(value:string|undefined,localPort:number){if(!value)return `http://127.0.0.1:${localPort}`;const url=new URL(value);if(url.protocol!=='https:'||!(url.hostname==='app.willthiseverscale.com'||url.hostname.endsWith('.vercel.app'))||url.username||url.password||url.port||url.pathname!=='/'||url.search||url.hash)throw new Error('Choose the canonical app or an HTTPS Vercel deployment origin.');return url.origin}

@@ -1,0 +1,2 @@
+/** Four human-readable steps covering non-negative observations, including zero. */
+export function chartScale(values:number[]){const max=Math.max(0,...values.filter(Number.isFinite)),target=max/4;if(!target)return {top:1,ticks:[0,.25,.5,.75,1]};const power=10**Math.floor(Math.log10(target)),fraction=target/power,step=(fraction<=1?1:fraction<=2?2:fraction<=5?5:10)*power;const count=Math.ceil(max/step);return {top:count*step,ticks:Array.from({length:count+1},(_,i)=>i*step)}}

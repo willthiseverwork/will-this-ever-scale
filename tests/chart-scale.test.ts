@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {chartScale} from '../lib/chart-scale';
+test('chart ticks cover empty, sparse and large values without inventing observations',()=>{assert.deepEqual(chartScale([]).ticks,[0,.25,.5,.75,1]);for(const values of [[0,3],[1.25,99.91],[1e8,8e8]]){const result=chartScale(values);assert.ok(result.top>=Math.max(...values));assert.equal(result.ticks[0],0);assert.equal(result.ticks.at(-1),result.top)}});

@@ -10,7 +10,7 @@ import {serializeWorkspaceExport} from '../lib/workspace-export';
 import {readBrowserAnalysis,snapshotForSave,type BrowserRead} from '../lib/browser-analysis';
 import {emptyWorkspace,type Workspace,type WorkspaceInput} from '../lib/workspace-types';
 
-const findings=[['one_time_buyers','Returning buyers'],['unpaid_invoices','Unpaid invoices'],['refunds_one_item','Item refunds'],['small_order_fees','Small-order fees'],['cross_border_fees','Cross-border fees'],['one_item_dependence','One-item dependence'],['below_cost_items','Below-cost items'],['fewer_new_buyers','First-seen buyers'],['subscription_failed_payments','Failed subscription payments'],['sets','Product sets'],['held_money','Money on hold']] as const;
+const findings=[['one_time_buyers','Returning buyers'],['unpaid_invoices','Unpaid invoices'],['refunds_one_item','Item refunds'],['small_order_fees','Small-order fees'],['best_month','Best month'],['cross_border_fees','Cross-border fees'],['one_item_dependence','One-item dependence'],['below_cost_items','Below-cost items'],['fewer_new_buyers','First-seen buyers'],['subscription_failed_payments','Failed subscription payments'],['sets','Product sets'],['held_money','Money on hold']] as const;
 type Finding=WorkspaceInput['reminders'][number]['findingId'];
 type Reminder=WorkspaceInput['reminders'][number];
 const localKey='wtes-local-reminders-v1';

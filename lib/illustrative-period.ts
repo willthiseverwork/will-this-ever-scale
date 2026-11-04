@@ -1,0 +1,2 @@
+/** Conditional shortfall before fees for one illustrative per-order cost. */
+export function illustrativePeriodShortfall(receiptsMinor:number,orders:number,costMinor:number){if(!Number.isSafeInteger(receiptsMinor)||receiptsMinor<0||!Number.isSafeInteger(orders)||orders<1||!Number.isSafeInteger(costMinor)||costMinor<0)throw new Error('Invalid illustrative period.');const result=costMinor*orders-receiptsMinor;if(!Number.isSafeInteger(result))throw new Error('Illustrative amount is too large.');return result}
