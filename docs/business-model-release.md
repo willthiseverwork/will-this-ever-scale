@@ -1,6 +1,6 @@
 # Business model release and recovery
 
-This record covers the released Phase A implementation and its operational limits. The current canonical deployment is READY `dpl_BjWB6HM2EevqxNJ2ZzmEt31NBfFp`, application source `263eb583a707adabef8d76c8e0e74273897a23be` at `app.willthiseverscale.com`. It supersedes `dpl_D5UQqj3aREC28GsE5GYeGo626FTS`. Subsequent harness and documentation changes do not alter the deployed application. Codex owns verification and the release owner controls deployment. No filming is planned.
+This record covers the released Phase A implementation and its operational limits. The current canonical deployment is READY `dpl_Crs4jiyQvbKdA1mpLCb1bsHrumqq`, application source `695f67ba153947c785374b7f42450fd6ba7e9b00` at `app.willthiseverscale.com`. It supersedes `dpl_GHmWgBCpPHhxYuxVNiR985aGUBFY`. Subsequent harness and documentation changes do not alter the deployed application. Codex owns verification and the release owner controls deployment. No filming is planned.
 
 ## Compatibility and rollback
 
@@ -27,6 +27,14 @@ The broader semantic conversation/model evaluation is Phase B and has not been p
 ## Frozen draft reconciliation
 
 The four paused semantic-draft files were backed up byte-for-byte in `work/frozen-semantic-preflight-20261103-201516` under the parent task workspace. `app/api/chat/plan/route.ts` was restored to the existing lookup route; `components/data-chat.tsx` was rebuilt around the existing lookup path and an explicit cost explanation, then extended for scoped saving; `lib/cost-followup.ts` retains the deterministic explanation renderer without the phrase matcher; the untracked `lib/semantic-chat.ts` working copy was moved to the external backup and is not part of this candidate. The backup also contains the original tracked patch and hashes.
+
+## Shared finding presentation and plan recovery
+
+A missing playbook guide no longer prevents the plan from rendering supported findings. The result, plan, detail and math views use the same supported scenario amount and period; observed 90-day sales and hypothetical annual pace remain distinct. Missing comparison windows are omitted, known zero remains visible, and targets are identified as hypothetical. Unregistered findings do not acquire unsupported guidance or reminders. The final local build passed 437 tests with two existing skips; production repeat and plan fixtures and HTTP access, metadata and sitemap checks passed. The hosted build passed 437 tests and both separately run voice component checks. A single anonymous 390px live empty-state lab showed no overflow or browser errors; it was unthrottled with API calls mocked and off-origin assets blocked, so is not field performance. Synthetic browser fixtures use mocked APIs and do not verify real authentication or persistence. The release log records deployment and evidence.
+
+## Repeat and concentration correction
+
+Repeat-buyer opportunity eligibility now requires a nonempty identified single-order cohort, with cohort-specific wording and explicit missing-identifier coverage. Restored stale zero-cohort results are suppressed, including on direct finding links. Item concentration is expressed as gross value of orders identified with the item, with shared or unknown contents acknowledged; it is not an allocation of revenue to that item. The offer expiry remains unchanged, and its earlier check is labelled provisional. The final local build passed 433 tests with two existing skips, and the affected synthetic rendered results, plan and fallback screens passed review. See the release log for current production evidence and limits.
 
 ## Current results and price comparison
 
