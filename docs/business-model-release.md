@@ -1,10 +1,10 @@
 # Business model release and recovery
 
-This record covers the released business-model implementation and its operational limits. The current canonical deployment is READY `dpl_3Lfpa1sZHbhTJK8HQi5ixLRBdawA`, application source `282fc9a3d833e01cccb3937f48d18efe28294c92` at `app.willthiseverscale.com`. Later documentation-only commits do not change the live application. Codex owns verification and the parent task controls release. No filming is planned.
+This record covers the released business-model implementation and its operational limits. The current canonical deployment is READY `dpl_6ke2Lnxpci3hXsXdYw67Gq8LrCj3`, application source `f316ea3d82884baaee40605a6dc7c732cb75dc9b` at `app.willthiseverscale.com`. Later documentation-only commits do not change the live application. Codex owns verification and the parent task controls release. No filming is planned.
 
 ## Report preview
 
-The released option-one preview improves the fictional report and shared Results presentation without adding a sample ledger, simulated sends or paid anonymous Ask/voice. Hosted synthetic checks covered the sample, named choices, report math and mocked own-source return; real Chrome verified the sample Ask explanation. The whole-shop UI and state contracts are unchanged from the prior verified synthetic fixture. These checks do not establish real customer persistence or real audio quality. The broader simulator and typed/voice work are outside this release.
+The released option-one preview improves the fictional report and shared Results presentation without adding a sample ledger, simulated sends or paid anonymous Ask/voice. Hosted synthetic checks covered the sample, named choices, report math and mocked own-source return; real Chrome verified the sample Ask explanation. The whole-shop UI and state contracts are unchanged from the prior verified synthetic fixture. These checks do not establish real customer persistence or real audio quality. The broader simulator is outside this release. Subscriber typed Ask and opt-in voice use the existing provider and permission gates; their supported business answers use the same deterministic whole-shop calculation. No new persisted schema was introduced. Synthetic checks used mocked model and speech services, so real audio, model quality and customer persistence remain unverified.
 
 ## Compatibility and rollback
 
