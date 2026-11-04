@@ -74,7 +74,8 @@ export function monthLabel(month:string, style:'short'|'long'='long') {
   return new Intl.DateTimeFormat('en-US',{month:style,year:'numeric',timeZone:'UTC'}).format(new Date(`${month}-01T00:00:00Z`));
 }
 
-export function leakTitle(leak:Leak, names:Record<string,string>) { return names[leak.id]||leak.id; }
+export function repeatBuyerTitle(once:number,buyers:number) { if(once===1)return 'One identified buyer bought once'; if(once*2===buyers)return 'Half of identified buyers bought once'; return once*2>buyers?'Most identified buyers bought once':'Some identified buyers bought once'; }
+export function leakTitle(leak:Leak, names:Record<string,string>) { return leak.id==='one_time_buyers'?repeatBuyerTitle(Number(leak.evidence.once_buyers),Number(leak.evidence.buyers)):(names[leak.id]||leak.id); }
 
 export function worthLine(id:string) {
   return ({one_time_buyers:'What getting back to your best months is worth.',refunds_one_item:'What preventing half of these refunds is worth.',small_order_fees:'What a lower payment fee could save.',below_cost_items:'What these sales lose you each month.',fewer_new_buyers:'What getting back to your earlier number of new buyers is worth.',subscription_failed_payments:'What failed payments added up to each month.'} as Record<string,string>)[id]||'';

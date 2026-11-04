@@ -24,7 +24,7 @@
     {
       "id": "one_time_buyers",
       "kind": "monthly",
-      "name": "Most buyers buy once",
+      "name": "Returning buyers",
       "why": "Someone who already bought from you trusts you. Selling to them again needs no ads and no searching, so it is the cheapest sale you can make.",
       "questions": [
         {
@@ -471,13 +471,13 @@
     {
       "id": "one_item_dependence",
       "kind": "risk",
-      "name": "One item makes almost half your money",
-      "why": "If it stops selling, half your income goes with it.",
+      "name": "Sales concentrated in orders linked to one item",
+      "why": "A large share of sales is in orders identified with this item. Those orders may include other items.",
       "questions": [],
       "tests": [
         {
           "do": "Make one new variation of {top_group} this month.",
-          "success": "{top_group} under {target_share}% of sales within 3 months",
+          "success": "Orders identified with {top_group} under {target_share}% of sales within 3 months",
           "target_rule": "current share - 10 points",
           "can_hand_off": false
         }
