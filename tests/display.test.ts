@@ -16,7 +16,7 @@ test('currency and mid-sentence item formatting',()=>{
  assert.equal(titleLowercase('Stacking rings'),'stacking rings');
  assert.equal(titleLowercase('ASSTD MULTICOLOUR CIRCLES MUG'),'asstd multicolour circles mug');
 });
-test('returning-buyer hypothetical is never labelled as an observed period',()=>{const leak={id:'one_time_buyers',kind:'monthly' as const,money_per_month:10,method:'',evidence:{current_share:27,target_share:32,target_is_observed:0,best_window:'Aug–Oct',additional_orders:3,average_order:20,kept_share:80}};assert.match(evidenceLine(leak,'GBP',true),/five-point test/);assert.doesNotMatch(calculationLines(leak,analyze(demoTransactions(),{asOf:DEMO_AS_OF})).join(' '),/Aug–Oct/);});
+test('returning-buyer hypothetical is never labelled as an observed period',()=>{const leak={id:'one_time_buyers',kind:'monthly' as const,money_per_month:10,method:'',evidence:{current_share:27,target_share:32,target_is_observed:0,best_window:'Aug–Oct',additional_orders:3,average_order:20,kept_share:80}};assert.match(evidenceLine(leak,'GBP',true),/hypothetical target/);assert.doesNotMatch(evidenceLine({...leak,evidence:{...leak.evidence,current_share:0,target_share:10}},'GBP',true),/five.point/i);assert.doesNotMatch(calculationLines(leak,analyze(demoTransactions(),{asOf:DEMO_AS_OF})).join(' '),/Aug–Oct/);});
 test('fee rate note displays whole dollars per $100 without cents',()=>{
  assert.equal(feeRateNote(6,'USD',true),'Normal, $6 of every $100. Leave it.');
  assert.equal(feeRateNote(6,'USD'),'$6 of every $100.');

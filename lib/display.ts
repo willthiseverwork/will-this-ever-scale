@@ -1,4 +1,5 @@
 import type { Analysis, InvoiceRecord, Leak } from './types';
+import {findingPresentation} from './finding-presentation';
 
 export function verifiedInvoicesMatch(verified:unknown,requested:InvoiceRecord[],expectedTotal:number,minAge=14):boolean {
  if(!Array.isArray(verified)||!requested.length||verified.length!==requested.length)return false;
@@ -83,7 +84,7 @@ export function worthLine(id:string) {
 
 export function evidenceLine(leak:Leak,currency:string,readCard=false) {
   const e=leak.evidence;
-  if(leak.id==='one_time_buyers'&&typeof e.current_share==='number'&&typeof e.target_share==='number'){const observed=e.target_is_observed===1;return readCard?`${inOneHundred(e.current_share)} buyers came back in the last 3 months, ${inOneHundred(e.target_share)} ${observed?`in ${String(e.best_window||'your best window')}`:'in this five-point test'}.`:`${inOneHundred(e.current_share)} buyers came back recently, ${inOneHundred(e.target_share)} ${observed?'in your best months':'in this five-point test'}.`;}
+  if(leak.id==='one_time_buyers'&&typeof e.current_share==='number'&&typeof e.target_share==='number'){const observed=e.target_is_observed===1;return readCard?`${inOneHundred(e.current_share)} buyers came back in the last 3 months, ${inOneHundred(e.target_share)} ${observed?`in ${String(e.best_window||'your best window')}`:'as a hypothetical target'}.`:`${inOneHundred(e.current_share)} buyers came back recently, ${inOneHundred(e.target_share)} ${observed?'in your best months':'as a hypothetical target'}.`;}
   if(leak.id==='refunds_one_item'&&typeof e.item==='string')return typeof e.refund_rate==='number'?`${sentenceCaseItem(e.item)}: refunded ${wholePercent(e.refund_rate)} of the time.`:`${money(Number(e.refunds||0),currency)} refunded on ${sentenceCaseItem(e.item)} in the last 3 months.`;
   if(leak.id==='small_order_fees'&&typeof e.threshold==='number')return `On qualifying orders under ${new Intl.NumberFormat('en-US',{style:'currency',currency,minimumFractionDigits:2,maximumFractionDigits:2}).format(e.threshold)}.`;
   if(leak.id==='below_cost_items'&&typeof e.item==='string')return `Each sale of ${sentenceCaseItem(e.item).toLowerCase()} loses money after your costs and fees.`;
@@ -104,10 +105,11 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
   const n=(key:string)=>typeof e[key]==='number'?e[key] as number:undefined;
   const exact=(v:number)=>new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
   const result=money(leak.money_per_month||0,c);
-  if(leak.id==='one_time_buyers'&&n('additional_orders')!==undefined&&n('average_order')!==undefined&&n('kept_share')!==undefined) {const buyersBack=Number((n('additional_orders')!/3).toFixed(1)),averageOrder=n('average_order')!,keptShare=Math.round(n('kept_share')!),shownResult=money(buyersBack*averageOrder*keptShare/100,c);return [
+  if(leak.id==='one_time_buyers'&&n('once_buyers')!==undefined&&n('people_back')!==undefined&&n('average_order')!==undefined) {const p=findingPresentation(leak),small=n('people_back')!<3,factor=small?12:n('people_back')!;return [`Identified buyers who bought once: ${n('once_buyers')} of ${n('buyers')}`,p.condition,`Average order: ${exact(n('average_order')!)}`,`${factor} × ${exact(n('average_order')!)} = ${money(p.amount,c)} ${p.period}`];}
+  if(leak.id==='one_time_buyers'&&n('additional_orders')!==undefined&&n('average_order')!==undefined&&n('kept_share')!==undefined&&n('current_share')!==undefined&&n('target_share')!==undefined) {const buyersBack=Number((n('additional_orders')!/3).toFixed(1)),averageOrder=n('average_order')!,keptShare=Math.round(n('kept_share')!),shownResult=money(buyersBack*averageOrder*keptShare/100,c);return [
     `Buyers, last 3 months: ${n('buyers')}`,
     `Came back, last 3 months: ${inOneHundred(n('current_share')||0)}`,
-    `Came back, ${e.target_is_observed===1?(e.best_window||'best window'):'five-point test'}: ${inOneHundred(n('target_share')||0)}`,
+    `Came back, ${e.target_is_observed===1?(e.best_window||'best window'):'hypothetical target'}: ${inOneHundred(n('target_share')||0)}`,
     `More buyers back each month: ${buyersBack.toFixed(1)}`,
     `Average order: ${exact(averageOrder)}`,
     `Kept after fees and refunds, all months: ${keptShare}%`,
