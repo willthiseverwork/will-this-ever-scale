@@ -18,7 +18,7 @@ async function lockedRefresh(force:boolean):Promise<'ok'|'signedout'|'unavailabl
   return r.status===401?'signedout':'unavailable';
  });
 }
-export function useAccountSession(){
+export function useAccountSession(options:{passive?:boolean}={}){
  const [status,setStatus]=useState<Status>('loading'),[error,setError]=useState('');
  const refresh=useCallback(async()=>{try{const first=await account();if(!first.configured){setStatus('unconfigured');setError('');return}if(first.authenticated){setStatus(first.deletionPending?'deletionPending':'signedin');setError('');return}const outcome=await lockedRefresh(false);if(outcome==='ok'){const after=await account();setStatus(after.authenticated?(after.deletionPending?'deletionPending':'signedin'):'signedout');setError('');}else if(outcome==='signedout'){setStatus('signedout');setError('');}else{setStatus('error');setError('Session renewal is temporarily unavailable.');}}catch{setStatus('error');setError('Account status is temporarily unavailable.');}},[]);
  const ensureSession=useCallback(async()=>{
@@ -37,7 +37,7 @@ export function useAccountSession(){
    setError('');return true;
   }catch{setError('Session renewal is temporarily unavailable. Please try again.');return false;}
  },[]);
- useEffect(()=>{void refresh()},[refresh]);
- useEffect(()=>{if(status!=='signedin'&&status!=='deletionPending')return;let alive=true;const renew=async()=>{try{const outcome=await lockedRefresh(true);if(!alive)return;if(outcome==='signedout'){setStatus('signedout');setError('');}else if(outcome==='unavailable'){setError('Automatic session renewal is unavailable. Your current session may expire.');}else setError('');}catch{if(alive)setError('Automatic session renewal is unavailable. Your current session may expire.');}};void renew();const timer=window.setInterval(()=>void renew(),renewalMs);const visible=()=>{if(document.visibilityState==='visible')void renew()};document.addEventListener('visibilitychange',visible);return()=>{alive=false;window.clearInterval(timer);document.removeEventListener('visibilitychange',visible)}},[status]);
+ useEffect(()=>{if(!options.passive){void refresh();return}let alive=true;void account().then(value=>{if(alive)setStatus(!value.configured?'unconfigured':value.authenticated?(value.deletionPending?'deletionPending':'signedin'):'signedout')}).catch(()=>{if(alive){setStatus('error');setError('Account status is temporarily unavailable.')}});return()=>{alive=false}},[refresh,options.passive]);
+ useEffect(()=>{if(options.passive||status!=='signedin'&&status!=='deletionPending')return;let alive=true;const renew=async()=>{try{const outcome=await lockedRefresh(true);if(!alive)return;if(outcome==='signedout'){setStatus('signedout');setError('');}else if(outcome==='unavailable'){setError('Automatic session renewal is unavailable. Your current session may expire.');}else setError('');}catch{if(alive)setError('Automatic session renewal is unavailable. Your current session may expire.');}};void renew();const timer=window.setInterval(()=>void renew(),renewalMs);const visible=()=>{if(document.visibilityState==='visible')void renew()};document.addEventListener('visibilitychange',visible);return()=>{alive=false;window.clearInterval(timer);document.removeEventListener('visibilitychange',visible)}},[status,options.passive]);
  return {status,error,refresh,ensureSession};
 }

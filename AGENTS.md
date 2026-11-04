@@ -15,3 +15,7 @@ For material `/read` UI changes, independently inspect rendered populated deskto
 ## Shared findings and evidence
 
 Repair factual and presentation defects at the shared eligibility, metric or action boundary. Establish the supported population, unit, period and available action, then reuse those rules across affected surfaces and restored analyses. Verify the failing case, a different fixture with the same condition and a nearby allowed case. Do not use fixture IDs or exact phrases as product conditions.
+
+## Sample entry and access
+
+For changes to public sample entry or access, test a cold signed-out visit from the homepage through the primary sample action without injecting or restoring analysis. Exercise every sample and return-to-sample action, and confirm denied or expired access still protects own-data actions. Check the access page on first load independently of prior route visits, including its stylesheet, controls and phone layout. Check that long lists keep primary actions discoverable while preserving the complete selected cohort.

@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {previewItems} from '../lib/preview-items';
+test('collapsed and expanded previews preserve selection for empty, small and large cohorts',()=>{for(const count of [0,3,7,99]){const all=Array.from({length:count},(_,i)=>i);assert.deepEqual(previewItems(all,false),all.slice(0,3));assert.deepEqual(previewItems(all,true),all);assert.equal(all.length,count);}});
