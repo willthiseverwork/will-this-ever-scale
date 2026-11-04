@@ -75,8 +75,8 @@ export function monthLabel(month:string, style:'short'|'long'='long') {
   return new Intl.DateTimeFormat('en-US',{month:style,year:'numeric',timeZone:'UTC'}).format(new Date(`${month}-01T00:00:00Z`));
 }
 
-export function repeatBuyerTitle(once:number,buyers:number) { if(once===1)return 'One identified buyer bought once'; if(once*2===buyers)return 'Half of identified buyers bought once'; return once*2>buyers?'Most identified buyers bought once':'Some identified buyers bought once'; }
-export function leakTitle(leak:Leak, names:Record<string,string>) { return leak.id==='one_time_buyers'?repeatBuyerTitle(Number(leak.evidence.once_buyers),Number(leak.evidence.buyers)):(names[leak.id]||leak.id); }
+export function repeatBuyerTitle(once:number,buyers:number,complete=false) { const group=complete?'buyers':'identified buyers';if(once===1)return complete?'One buyer bought once':'One identified buyer bought once'; if(once*2===buyers)return `Half of ${group} bought once`; return `${once*2>buyers?'Most':'Some'} ${group} bought once`; }
+export function leakTitle(leak:Leak, names:Record<string,string>) { const e=leak.evidence,complete=typeof e.identified_orders==='number'&&typeof e.orders==='number'&&e.identified_orders===e.orders;return leak.id==='one_time_buyers'?repeatBuyerTitle(Number(e.once_buyers),Number(e.buyers),complete):(names[leak.id]||leak.id); }
 
 export function worthLine(id:string) {
   return ({one_time_buyers:'What getting back to your best months is worth.',refunds_one_item:'What preventing half of these refunds is worth.',small_order_fees:'What a lower payment fee could save.',below_cost_items:'What these sales lose you each month.',fewer_new_buyers:'What getting back to your earlier number of new buyers is worth.',subscription_failed_payments:'What failed payments added up to each month.'} as Record<string,string>)[id]||'';
@@ -119,6 +119,7 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
     const p=leak.assumption?.value??50;
     return [`Refunds on ${sentenceCaseItem(String(e.item||'item'))}, last 3 months: ${exact(n('refunds')!)}`,...(n('refunded_orders')!==undefined&&n('item_orders')!==undefined?[`Refunded orders: ${n('refunded_orders')} of ${n('item_orders')}`]:[]),`If you prevent: ${p}%`,`${exact(n('refunds')!)} ÷ 3 × ${p}% ≈ ${result} a month`];
   }
+  if(leak.id==='small_order_fees'&&n('small_orders')!==undefined&&n('months')!==undefined&&n('annual_sales')!==undefined) return [`Qualifying orders in ${n('months')} observed months: ${n('small_orders')}`,`Illustrative increase per qualifying order: ${exact(1)}`,`${n('small_orders')} × ${exact(1)} ÷ ${n('months')} × 12 ≈ ${exact(n('annual_sales')!)} a year in additional sales if the same orders occur at that price.`];
   if(leak.id==='small_order_fees'&&n('annual_savings')!==undefined) return [`Qualifying orders, last 12 months: ${n('small_orders')}`,`Savings across those orders: ${exact(n('annual_savings')!)}`,`${exact(n('annual_savings')!)} ÷ 12 ≈ ${result} a month`];
   if(leak.id==='sets'&&n('single_orders')!==undefined&&n('second_price')!==undefined) {
     const price=n('second_price')!;

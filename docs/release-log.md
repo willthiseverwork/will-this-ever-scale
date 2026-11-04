@@ -1,6 +1,12 @@
+# 4 November — whole-shop numbers (Stage A)
+
+The canonical application serves READY deployment `dpl_4hzFept7KXsnroyJk4dkitPMiAGg`, source `63980a3c1983a3568596a18bcdc5df0e4e37806b`. The same-source read-only recovery deployment `dpl_7K2XJPQaJDKfcVBbTVK8Nc9RDEjQ` is READY and unaliased, with the special diagnostic disabled. Both source manifests matched. The older recovery `dpl_CYFkR1c4txEwBfmwvt43Hc7PhoSf` predates these fields and is not the Stage A fallback.
+
+Stage A added the whole-shop view, monthly and item/order tables, and explicitly confirmed period expenses and unpaid hours. Hosted synthetic checks covered the supported $120 remainder and $12 per hour, an unknown-cost case, correction to $110, reload, source deletion and stale saves. These fixtures mocked frontend writes and do not establish destructive owner-account verification. No new hosted destructive storage diagnostic or real audio/provider-quality test was made. Broader typed and voice work remains outside this release. The entries below describe earlier releases.
+
 # 4 November — anonymous fictional sample entry
 
-The canonical `app.willthiseverscale.com` serves READY deployment `dpl_C9PTCX44wnPezqMzyAWPRbWxQkvr`, source `7297d9dbfb12f808ff9f6ed54c8b976789bbe45a`. The deployed-source manifest matched the 404 tracked source files, with the normal `.gitignore` omission and generated `tsconfig.tsbuildinfo` extra. Codex owns verification and the parent task owns release. The shareable fictional sample opens directly at `https://app.willthiseverscale.com/?sample=1`.
+At that release, the canonical `app.willthiseverscale.com` served READY deployment `dpl_C9PTCX44wnPezqMzyAWPRbWxQkvr`, source `7297d9dbfb12f808ff9f6ed54c8b976789bbe45a`. The deployed-source manifest matched the 404 tracked source files, with the normal `.gitignore` omission and generated `tsconfig.tsbuildinfo` extra. Codex owns verification and the parent task owns release. The shareable fictional sample opens directly at `https://app.willthiseverscale.com/?sample=1`.
 
 A cold signed-out visitor can open the bundled fictional sample without a login, private save, grouping model, sandbox or provider request. The access page returns to that sample and now loads its own styles; the judge page also loads its styles on a cold visit. The access proposition states the existing trial and Paddle terms without inventing a cancellation date before checkout. Long quiet-regular and message lists show a short preview with an accessible expansion; the full selected cohort is retained. Sample-only provider actions are unavailable, while protected own-data and entitled sandbox paths keep their existing guards.
 

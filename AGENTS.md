@@ -19,3 +19,7 @@ Repair factual and presentation defects at the shared eligibility, metric or act
 ## Sample entry and access
 
 For changes to public sample entry or access, test a cold signed-out visit from the homepage through the primary sample action without injecting or restoring analysis. Exercise every sample and return-to-sample action, and confirm denied or expired access still protects own-data actions. Check the access page on first load independently of prior route visits, including its stylesheet, controls and phone layout. Check that long lists keep primary actions discoverable while preserving the complete selected cohort.
+
+## Results presentation
+
+For changed findings, check that the displayed amount has its supported currency, period and condition, and that the detail reproduces it using the actual precision and population. Verify the same presentation on sample and ordinary partial-data results; do not infer missing evidence.
