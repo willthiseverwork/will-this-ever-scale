@@ -8,7 +8,7 @@ export function offerFollowup(rows:Txn[],buyerKeys:string[],started:string,asOf:
 export function quietRegulars(rows:Txn[],currency?:string){
  const sales=rows.filter(x=>(!currency||x.currency===currency)&&x.buyer_key&&['sale','invoice_payment','subscription_payment'].includes(x.kind)&&x.gross>0&&!/pending|failed|denied|refused|declined|cancelled|unpaid/i.test(x.status||'')).sort((a,b)=>a.date.localeCompare(b.date));const latest=sales.at(-1)?.date;if(!latest)return [];
  const groups=new Map<string,Txn[]>();for(const row of sales){const key=row.buyer_key!;groups.set(key,[...(groups.get(key)||[]),row])}
- return [...groups.entries()].flatMap(([key,orders])=>{if(orders.length<2)return [];const first=Date.parse(orders[0].date),last=Date.parse(orders.at(-1)!.date),gap=(last-first)/(orders.length-1)/86400000,quiet=(Date.parse(latest)-last)/86400000;if(quiet<=Math.max(60,gap*2))return [];return [{key,orders:orders.length,last:orders.at(-1)!.date,average:orders.reduce((n,x)=>n+x.gross,0)/orders.length,gapWeeks:gap/7}]});
+ return [...groups.entries()].flatMap(([key,orders])=>{if(orders.length<3)return [];const first=Date.parse(orders[0].date),last=Date.parse(orders.at(-1)!.date),gap=(last-first)/(orders.length-1)/86400000,quiet=(Date.parse(latest)-last)/86400000;if(quiet<=Math.max(60,gap*2))return [];return [{key,orders:orders.length,last:orders.at(-1)!.date,average:orders.reduce((n,x)=>n+x.gross,0)/orders.length,gapWeeks:gap/7}]});
 }
 
 /** Require an observed transaction at or after the deadline before presenting a follow-up. */

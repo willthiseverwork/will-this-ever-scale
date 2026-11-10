@@ -16,11 +16,9 @@
       }
     },
     "lapsed_buyers": {
-      "shown": true,
-      "money": 160.12,
-      "facts": {
-        "method": "One more order from each regular buyer whose usual ordering gap has passed."
-      }
+      "shown": false,
+      "money": null,
+      "facts": {}
     },
     "items_stopped": {
       "shown": false,
@@ -52,7 +50,7 @@
       "shown": true,
       "money": 34.32,
       "facts": {
-        "method": "Single-piece orders per month × 10% × average second-piece price × 90%: added sales."
+        "method": "Single-piece orders per month \u00d7 10% \u00d7 average second-piece price \u00d7 90%: added sales."
       }
     },
     "best_sellers": {

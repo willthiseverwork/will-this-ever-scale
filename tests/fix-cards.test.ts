@@ -29,7 +29,8 @@ test('demo keeps its ordered story and exposes both action findings',()=>{
   const a=analyze(demoTransactions(),{asOf:DEMO_AS_OF,homeCountry:'US'});
   assert.equal(a.ranked_leaks[0].id,'one_time_buyers');
   const next=a.ranked_leaks.slice(1).find(l=>!l.label);
-  assert.equal(next?.id,'lapsed_buyers');
+  assert.equal(next?.id,'small_order_fees');
+  assert.equal(a.ranked_leaks.some(l=>l.id==='lapsed_buyers'),false);
   assert.ok((next?.money_per_month||0)>=10);
   const refunds=a.ranked_leaks.find(l=>l.id==='refunds_one_item');
   assert.equal(refunds?.money_per_month,75);

@@ -16,11 +16,9 @@
       }
     },
     "lapsed_buyers": {
-      "shown": true,
-      "money": 74.53,
-      "facts": {
-        "method": "One more order from each regular buyer whose usual ordering gap has passed."
-      }
+      "shown": false,
+      "money": null,
+      "facts": {}
     },
     "items_stopped": {
       "shown": false,
