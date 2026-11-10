@@ -1,3 +1,7 @@
+# 10 November — independent Results review
+
+A fresh reader inspected synthetic populated and sparse desktop/phone screenshots in the task's `evidence/` directory. They understood the primary action as choosing an experiment through “Find my test · 3 quick questions”, but could not tell from the screenshots what completion yields. They found repeated “How we got this” and “See your test” labels vague, noted that the caveat appears only when expanded, and found mobile body text hard to assess at screenshot scale. The sparse risk asks the reader to inspect order contents without an adjacent action. These are screenshot-only observations, not observed interaction failures; a broader Results layout and copy pass is outside this brief and remains a follow-up.
+
 # 10 November — sandbox readback and PayPal response repair
 
 Temporary production deployment `dpl_F7WLmsKCBVavbcmugswh8GiRnZJE` (source `0138098`) included a judge-only, rate-limited read-only reconciliation against the configured sandbox. The PayPal list reconciliation returned `unavailable` without a provider status; no resource match or non-existence can be inferred. The set attempt remains partial/unknown, and the sixth reminder remains `sending` after HTTP 504. Neither was retried. The temporary route and test are removed in the following release.
