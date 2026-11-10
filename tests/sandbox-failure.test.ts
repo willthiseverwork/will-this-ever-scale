@@ -26,3 +26,10 @@ test('diagnostics conceal unquoted names and retain only file and line from fram
   assert.doesNotMatch(line,/Alice|\/private/);
  }finally{console.error=original;}
 });
+
+
+test('Zod diagnostic exposes only allowlisted schema path and issue code',async()=>{
+ const {z}=await import('zod');const original=console.error;let line='';console.error=value=>{line=String(value);};
+ try{const parsed=z.object({ranked_leaks:z.array(z.object({id:z.enum(['known'])}))}).safeParse({ranked_leaks:[{id:'Alice Smith'}]});assert.equal(parsed.success,false);if(parsed.success)throw Error('expected failure');const result=sandboxFailure('sandbox_analyze_failed','analysis',parsed.error);assert.equal(result.detail,'validation invalid_enum_value path=ranked_leaks.#.id');assert.doesNotMatch(line,/Alice/);}
+ finally{console.error=original;}
+});
