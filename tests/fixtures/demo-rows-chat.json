@@ -1,0 +1,3403 @@
+[
+  {
+    "id": "t_f14e623544da05f1aa4978cbfc16abfffb8f220096a2c430b78be9dc62ac58d1",
+    "date": "2026-10-10T10:44:33Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.47,
+    "net": 4.53,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Will This Ever Work ASO AI listing",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Will This Ever Work ASO AI listing",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_419707798ca113dde4515ce2846ec81b91e1ce2de32ea3faae60869d30790cc0",
+    "date": "2026-10-10T11:39:54Z",
+    "kind": "refund",
+    "gross": -5,
+    "fee": 0.47,
+    "net": -4.53,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Will This Ever Work ASO AI listing",
+    "fee_known": true,
+    "status": "completed"
+  },
+  {
+    "id": "t_6e0ddbc03e40c095b18374c060453017d67713478f73546f64d96714720b0d72",
+    "date": "2026-10-31T12:49:16Z",
+    "kind": "sale",
+    "gross": 18,
+    "fee": -0.91,
+    "net": 17.09,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Stud earrings",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 18
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_5cdbf8eaef0fa875959bc05285c6dae1b44d44321ba5e21c9dd9ccc021e1e41c",
+    "date": "2026-10-31T12:49:28Z",
+    "kind": "sale",
+    "gross": 28,
+    "fee": -1.25,
+    "net": 26.75,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Silver hoops",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 28
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_dfb8008e53b936731e71585feccb68c65a62fdd86fa1093afce4516f8cc66b08",
+    "date": "2026-10-31T12:49:39Z",
+    "kind": "sale",
+    "gross": 35,
+    "fee": -1.49,
+    "net": 33.51,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Stacking rings",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 35
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_fc0387db9235e5b9a3facc257087e3f162403a00820c38225eb84d63e953d123",
+    "date": "2026-11-03T10:58:09Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_851a4ad7b8349308f2f85c66c706a12137a4e49648d8cd60a3102d4cf4e19e04",
+    "date": "2026-11-03T10:58:11Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_3904245978ea371828a47aa5f93ff6cb917d528a9a4fe2204fd6a5cae7d7310f",
+    "date": "2026-11-03T10:58:13Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_63e10aa1c815332bcc701331e465bc90a3d4947b9e945831a4e86f2db2dc93ae",
+    "date": "2026-11-03T10:58:15Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_81b7d62fde30ad25f09c8bd4dfa7b02a88589b06700fbd9d53c017c00e4108c5",
+    "date": "2026-11-03T10:58:17Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_711e86e3e850a80d59909a6ff58e59535da0ce0a8faaa96627c0326c2a1b02ab",
+    "date": "2026-11-03T10:58:19Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.34,
+    "net": 57.66,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Silver hoops",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_373dd184f435c93ea723dbdd3298a25ded031e2b936e39bf3ecbbb7fc4bbb06a",
+    "date": "2026-11-03T10:58:21Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_489c4a6dd51f297c79155f582303a8f749bdb3adfd96af5d662e9cc1c5e64335",
+    "date": "2026-11-03T10:58:23Z",
+    "kind": "sale",
+    "gross": 60,
+    "fee": -2.64,
+    "net": 57.36,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      },
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_3b349bde69a3eca88f3ad64838d81b9a6f9e2d1cd24c26e426e81f80d4c83242",
+    "date": "2026-11-03T10:58:25Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_dca260a1e903d4bb8a2e3353d65f7bb13017504fb69b9b3f103fe7adcc5fdb2e",
+    "date": "2026-11-03T10:58:27Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_2704f1797cbbb2241cfd58147f43bcffa75a9ff1bde6b0e0cdda61914c536392",
+    "date": "2026-11-03T10:58:29Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_0f085c37357a21e895e98595a43cba7867f9c5acd01268d87320000378eff928",
+    "date": "2026-11-03T10:58:31Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.17,
+    "net": 52.83,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Necklaces",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_dcfc35cf5b27a643f00e2408da7a8c6827aacf2ee94879503fe5342b1fe41eba",
+    "date": "2026-11-03T10:58:33Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_dbe195dd0463c9ae402f7d43843ad34896801481bc631493dfdf7fda278f5569",
+    "date": "2026-11-03T10:58:35Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_6c96416d13e6512356b48fff45b9eca4421ef135800459105cc23c8e8d8c7c40",
+    "date": "2026-11-03T10:58:37Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_71e45059146eeb34eabaa329f0e62e69b04f3a3e3aa19993445baa34669c4590",
+    "date": "2026-11-03T10:58:40Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.45,
+    "net": 52.55,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Necklaces",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_adb60ead23aff5eeb6c55521bc024dd3d33be4e57a00b6755b624a23d2756203",
+    "date": "2026-11-03T10:58:41Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_29f908bc20cdd753185b97a983567c72462f661fca762a2e5a4a750936c8df9f",
+    "date": "2026-11-03T10:58:43Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.32,
+    "net": 28.68,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Silver hoops",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_bf28514292efda4f837da9b763fc6db9a9659b9a8550cad0ce7861a4170bf0c0",
+    "date": "2026-11-03T10:58:46Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_fc9a500973ec80320b07f86c5b5016b2bf0913fa99b0e4f673107b4eaea0b33d",
+    "date": "2026-11-03T10:58:48Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.45,
+    "net": 52.55,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Necklaces",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_2de21543b5deb5837767abeaa32d8a666bbafd42f100c27154c080c0efc4141d",
+    "date": "2026-11-03T10:58:50Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_d004f8d4a660afd3da1afd2681de2aae5cb2453eee17732dc706a756a76f23e8",
+    "date": "2026-11-03T10:58:51Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_e12b6ab4399d8799f84771dad16f60696cd105dd31335839329e60b6b0dcd4da",
+    "date": "2026-11-03T10:58:53Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_fffe0c3c7a7c7b9a150a6b8a5f4da02d45decb4694867b1217066f2da5294012",
+    "date": "2026-11-03T10:58:55Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.17,
+    "net": 52.83,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Necklaces",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_9e2cab264a4e815255a2c04d8c362d9b673689e2bbd8a8b34a73c86d0f8fdfed",
+    "date": "2026-11-03T10:58:57Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_ff1dd281a32c9485775264ba757957a1818515166b45c6ac34a115eb18646d11",
+    "date": "2026-11-03T10:58:58Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_7313a53c33be9e9ae4fdf4c263de8420de4030a52bed8ee9deb56463b9ea13fc",
+    "date": "2026-11-03T10:59:01Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_f1092128754c3df489a04f90d568eb60f8dd1bb8983130d1cc9ea606b358acec",
+    "date": "2026-11-03T10:59:03Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.45,
+    "net": 52.55,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Necklaces",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_2fcb417cac03e4eab39f5bf04e920536ba03c358889fca073b8fd50260b56812",
+    "date": "2026-11-03T10:59:05Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_3dee85ff593275a5ad29931cdaf1f23de52a1fb8c980dcabd3cff5ee8df100d7",
+    "date": "2026-11-03T10:59:06Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.32,
+    "net": 28.68,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Silver hoops",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_d8c867c660eadaa341761637304cfff019c1580507de48440a709af1597448d3",
+    "date": "2026-11-03T10:59:08Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_5f9e4f23718f949993c8cf147d4fc58428b065333ad3721eda0dde1cbb0ecd6b",
+    "date": "2026-11-03T10:59:10Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.45,
+    "net": 52.55,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Necklaces",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_de1c10e7a7ed5e4238d286bdcaa6a05d826e27f8171d665727a4c22b2f1d3cf1",
+    "date": "2026-11-03T10:59:12Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_da1d72099f9b123738a33cc27c856709dab803c9a593aadcfe1c2fb02b328a9e",
+    "date": "2026-11-03T10:59:14Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_74dca5b603de7ad721e6fbcbedfd335a91232ab5c900e60281c0cca66c5e9000",
+    "date": "2026-11-03T10:59:16Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "b8bec2798b1da79d2e904f7f64e2a42cfbc80ba84267555cda823f02d8e1200f",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_8e02cccf9edd6965ec8e9e7dbe046eb6996e5e07c717ff75237278afccbe1db8",
+    "date": "2026-11-03T10:59:17Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.17,
+    "net": 52.83,
+    "currency": "USD",
+    "buyer_key": "6e3d1448e7d682420fd1c81499a966e84d26ecb695c8afaf6e5c4c8b847c5de2",
+    "item_title": "Necklaces",
+    "country": "GE",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_241b2a333385a7ce8a67ee8164d72d998194365d8c69bc9acaf7264f4fe46a9b",
+    "date": "2026-11-03T10:59:19Z",
+    "kind": "sale",
+    "gross": 5,
+    "fee": -0.5,
+    "net": 4.5,
+    "currency": "USD",
+    "buyer_key": "8bd12d4db1e094805c3094344939ea9226fdcfa21bcc1d8a5786295f8562229e",
+    "item_title": "Stud earrings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_8be0094b8378b1f44c306470f526b7216143efc8787c5798c9ddd6b85007ea1d",
+    "date": "2026-11-03T10:59:21Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "80358ed53beaf434317e21bd35f82cf21e7cc9ab106480ff15213a09c98e3dee",
+    "item_title": "Silver hoops",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "earrings"
+  },
+  {
+    "id": "t_88666aa1ab92b85d9e4886377b166bd0ccb1eabbb21c898eab1def1cec3053e3",
+    "date": "2026-11-03T10:59:22Z",
+    "kind": "sale",
+    "gross": 30,
+    "fee": -1.47,
+    "net": 28.53,
+    "currency": "USD",
+    "buyer_key": "0bb9c6fea5c299796351c1060a507d860ef2bfc3cf795ed5a4f94c3ac4fc0b66",
+    "item_title": "Stacking rings",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ],
+    "item_group": "rings"
+  },
+  {
+    "id": "t_930263c92f1f3194c40b9c8f8f72b905c3b738f8be8fcca72ad955a40878baf1",
+    "date": "2026-11-03T10:59:24Z",
+    "kind": "sale",
+    "gross": 55,
+    "fee": -2.45,
+    "net": 52.55,
+    "currency": "USD",
+    "buyer_key": "7d7351a431b27a5d30380fc9c712e7f68bc6fac6191ab1741bc6c7e4cde94ed0",
+    "item_title": "Necklaces",
+    "country": "US",
+    "fee_known": true,
+    "status": "completed",
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ],
+    "item_group": "necklaces"
+  },
+  {
+    "id": "t_3b7f4d1b083fec902db3241a755dba510ee133e116a2dd27647425f64744e771",
+    "date": "2025-11-07",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "45935baea12fc7aabd04d26dfc9d629690a82936406457397c51101c66e6406d",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_3e08392e2e16efae5afe8cfacf90f839b9802ec5698a1556f8af068a016011e0",
+    "date": "2025-11-10",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "653615e74325848881f06f45a420803b5d31a195176ae8c536302965f18cbe28",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_3e3accb9c83fd735190ddce1ea952d0a9b40709824a0e182549782c813d026f5",
+    "date": "2025-11-12",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "a104dcfde97732782ec5cdcd3708ecc56953ce31b6d3a6ba095b8bcf4272283a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_b35db70c553d2f17cdc14d766f2b56e54f096227a5d942309a124fd82451c76c",
+    "date": "2025-11-13",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "64fbb0f16e80c4e3bd665cf9f8d9d148d24b6c8c2ac907f558e3649f64faffc6",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_b139f424912baffa4b0ff5850e378eae30654c7869e39869da595035d73c9553",
+    "date": "2025-11-16",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "a951ac0a1cd9027189f4af1e33a2a012bb592d0455ed4394c8a308e58cfa05b9",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_4bb57f030bb4f738b6de89265ce858fc684e0a149480636d4f3e860a5c5332d0",
+    "date": "2025-11-19",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "feaa8807b0db3baa5c0901c0988394659c9a4b586de1fe88988cbc2a2bd3b4c5",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_0d77a434dedd424027c6fd461816daccc2159e1f33010b32de0c94a9d6fa8384",
+    "date": "2025-11-21",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "f8ceff5ffbc9f31336f5b5da6bccccd5f4894a943fbf05756e0c5f9e31ff6d52",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_66782dea1b79efe546fbcd13740fd10adf7c6381272c541a154d64346fba03d5",
+    "date": "2025-11-23",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "c767a7f026e9f2a0388f72bead2637b941c31fec752b9c6b2d93474d02cdd833",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_68cdbf9a1cf24811d3492d7e13969e955cec2ece93b075efba8a790a45fc2847",
+    "date": "2025-11-28",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "77b14e746e4ac2d8d2958cacf3dcdd42bbe46e6d2307a18e84d8fbf991ab0afd",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_f03347335230b34b7ea5bd54a18d8bfbe4efec2e78c291c82f95be089c3d7207",
+    "date": "2025-12-04",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "09bbd67722aec662163c40a43ed9f843cf65416723ebf06198d5dfa5e5738e3d",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_d9793a32e7997a67eef23eab364b0ff5b02ed79e90a2acf4560a92392e2904c3",
+    "date": "2025-12-06",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "bbb8b43ec1d8d2efc56d41f9500eee7026f657e2b83685d05284869a654d9379",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_b0404dab86f732012aad881ee90a5938be5ecca4bad18ba5786edeaabf5e4b09",
+    "date": "2025-12-09",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "bcda6c7086f75effbc03ae113e73d83f318f0788cd7542ee19a937129900513f",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_799a60e8d437c9bdfff6afc8d6521c1717ac699f94b5c78937a78d2d6266332b",
+    "date": "2025-12-14",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "c8b1b41194912e517a2a443667d6401041f1708ad938e6cda1ae1a330cb8f5b6",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_9e5f39649fdfbd5b06256c3aec7e3558093bd61cb42975dd7c56efb1efdbbfbd",
+    "date": "2025-12-17",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "a9a8731016060e7a539142da0069be149fea0bd98ba695c7ca27474e3288285a",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_f0cedd57e32c9d6eb63a67d702f2cdbdc67ae834d6e29eed728b610fe41914c1",
+    "date": "2025-12-22",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "7379440d08fa8e200d85f81bd5521a10778e9d21a1d6fba43be646efa86f896b",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_72e0d06ef7d42c8f82ded9ca12f854452465550231effdf115dbb999c38abb76",
+    "date": "2025-12-25",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "84f0fa186f308dd3347a54d05749e359073ff19714347df3e68c9180bbc83406",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_d0f07b277201fac28ed181fdf8f47eda66a46c38752765956056abddea83c378",
+    "date": "2025-12-26",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "653615e74325848881f06f45a420803b5d31a195176ae8c536302965f18cbe28",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_b951a6fca18ef030fb5363f8b25e7c078d2caf960696055d9150daeee12c2ae9",
+    "date": "2025-12-31",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "64fbb0f16e80c4e3bd665cf9f8d9d148d24b6c8c2ac907f558e3649f64faffc6",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_b02ef58b0c7341ae61c17ce81ff4f99b54e985735c5bf28cc22ed894145a8979",
+    "date": "2026-01-05",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "feaa8807b0db3baa5c0901c0988394659c9a4b586de1fe88988cbc2a2bd3b4c5",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_7b0edce997d56b794bb5a4ca877b433c40f6fa893f2918ce70dbd39b90ad2861",
+    "date": "2026-01-05",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "8a08c0ada3ce580010605eea6d49ffacf46a99daa1ce71a61a903783da91c33a",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_5a2fd2ef9962422f17106393e7012ee955225cbfc2e13489616a9be6e99fa116",
+    "date": "2026-01-07",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "a951ac0a1cd9027189f4af1e33a2a012bb592d0455ed4394c8a308e58cfa05b9",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_a2b7b65a6e4a09e4dff06923beb421c97fbdf61ffbb1379121b8a836c8c914a2",
+    "date": "2026-01-07",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "1d36d51d9cca6705cd32633638608f320cfa7ade3587ee9149cd9296655884f9",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_c24d2bff5069d2ba569d4a97521d6bbeef1f65d29e5e460053a2aedf2f38da6c",
+    "date": "2026-01-07",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "b1e1c0c3adf400a55911d985fdcacd9b93861e05a37bd82f5ea3e1a96a6c2c04",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_f0a44da221bbac89b35d009fe7266844ecfe0ae894257589bc4b068f91e89a3a",
+    "date": "2026-01-10",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "151f3c704101b8932615410ae81950f2ca6ca64441533a218069e544f4a970e5",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_c5d5bbb1021ad13936f5fd104e54449296eca8d79062d5b403720f376e525e29",
+    "date": "2026-01-17",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "091cf8d02b5373cf1373205c0f9c62a88b477b78ec141cff6dde286ea04f0ccf",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_648dda06c18c28e4a02e759d57f8f622ba3aa63d934ca8b85639b97d0be24a83",
+    "date": "2026-01-18",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "686e0515dc5ec08f3f0805c39b53452300ae274bd9268bfabee3a4fa4554738a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_0cf4f586b296b1f26eae3124ecf5ed0feaa3622d69ee2394bbf909f893ccbadb",
+    "date": "2026-01-26",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "d19a6655bdd203f5ab0f4428c50e7d16481c6a0f46d326afb9b50404b757db05",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_eb5d191b6ba710ab1be24486423e8512600ca1cfbeb41e81229ae33fb42a03c1",
+    "date": "2026-01-29",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "f3a7944d6d43404ce97d524c4b55d05180eb3c293ac8258d4126ffb001b42e5e",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_16ee87087483303ed5ed0a848afccdaa1f25923ec8b37bd7ea5cb49cd684c55b",
+    "date": "2026-02-03",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "449983b3424d555a456abe637c754fc0fa7c7821051573ff306bf711e656f828",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_8ecd2ac6080be0c11c2521f66376f6201710da74ae2d028cd32ec25f2b001a4a",
+    "date": "2026-02-06",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "653615e74325848881f06f45a420803b5d31a195176ae8c536302965f18cbe28",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_064659d7d004de2a17d5f709f00b987eb755689c0e7c4163134bf15cf4ba62fb",
+    "date": "2026-02-07",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "2c94cf0bcfd76a39d0093c48fc1437bb1f3ec8211ee3a5d228dcf8830c3ccc8a",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_add9d05694d66cb909555d4f7135ad1336444bc29de0ea1220a80575f0741b94",
+    "date": "2026-02-09",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "877c86c2573ace064e0095fe3e29b6bf0f623e35055270423e14af4a91a3f0a5",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_b1e7b31ec0c4cb27ddb0aba9f20a86ce8934580cc621cd62eb8408ef543dec7f",
+    "date": "2026-02-13",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "a220afbc8ed201a018a68b6c2ebe85a651e7f4011618bba5081ae90d5dab9745",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_d4b84d1a371ef5d01f6deca221933302b7d5784b93b8f6157b356a2f83a0dd9b",
+    "date": "2026-02-14",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "64fbb0f16e80c4e3bd665cf9f8d9d148d24b6c8c2ac907f558e3649f64faffc6",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_27103cbe0adbe6136ff9d814a99547ed08cb9f87fb3fc075a555ec28015c798e",
+    "date": "2026-02-16",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "5324fad0d52448b5d7fe6149d49e2dd3a7d8925a93abdfd89a285326c8e012cd",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_a7aea3f17bb9a0353f3eac7483e08c6cc287e0b6d339df8a4db40f4d0252412c",
+    "date": "2026-02-18",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "dc1f56da19fd9debe78ce73e2ea49ed61eef3468976168de08050e8c3a156810",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_41434e2de3e44837f6696b966652dba2e139e417de586457dda0461db3fb2f52",
+    "date": "2026-02-24",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "a951ac0a1cd9027189f4af1e33a2a012bb592d0455ed4394c8a308e58cfa05b9",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_81f6eb910b7724539339c02ab2b34b5681ff01fcabb6d2261c0c2a2d7b44ca7a",
+    "date": "2026-02-24",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "d48ab0f890478cc14f4557203826c06b28dac780a78e9957ac0daeb7c896493a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_063bfdd5d880c3490e4d33c53fe43b0515a329966ff15dc06915d0040eca8c40",
+    "date": "2026-02-28",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "feaa8807b0db3baa5c0901c0988394659c9a4b586de1fe88988cbc2a2bd3b4c5",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_861c1020875b5b0349454c737ae45ff3141bd67ce6ca7166e9a20cbf85c4b991",
+    "date": "2026-03-01",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "3cf9111ca096757f036d3d3f176f8e32694e500fcaa2c4680b174342946b36db",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_a3e23f1ff0fb817232876a0ff3b726ca8d5d80301139db34f250e54a984bbe31",
+    "date": "2026-03-11",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "232d5e80b73d4e7f4b4a0624eb3b6688e97469686c8d29177ee8d41d892646f8",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_7c2aca1af6656ce3bb9e0860475f4eb087ff7d44d5ed93caa5fa421c2d92168b",
+    "date": "2026-03-11",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "2ff41042d028f5056bc6aa29e3d45f383b2ba3cf174ecdf5439cdea74bcdd9f1",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_47ad5aef38b17250ea54f4a8c6c44e4da3bc0e24c7030fdc8d88c4dfd3fd2661",
+    "date": "2026-03-14",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "bac510ed8ef3ea6ceed911f6849e985d2069237c8c5ee15e6c361f4a1d2675c9",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_84de9a7b9be67b67510bc4e458937c3d5bca1398f1975f3e4f0e371c9e671991",
+    "date": "2026-03-15",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "3deb4fd20d128d345bcdd585e29310c8cfb7a9bbd9f5505e7460f616c759450a",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_bf57411c8fca2fb8355b352ecc5504a1b6f16e87328ac775aa7cb82f405cfbf5",
+    "date": "2026-03-18",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "e00492f5ffdc262ce98488acd6677cd15b7223681e4398fcc33b87fb3888a146",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_89c7677c0e47ccb0044b5ee036b02b74ad4369378703f6dbb74040793c425b22",
+    "date": "2026-03-18",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "0cfd80a267ebd9da4fe6d63d4475e035318b36d9ae739bcd272a0c53af37612f",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_3489f51d76a8ad3a3342aa25fc2e6ec8caf97acdbc993828cdde983e781b6b1e",
+    "date": "2026-03-21",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "288a68183d6f10a390e598fb6b5e4207cdd09e4168d65c037634fffd4925f400",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_a1768e230f6b65fc397648b2d50bcf8b73d0f392c80985d5f32a9c370c79b8be",
+    "date": "2026-04-02",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "653615e74325848881f06f45a420803b5d31a195176ae8c536302965f18cbe28",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_2a46c19201c9289477a3ae63b3c0e62016e15d5d556f3a7d5c1a5b7ee0a4dd56",
+    "date": "2026-04-04",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "14af42e333b66ea83a6d56356e1548b1613d2261147b61c5c9e44b1d84eb2a66",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_a9acbdbe43da87f74a2f354a018f645ece914cd83480145a711f52f5be9db1b0",
+    "date": "2026-04-09",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "0cb0162dad3055835a8bdaae434181c9753a7467a1401d23acc1b9e0d062850a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_b031705b45e4a94c1dfd46199db42be80099250b789ecd199e0fc62e9c79a76e",
+    "date": "2026-04-11",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "7ebf244ec8565fe08bb5b15a20d59adf3c79920da17b9ca2c591989fff927b66",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_369a4f3ca7e33fbd13515214eadba1b67413cc1ea9fee4e60b0c4baa2b96f8c2",
+    "date": "2026-04-11",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "64fbb0f16e80c4e3bd665cf9f8d9d148d24b6c8c2ac907f558e3649f64faffc6",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_d09a38fc4e2a8443a4ff3e0fa2749cb24d32596af0399b77f16550e4a3d9f382",
+    "date": "2026-04-12",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "92857342d48d501bb94288b9e6f5d337e41bca64f944be4bf40292492c9e5915",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_8d9c5d888086940bdfd7cf0074e5ce0d04a15f4b4cd8c8a821abfbb2bc439bc2",
+    "date": "2026-04-13",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "c3e477bf1b4c60e507686e8d83debe2e3e10b8a3fa54ef241d82fa2df2f807fa",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_db402cf2e99ce0a8b332f0b337a5c59eb680f9cb4bb3ab4b05898799c4f02c9a",
+    "date": "2026-04-16",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "a7e964d204e62640aad412064c1a91da90ed2651dabaf8508e7e3f07e090cc72",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_0064e69c7f88645875aa29450a6a97b83da490b281bad137b84a1dd1048e042f",
+    "date": "2026-04-18",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "ca757ebbc2d4d57a2d9cacdfd5c84d1e8f520a68df72d93ce9ab2f625133b127",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_a2552b6098af78af274bcbb58465612de3c342c8bb02f6d16671d33e304b000e",
+    "date": "2026-04-20",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "a951ac0a1cd9027189f4af1e33a2a012bb592d0455ed4394c8a308e58cfa05b9",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_b9981f79cd24c7615e284210e619d5141a1c7402ffebf7257e31841f18b679ba",
+    "date": "2026-04-20",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "feaa8807b0db3baa5c0901c0988394659c9a4b586de1fe88988cbc2a2bd3b4c5",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_8f400e725a7faee8dcab2541303ac69ff2f24056998ace9f85811da1ad5afa69",
+    "date": "2026-04-22",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "6f8ceb6562765e5c762d961feffa1890eb37f883a4e98e1d9bc0ebf228f9efbd",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_69d19433d163f75064a8b902cfe73ce87a704b6e54335e3c08ca45bdda525e34",
+    "date": "2026-04-25",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "2a8dc8ee9cebb948c972f1572f86055aa002c4abe6bac5a10fa02a64d29eb72c",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_7b22d52c7f2c6e135bb943326e8e2a1cce2c921c299c0c0d9eacb04af2cc6043",
+    "date": "2026-04-28",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "9cfc26932f5ce64d27d9f291465dd4fdfbbabce2045107adda95453b99065a3e",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_d2f3bf3c27c0e39fe954ac6965d76d0e602a4aa32268fe21ad98555024a1cbe5",
+    "date": "2026-05-01",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "0686705512f18969850025bfd24cf943ee3e01ad2c9ac210009712ef19444741",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_e6a5d1807d421589ed98953264fede21663ca57d68189919782374b1b59447c0",
+    "date": "2026-05-05",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "e1b0821cfb0bf0aff60b0d77abb9a965e83fcc2897c56b74deec891bc4d03093",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_6a0d1daf8a01db42d561deb0b46ec64cb63c0cc15535bcc41d5c4a4b3daede31",
+    "date": "2026-05-06",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "189f0ef06a674ce5782a3760033eb52d7e064afdea4f3f631897d34ee77e9b89",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_fdad162b44b306e5e326ea47843c548eb68eca0305379171c8e4d1463d41142c",
+    "date": "2026-05-07",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "652cba8ca60e242d54482abef10c03793e1f3bf63d6c9c01f2136b32018edfe1",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_8024c2c541913407589e0fe1d8a26c747fb8b33b8d6769ed5c998285057b3e53",
+    "date": "2026-05-09",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "465f7860383f0deed00b089c66118125cb094e2c82e1ba55d7da5e1834984e6f",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_e6de740461356a17192eaee13d5b8b3889432835c920e3291922454038b817d9",
+    "date": "2026-05-13",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "8809bf246c5f6f4d476c95cddbd1f472742cdccfffee1b20164e9ba252298746",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_e671a5569f74903516edf2071f4a47a3ef246a971f5580171cef4c21e08f849d",
+    "date": "2026-05-18",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "068c6ef1575b53708669a195ad11923601839b10c8d3d38215ffb862a059b378",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_82240b2f5fc708f8951c0b18b8bcc8335fbc3fd6b30e48729645f27e1af6319b",
+    "date": "2026-05-27",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "64fbb0f16e80c4e3bd665cf9f8d9d148d24b6c8c2ac907f558e3649f64faffc6",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_50ddb6c309911b930a2501888719c8682a655eff95a3d60c9121da121d1a2559",
+    "date": "2026-05-27",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "faf2a0a9db168047afac35a5680202b3e4d0058f168d533478669fc8e7de9a40",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_b1b20fad4f70ee5505adac889fd2b172f10c5dc62dcbdcb9432caf356350d56c",
+    "date": "2026-05-27",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "5bcd66038de6958e1b4dd550922ac8d8c2b2aea8d2eb51afe98e377383ff8ddb",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_6bffe954b36c859f04903a244735bdcdc4b844bd939174c3697db3af422a6663",
+    "date": "2026-05-27",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "653615e74325848881f06f45a420803b5d31a195176ae8c536302965f18cbe28",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_c93f5e9eb5e9ee2b03720627ee9dd625048be0a3a66165e5f0e236fee82c7340",
+    "date": "2026-06-01",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "a951ac0a1cd9027189f4af1e33a2a012bb592d0455ed4394c8a308e58cfa05b9",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_312f2bd508f038b91fddb7a8eecda0c0971d659ce5497adaf0887e02e0fb0a51",
+    "date": "2026-06-01",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "feaa8807b0db3baa5c0901c0988394659c9a4b586de1fe88988cbc2a2bd3b4c5",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_71de10d4378e558cb549b45b89d5d78732a211b984d91792a807433495894315",
+    "date": "2026-06-04",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "12b92aa342c63d8f90156bc3b8e252f7b9d9c5d7a5ccac85258c5dfa1a63638b",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_8d8d509890a75843dc232e8e91681fd32afc11f20b5e2cf8851ef39acd3353cc",
+    "date": "2026-06-05",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "df98fa804bdeed602afa3f2aae03d3124a684618637d2c5f7867a3ffb4c7d019",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_eb97060cfa3d9c8e20dae4b125a8ee89eb7354de834a4d75538e395215747557",
+    "date": "2026-06-05",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "543cdcc6960c9a3ded2384f9b87e972284f7902ed852bb01a3a27663749a5eed",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_611c5c216757cd768973cae5dfbcd01c9fd4dbe4dda2a9164a24f23b9717a123",
+    "date": "2026-06-11",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "3cfccedeb4c38e4cf4d7478b48c3406131d6a0e96512f14324c7f0d1a03ab006",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_a6e7cb9f6d73b237b429707c35be8fe67e2f96161480f6856271fdb4a1110c96",
+    "date": "2026-06-12",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "b6991fdaf7c8b081d94f843731f72abe71f413924475c29523c5d8efde3f12fb",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_fb2fdde0ff082f57b3003a1b8aced194408d85d835436b4d0b36ba66ac917d04",
+    "date": "2026-06-14",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "3784980e1270b61ffabfab4afd481cf1dccd590a95d7d643e45e9b2f1cd38bda",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_4bf5834a4cd3f8646ac05776d68741fbb3d396edaf16d053eecdd19280b9e1d0",
+    "date": "2026-06-24",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "171d37844047770de0cb714fe33b93dd1d79778c254c7e91d754af9dce08a9e3",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_67976ad0c0e21dd9dd6b8b2bbeb4643848fd88b495dbdaeca57af33ce2ed1e99",
+    "date": "2026-06-24",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "85a42b01c5fa4aef5e1c8006dc839bb93a417038040d40ce66ec165e2c1786d1",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_9ad64d59a5684c0c584212b169dcdce3dafa732a8c3570769ea27f40f4563979",
+    "date": "2026-06-27",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "adae0aff51d84833f6f9a775b6257d26d0057219616dc0f6de7f74b67bb56e46",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_7515e293977b8b8d00607eb3cf8819ccde176911784aaf2569f92fe61180a607",
+    "date": "2026-07-08",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "5f99ac19f62c802fa15c6c46b84b172506b2fc0d9b9f010b8e59184b518d557c",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_9162031e84ae1a0251c7ebda0dafcad600b803a1443dc14d2d50df546d0d4eb7",
+    "date": "2026-07-08",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "92b21c6e6207c65898cdfc8691732745e5d4fc03c299453abe1d2a53dd9d1ba8",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_b86c388fbb05733e0db9eb3363c3a2a5e531a625f937b60bf297677f1bb268d0",
+    "date": "2026-07-09",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "bd10b378dc31d99fc95c8a148916ed59e86e9c314cf53e00267b7cc18a3a9ce7",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_888288b383efcbb32827effbfe5810613cfc37e9a078159e65ae4d9fe17d3a86",
+    "date": "2026-07-13",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "d7c8f5c83cdac3f02fdf335a44dc52105b2cbaed4f2bfde28ba705dedfae6c3d",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_1d09a745d38d041f18861cda5bc539d6216bbf684cad3c8b0843699bec88753a",
+    "date": "2026-07-31",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "bbc2e7564ef41b68b8c77a8e1701a14a71fbec858ae278bdf1d00014d2864341",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_d8ee95f98a7d6de0c571e607131cc3fadba0070b9fadf577a5e3fd0436fc0108",
+    "date": "2026-07-31",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "d9daf646100f98bcf0c457ce514ac1fe6f341b728f903a9147ee984f335997b5",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_968ca47e5e24507c60c3e98cc6b93c5f2512462cd9ce505f8e971ba731114b88",
+    "date": "2026-08-02",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "23fc2fbd575bd1d1d45693f57a81183a78cde7dff4ea02d7967b66a88921e9e1",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_5a30221bd5e97d7489f6a74c5b9bc01e7ae2384a5eecad85e2de5f7b4c80e41a",
+    "date": "2026-08-07",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "df69488c5be90a29b8e469b3d416712ab06916abb202d1762acbe5d71eac18ae",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_7d670f3186275f7bcb898c897d4de4e0d8f4cdda39a0aa4dc0be1dea120523a0",
+    "date": "2026-08-08",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "6480f56f506117a6039658252b48e85aca0012cf35f2a4578fe7dfe32de268a2",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_e2626fe9345fd233a01e1e828d45c80ea18d3759679292b85f6a8975aa5da798",
+    "date": "2026-08-12",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "64d06d123a47a28883e4b2665cd3b9925d6528434d11f62091095e3f400bdb2a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_b4eac2b5644ece9a477b1c6de8d75deca65b9e80eb4a5b50b6d12b7858076384",
+    "date": "2026-08-14",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "81b02c4ec53e58a96539ab686e0aa3be6de6ce57b2860d42edb5f0d70b039f9f",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_6e7b81e3d086b044cad1dd96cb4785769d32f78f6479a5b48e192293156832a9",
+    "date": "2026-08-16",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "0dc83c7992deeda0cc8250b30587533bf943817c32892f3cfb9592aca10e125a",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_0537606c5b19df1488bbc13e06a41c58e7ef9f5444bc7928fe373a579c6d7baf",
+    "date": "2026-08-26",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "e20a0ebeb01d86b0ea430d57bc300329f50197d249443c7cdf802cb050114143",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_777eb317868e583cbfcc28362adb7249fb7abe3d4cf9521d3a861cfb09ad9c68",
+    "date": "2026-09-03",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "1261606acf43935f12d6990d6d6edfe5472591c3f1c928cde02ba4ab309ec2c8",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_44df1d2134a1a15176bc5f7e74841ad5206fb357d4d7ae873e1708fad362e68f",
+    "date": "2026-09-07",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "69f18873b417fc6b166723d199fe466602a0ea9d33300a1dede5ddde92933011",
+    "item_title": "Silver hoops",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Silver hoops",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_88545af76307ab09cf0d39fadf0cc68b43baa81de4ecc0efd6ff35028a0edbee",
+    "date": "2026-09-13",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "5040c113549eece585ee9caff58e6ff7455c873ed02286aabf8fbabc012495f0",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_9fd9c73b9d850929a151a889eaad37dae40285c23ebf7bc8eb2ec11b4bb2bd12",
+    "date": "2026-09-16",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "cad6135bf8e5f4317e123d659945bcd077c4f8d8c0f4750999aa3e8c5171b85b",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_607df4b793cab554e70c132a53065c8fb7931cdf78d47071397bd5fce6f61719",
+    "date": "2026-09-18",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "b8be114d7f31b093232763c5ce8e0e080da4c294a081cedc5130be78c4f65462",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_b3403f0bc46608a78b21cd053068943a75493d9c22d5a8e23384b52d40c3e3e5",
+    "date": "2026-09-21",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "ce92bfcaab9dd4ff2b92cc818a9e2357fe8329ed431c0ad583a870e3a157f63a",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_8d377ef3edcda4848abdef6a93fa47a6a5f030def61312f88f856c0a3e79200a",
+    "date": "2026-10-01",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "a40909a014cd5204da8c70512c1edbc25c748c71ae3706eeaba1dbcce8794844",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_e3df700d9fac298593fd52295228a78f39f47e471e1fd86e01e8775a21aa57b8",
+    "date": "2026-10-01",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "a3c7d909ff7645bbb445574568aa361bd6c33cce7ebb5824e06fad144de9ca6d",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_aaf8b44a7e0fb321c3d113bd815e9c4673aef18f78fbb10c9f6d0d32bdb585f5",
+    "date": "2026-10-06",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "4beed2504dede95019561087bc58295016c76dc2cdeac79816af3ee9a8e5b5ad",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_6f4b7d569b152f52db0d0a3484f98f1c28494224ab9b8aba2d0dcdf2c4dd6b43",
+    "date": "2026-10-15",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "211bec9c12954b75cbc55ba0a05f3c1fe371dd308e84652d95875b5e86fe47b5",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_1d4bc62a33ce55dc7d820dd05873ff7c14d38651ee15e63a40ccca268fcd5467",
+    "date": "2026-10-16",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "fdbbcac12a29432a98b9fda5f650d862fe466d661109ba7c24be7bd4536d1e02",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "t_be247d6c341d0e66689dd144edf187cd88f95f1a9b3d742d7349c4928aa89789",
+    "date": "2026-10-17",
+    "kind": "sale",
+    "gross": 55,
+    "fee": 2.41,
+    "net": 52.59,
+    "currency": "USD",
+    "buyer_key": "aba19d801297d74e86d99053f329c5e0f9f2f5b56bdcbfa03ee0a78648faad6e",
+    "item_title": "Necklaces",
+    "item_group": "necklaces",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Necklaces",
+        "quantity": 1,
+        "unit_price": 55
+      }
+    ]
+  },
+  {
+    "id": "t_b511b74894b46ee53885f4c479f4d839dccc36503d399964a113ec8421174cb4",
+    "date": "2026-10-24",
+    "kind": "sale",
+    "gross": 30,
+    "fee": 1.54,
+    "net": 28.46,
+    "currency": "USD",
+    "buyer_key": "c6e2d3a66c721b6ef098f7217dc964a1396b3f610cbf522e142d8ea1a3bbbce7",
+    "item_title": "Stacking rings",
+    "item_group": "rings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stacking rings",
+        "quantity": 1,
+        "unit_price": 30
+      }
+    ]
+  },
+  {
+    "id": "t_421c1906b507dd7e49555e60b32fe81e25301ffeefb5c7f0cdf38ae9205bdb2e",
+    "date": "2026-10-26",
+    "kind": "sale",
+    "gross": 5,
+    "fee": 0.66,
+    "net": 4.34,
+    "currency": "USD",
+    "buyer_key": "2bf8e3152afca83a32107a91834d4ca83fc6432648cd5b3d987bb347e83ac5c7",
+    "item_title": "Stud earrings",
+    "item_group": "earrings",
+    "country": "US",
+    "quantity": 1,
+    "cart_items": [
+      {
+        "name": "Stud earrings",
+        "quantity": 1,
+        "unit_price": 5
+      }
+    ]
+  },
+  {
+    "id": "invoice-observation-INV2-N947-VS8M-VGB7-RBQ9",
+    "invoice_id": "INV2-N947-VS8M-VGB7-RBQ9",
+    "date": "2026-10-04",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  },
+  {
+    "id": "invoice-observation-INV2-XZKX-YH9N-S57X-3GSE",
+    "invoice_id": "INV2-XZKX-YH9N-S57X-3GSE",
+    "date": "2026-10-04",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  },
+  {
+    "id": "invoice-observation-INV2-QZU7-FQEE-ZVHV-4HEW",
+    "invoice_id": "INV2-QZU7-FQEE-ZVHV-4HEW",
+    "date": "2026-10-04",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  },
+  {
+    "id": "invoice-observation-INV2-3SVY-WY8B-358S-38V7",
+    "invoice_id": "INV2-3SVY-WY8B-358S-38V7",
+    "date": "2026-10-01",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  },
+  {
+    "id": "invoice-observation-INV2-TE3J-RZP6-DN8F-4AHL",
+    "invoice_id": "INV2-TE3J-RZP6-DN8F-4AHL",
+    "date": "2026-10-01",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  },
+  {
+    "id": "invoice-observation-INV2-4K6X-VSM7-BTTH-FU6X",
+    "invoice_id": "INV2-4K6X-VSM7-BTTH-FU6X",
+    "date": "2026-10-01",
+    "kind": "other",
+    "gross": 180,
+    "fee": 0,
+    "net": 180,
+    "currency": "USD",
+    "status": "sent",
+    "item_title": "Jewelry order"
+  }
+]
