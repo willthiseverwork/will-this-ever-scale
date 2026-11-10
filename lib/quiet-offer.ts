@@ -13,3 +13,6 @@ export function quietRegulars(rows:Txn[],currency?:string){
 
 /** Require an observed transaction at or after the deadline before presenting a follow-up. */
 export function offerCoverageThrough(rows:Txn[],started:string,currency:string){const due=offerDate(started);return rows.some(row=>row.currency===currency&&row.date.slice(0,10)>=due);}
+
+/** Treat calendar dates as UTC so they do not shift in the viewer's timezone. */
+export function quietDate(value:string){const day=value.slice(0,10),date=new Date(day+'T12:00:00Z');return Number.isFinite(date.getTime())?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(date):day;}
