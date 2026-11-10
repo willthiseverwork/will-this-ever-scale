@@ -38,7 +38,7 @@ if(p.action==='create_payment_link'){
  if(process.env.WTES_PAYPAL_SET_LINK_ENABLED!=='true')throw new Error('Payment links are unavailable.');
  const x=p.input,created=await post('/v1/checkout/payment-resources',{integration_mode:'LINK',type:'BUY_NOW',reusable:'MULTIPLE',line_items:[{name:x.a,unit_amount:{currency_code:x.currency,value:Number(x.amountA).toFixed(2)}},{name:x.b,unit_amount:{currency_code:x.currency,value:Number(x.amountB).toFixed(2)}}]});
  if(typeof created.id!=='string'||!/^[-A-Za-z0-9]+$/.test(created.id))throw new Error('Payment link creation unconfirmed.');
- const confirmed=await api(access,`/v1/checkout/payment-resources/${encodeURIComponent(created.id)}`,fetcher);const link=confirmed.links?.find((v:any)=>v.rel==='payment_link')?.href;
+ const confirmed=await api(access,`/v1/checkout/payment-resources/${encodeURIComponent(created.id)}`,fetcher);const link=typeof confirmed.payment_link==='string'?confirmed.payment_link:confirmed.links?.find((v:any)=>v.rel==='payment_link')?.href;
  const parsed=new URL(link);if(confirmed.id!==created.id||parsed.protocol!=='https:'||parsed.hostname!=='www.sandbox.paypal.com'||!Array.isArray(confirmed.line_items)||confirmed.line_items.length!==2||confirmed.line_items.some((v:any,i:number)=>v.name!==[x.a,x.b][i]||v.unit_amount?.currency_code!==x.currency||Number(v.unit_amount?.value)!==Number([x.amountA,x.amountB][i])))throw new Error('Payment link readback unconfirmed.');
  return {status:'completed',steps:[{action:'create_payment_link',status:'completed',id:created.id,url:parsed.toString()}]};
 }
