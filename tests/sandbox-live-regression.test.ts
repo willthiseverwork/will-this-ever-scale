@@ -15,7 +15,7 @@ test('seed-shaped orders with generated history keep full findings while read ag
 test('malformed PayPal rows are skipped while a valid sale with unknown fee remains usable',()=>{
  const malformed=[null,{}, {transaction_info:{transaction_id:'bad',transaction_initiation_date:'nonsense',transaction_amount:{value:'3',currency_code:'USD'}}}];const good={...seed[0],transaction_info:{...seed[0].transaction_info,fee_amount:{value:'invalid',currency_code:'USD'}},cart_info:{item_details:[null]}};const rows=normalizeTransactions([...malformed,good]);assert.equal(rows.length,1);assert.equal(rows[0].fee_known,false);assert.equal(rows[0].item_title,undefined);
 });
-test('status exposes only the in-process demo receipt with no-store',async()=>{recordDemoRead({at:'2026-11-10T00:00:00Z',ok:true,orders:40});const response=status();assert.equal(response.headers.get('cache-control'),'no-store');const body=await response.json();assert.deepEqual(body.lastDemoRead,{at:'2026-11-10T00:00:00Z',ok:true,orders:40});assert.equal(body.note,'resets when the server instance changes');assert.ok(JSON.stringify(body).length<2048);});
+test('status exposes only the in-process demo receipt with no-store',async()=>{recordDemoRead({at:'2026-11-10T00:00:00Z',ok:true,orders:40});const response=await status();assert.equal(response.headers.get('cache-control'),'no-store');const body=await response.json();assert.deepEqual(body.lastDemoRead,{at:'2026-11-10T00:00:00Z',ok:true,orders:40});assert.equal(body.note,'lastDemoRead resets when the server instance changes');assert.ok(JSON.stringify(body).length<2048);});
 
 
 test('optional enrichment failures preserve the primary analysis',async()=>{
