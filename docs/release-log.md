@@ -1,3 +1,7 @@
+# 10 November — judge access confirmation
+
+Production deployment `dpl_AE8Pxx31u32eVVRmDf3kAMX2cHCC` (source `8d41431`, application change `286fcd4`) was READY on `app.willthiseverscale.com` at approximately 19:31 UTC. A valid judge code now displays “Judge access is on until 15 Dec.” and the main “Open the demo shop” link opens the PayPal-backed demo. Production headless checks verified that success path and the unchanged “That code is not valid.” invalid-code message. Full build passed. GitHub main remains at `91e303e` because of the recorded auto-review denial; local source and release records are preserved.
+
 # 10 November — demo AI planner date repair
 
 Production deployment `dpl_Gba2CZsycHQ9dEA2Gm8cXCwnj2rE` (source `c8a68df`, application change `2b7e1b0`) was READY on `app.willthiseverscale.com` at approximately 19:27 UTC. The demo's ISO timestamps are normalized to calendar dates before AI planning and lookups, fixing the observed HTTP 400. The captured pre-fix request failed validation only at `lastDate`; after normalization, a judge-authorized production demo chat returned AI planner HTTP 200 and the December answer. Timestamp-boundary regression and the full build passed. The earlier four sample and four demo answers were captured; the earlier demo answers used fallback when the planner returned 400. GitHub main remains at `91e303e` due to the recorded auto-review rejection; local source and release records are preserved.
