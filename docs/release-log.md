@@ -1,3 +1,7 @@
+# 10 November — demo AI planner date repair
+
+Production deployment `dpl_Gba2CZsycHQ9dEA2Gm8cXCwnj2rE` (source `c8a68df`, application change `2b7e1b0`) was READY on `app.willthiseverscale.com` at approximately 19:27 UTC. The demo's ISO timestamps are normalized to calendar dates before AI planning and lookups, fixing the observed HTTP 400. The captured pre-fix request failed validation only at `lastDate`; after normalization, a judge-authorized production demo chat returned AI planner HTTP 200 and the December answer. Timestamp-boundary regression and the full build passed. The earlier four sample and four demo answers were captured; the earlier demo answers used fallback when the planner returned 400. GitHub main remains at `91e303e` due to the recorded auto-review rejection; local source and release records are preserved.
+
 # 10 November — uploaded-file reminder route
 
 Production deployment `dpl_AQ9dRhNgvXWyto8Qd4kWpM4Qq3ce` (application commit `3a078bf`, parent `74a4958`) was READY on `app.willthiseverscale.com` at approximately 19:25 UTC. File results now offer “Connect PayPal to send reminders” and return to the start screen. Local and production phone-sized uploaded-sample checks confirmed the destination, and a direct `/plan/remind` visit showed the connection link without the invoice-reading message. Full build and test suite passed. GitHub main remains at `91e303e` because automatic approval review rejected the subsequent default-branch push; local commits are preserved.
