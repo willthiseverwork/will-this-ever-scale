@@ -1,3 +1,5 @@
+Dated record of past work. For the current state, see the README.
+
 - 2026-11-10T21:17:52Z — Task 2a corrective production `dpl_B44kuj1Bz3S2NSsMgNH5MYZtuqSd`, parent `d9cbe08`: accept the validated AI grouping response on uploads while preserving silent fallback, on top of the combined payment-link restoration.
 # 11 November — combined production restoration
 

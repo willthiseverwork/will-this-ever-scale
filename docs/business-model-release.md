@@ -1,3 +1,5 @@
+Dated record of past work. For the current state, see the README.
+
 # Business model release and recovery
 
 This record covers the released business-model implementation and its operational limits. The current canonical deployment is READY `dpl_ARrA9Z7gr8ST6wFELyF7fjUit2pp`, application source `401ba9884f0c30a816e8da9d62f4445f3fd784b3` at `app.willthiseverscale.com`. Later documentation-only commits do not change the live application. Codex owns verification and the parent task controls release. No filming is planned.

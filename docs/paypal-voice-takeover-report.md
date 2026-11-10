@@ -1,3 +1,5 @@
+Dated record of past work. For the current state, see the README.
+
 # PayPal and voice takeover record
 
 ## Current status and outstanding checks — 3 November continuation
