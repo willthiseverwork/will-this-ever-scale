@@ -12,3 +12,15 @@ test('fallback groups known variants locally and the prompt contains only title/
  const fallback=fallbackProductGrouping(items);assert.deepEqual(fallback.groups,[{name:'Lunch bags',titles:['LUNCH BAG RED RETROSPOT','LUNCH BAG BLACK SKULL']}]);assert.deepEqual(fallback.unplaced,['TEA TOWEL']);
  const prompt=groupingPrompt(items);assert.match(prompt,/LUNCH BAG RED RETROSPOT/);assert.match(prompt,/"orders":4/);assert.doesNotMatch(prompt,/buyer@example\.com|txn_[a-z0-9]+/i);
 });
+
+test('browser accepts the server response and preserves a silent fallback on failure',async()=>{
+ const {groupBrowserRows}=await import('../lib/browser-analysis');
+ const {demoTransactions}=await import('../lib/demo');
+ const rows=demoTransactions(),originalFetch=globalThis.fetch;
+ try{
+  globalThis.fetch=async (_input,init)=>{const {items}=JSON.parse(String(init?.body));return Response.json({shop:'This shop sells jewelry.',groups:[],unplaced:items.map((item:{title:string})=>item.title),source:'ai'});};
+  const success=await groupBrowserRows(rows);assert.equal(success.grouping.source,'ai');assert.equal(success.grouping.shop,'This shop sells jewelry.');
+  globalThis.fetch=async()=>new Response('{}',{status:503});
+  const failure=await groupBrowserRows(rows);assert.equal(failure.grouping.source,'fallback');
+ }finally{globalThis.fetch=originalFetch;}
+});
