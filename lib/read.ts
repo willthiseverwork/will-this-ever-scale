@@ -19,7 +19,7 @@ export function readAggregate(a:Analysis):ReadAggregate {
   // reconciles to the engine quick win. IDs and labels never leave the browser.
   const complete=!!q&&records.length===q.evidence.invoices&&records.every(r=>r.currency===a.currency&&Number.isFinite(r.amount)&&r.amount>0&&Number.isInteger(r.age_days)&&r.age_days!>=14&&r.age_days!<=36500)&&Math.abs(records.reduce((n,r)=>n+r.amount,0)-(q.one_off_amount||0))<0.001;
   const invoice_candidates=complete?records.slice(0,20).map((r,i)=>({index:i+1,amount:r.amount,age_days:r.age_days!})):[];
-  return aggregateSchema.parse({currency:a.currency,money_map:a.money_map,ranked_leaks:a.ranked_leaks.map(l=>({id:l.id,money_per_month:l.money_per_month})),...(Number.isInteger(a.buyers.returning_buyers)&&a.buyers.returning_buyers>0?{returning_buyers:a.buyers.returning_buyers}:{}),...(q?{quick_win:{one_off_amount:q.one_off_amount,invoices:q.evidence.invoices}}:{}),...(invoice_candidates.length?{invoice_candidates}:{})});
+  return aggregateSchema.parse({currency:a.currency,money_map:a.money_map,ranked_leaks:a.ranked_leaks.filter(l=>leakId.safeParse(l.id).success&&typeof l.money_per_month==='number'&&Number.isFinite(l.money_per_month)).slice(0,10).map(l=>({id:l.id,money_per_month:l.money_per_month})),...(Number.isInteger(a.buyers.returning_buyers)&&a.buyers.returning_buyers>0?{returning_buyers:a.buyers.returning_buyers}:{}),...(q?{quick_win:{one_off_amount:q.one_off_amount,invoices:q.evidence.invoices}}:{}),...(invoice_candidates.length?{invoice_candidates}:{})});
 }
 export function templateRead(a:ReadAggregate | Analysis) {
   const v='months' in a?readAggregate(a):a; const top=v.ranked_leaks[0], q=v.quick_win;

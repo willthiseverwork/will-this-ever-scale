@@ -40,7 +40,7 @@ export function sandboxAnalysis(raw:any[]|null,invoices:any[]|null,inputs:Inputs
  const rows=raw?joinDemoHistory(normalizeTransactions(raw,buyerSalt),history):[];const sales=rows.filter(t=>['sale','invoice_payment','subscription_payment'].includes(t.kind)&&t.gross>0&&t.status==='completed');
  let analysis:Analysis;
  if(sales.length){analysis=analyze(rows,{...inputs,asOf:now.toISOString()});}else{
-  const totals=new Map<string,number>();for(const i of invoices||[]){const a=i.due_amount;if(a?.currency_code&&Number(a.value)>0)totals.set(a.currency_code,(totals.get(a.currency_code)||0)+Number(a.value));}
+  const totals=new Map<string,number>();for(const i of invoices||[]){const a=i.due_amount;if(typeof a?.currency_code==='string'&&/^[A-Z]{3}$/.test(a.currency_code)&&Number.isFinite(Number(a.value))&&Number(a.value)>0)totals.set(a.currency_code,(totals.get(a.currency_code)||0)+Number(a.value));}
   const currency=[...totals].sort((a,b)=>b[1]-a[1])[0]?.[0];if(!currency)return null;
   const range=windows(now);analysis={as_of:now.toISOString(),currency,excludedCurrencies:Object.fromEntries([...totals].filter(([c])=>c!==currency)),period:{start:range[0][0].slice(0,7),end:now.toISOString().slice(0,7)},months:[],money_map:{came_in:0,paypal_fees:0,refunds:0,costs:0,ad_spend:0,kept:0},buyers:{},item_groups:[],ranked_leaks:[],small_leaks:[],risks:[],gaps:[raw?'No completed sales found in returned transaction records.':'Transaction Search was unavailable; sales are unknown.'],read:''};
  }
