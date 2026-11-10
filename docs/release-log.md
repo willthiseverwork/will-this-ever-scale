@@ -263,3 +263,5 @@ Deploy this repository only to Vercel project `willthiseverscale-app` (`prj_n9tz
 - 2026-11-02T12:04:36Z — `cf01b29` — Fixed B1–B5: correctly labels a five-point returning-buyer test, preserves all-caps item prefixes, renames the refunds finding, reads PayPal `Subject`, and applies one date order per PayPal file. Updated the upload guidance. Check `/` and upload a UK/US PayPal activity CSV; local fixture coverage is in `tests/csv.test.ts` and `tests/display.test.ts`.
 
 - 2026-11-10T21:51:18Z — Task 2b: `a16ddac` (parent `424eeb3`) deployed as `dpl_FUQQ3ZMQ9MLeattM6i5MP8EriAw8`; corrected confirmed per-order costs and row rounding, concrete test measures, and shop-scoped started tests.
+
+- 2026-11-10T22:16:32Z — Task 2c partial: `6401ebc` (parent `3a31108`) deployed as `dpl_D29X6eDsnVaVoFTsFGXUvQrdhgyS`; prompt PayPal approval responses with status polling and readable quiet-regular names and dates; reminders remain serialized.
