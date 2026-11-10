@@ -1,3 +1,4 @@
+- 2026-11-10T20:57:14Z — Task 2a production `dpl_5RYbUKVVzdTKgWy17YQB8j8ZpK9T`, parent `e0800fe`: align the demo preview with its snapshot and lead wording, show successful shop grouping, and move the business numbers link below findings when data is available.
 # 11 November — final chat coverage correction
 
 Production deployment `dpl_4RKgmgZnpcs33sCjP6R9MXhhh42b` (source `1e831ce`, application change `3d30400`) was READY on `app.willthiseverscale.com` at approximately 20:18 UTC. Pending-only transactions no longer make a month appear to contain settled data in chat; a regression test also checks that the latest earlier month is correctly named. The full build passed 493 tests and skipped 2. A final judge-authorized production check on the 20:11 snapshot returned four AI planner HTTP 200 responses and the requested answers; the diagnostic route remained 404 and the snapshot timestamp stayed unchanged.
