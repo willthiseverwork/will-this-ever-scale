@@ -20,7 +20,7 @@ export async function POST(r:Request){
   if(source==='demo'&&!await hasPaidOrJudgeAccess(r))return NextResponse.json({error:'Judges: enter your code to try this in PayPal.'},{status:403});
   if(source==='login'&&!session)return NextResponse.json({error:'PayPal login expired. Connect again.'},{status:401});
   if(source==='connected'&&!getSession(session))return NextResponse.json({error:'Sandbox session expired. Connect again.'},{status:401});
-  const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);if(p.action==='create_payment_link'&&process.env.WTES_PAYPAL_SET_LINK_ENABLED!=='true')return NextResponse.json({error:'Payment links are unavailable.'},{status:403});const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
+  const {source:_,review,noteToken,...action}=body;let p=proposalSchema.parse(action);if(source==='demo'&&!['send_invoice_reminder','send_invoice_reminders','create_payment_link'].includes(p.action))return NextResponse.json({error:'This demo action is unavailable.'},{status:403});if(p.action==='create_payment_link'&&process.env.WTES_PAYPAL_SET_LINK_ENABLED!=='true')return NextResponse.json({error:'Payment links are unavailable.'},{status:403});const requested=p.action==='send_invoice_reminders'?p.input.invoiceIds:p.action==='send_invoice_reminder'?[p.input.invoiceId]:[];
   if(source==='demo'&&(p.action==='send_invoice_reminder'||p.action==='send_invoice_reminders')){
    const mapped=(process.env.PAYPAL_SANDBOX_DEMO_INVOICE_IDS||'').split(',').map(x=>x.trim()).filter(Boolean);
    const hasSample=requested.some(id=>/^INV-[0-2]$/.test(id));
