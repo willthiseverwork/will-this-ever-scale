@@ -1,3 +1,9 @@
+# 11 November — final chat coverage correction
+
+Production deployment `dpl_4RKgmgZnpcs33sCjP6R9MXhhh42b` (source `1e831ce`, application change `3d30400`) was READY on `app.willthiseverscale.com` at approximately 20:18 UTC. Pending-only transactions no longer make a month appear to contain settled data in chat; a regression test also checks that the latest earlier month is correctly named. The full build passed 493 tests and skipped 2. A final judge-authorized production check on the 20:11 snapshot returned four AI planner HTTP 200 responses and the requested answers; the diagnostic route remained 404 and the snapshot timestamp stayed unchanged.
+
+Consent-gated QA on `/judge` produced a sanitized page-view transport and fixed-label `judge_submit` events in the local data layer; no code value or query string appeared in the captured requests. The analytics account receipt remains unverified because no GA4 connector or permitted Chrome session was available. Google Search Console and Bing property, sitemap and URL-inspection checks remain pending. GitHub main remains at `91e303e`; automatic approval review rejected the subsequent default-branch push and local source is retained.
+
 # 11 November — remaining demo entries
 
 Production deployment `dpl_664x6ANMx7S8SRgeyCnGwCcSURHS` (source `b584279`, application change `ddc1344`) was READY on `app.willthiseverscale.com` at approximately 20:15 UTC. The access-page return link and empty-chat demo link now open the PayPal-backed demo; a direct `/?sample=1` link still opens the stored sample. Phone-sized production checks verified all three paths. Full build passed 492 tests and skipped 2. GitHub main remains at `91e303e` because of the recorded automatic approval review rejection; later source and logs remain local.
