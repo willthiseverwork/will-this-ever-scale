@@ -5,7 +5,7 @@ import {analyze} from './engine';
 import {demoTransactions,DEMO_AS_OF} from './demo';
 import type {Txn} from './types';
 import {fallbackProductGrouping,productGroupRequestSchema,validateProductGrouping,type ProductGrouping} from './product-groups';
-export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';sandboxMode?:'demo'|'connected'|'login';inputs:Inputs;answers:Record<string,string>};
+export type BrowserRead={analysis:Analysis;source:'demo'|'csv'|'sandbox';sandboxMode?:'demo'|'connected'|'login';shopKey?:string;testScope?:string;inputs:Inputs;answers:Record<string,string>};
 export const BROWSER_READ_KEY='wtes-approved-ui-v2';
 // Raw rows (and any buyer keys) remain in this browser tab's session storage and never enter a request.
 let chatRows:Txn[]=[];

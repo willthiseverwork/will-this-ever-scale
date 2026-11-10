@@ -1,0 +1,8 @@
+/** Only test state is retained on this device, under an opaque source identity. */
+export function testStateKey(source:string,identity:string|undefined){return identity?`wtes-test-state-v1:${source}:${identity}`:undefined}
+export function testAnswers(answers:Record<string,string>){return Object.fromEntries(Object.entries(answers).filter(([key])=>/^(lead_|quiet_offer_|set_|test_)/.test(key)))}
+export function loadTestAnswers(storage:Pick<Storage,'getItem'>,source:string,identity:string|undefined):Record<string,string>{const key=testStateKey(source,identity);if(!key)return {};try{const value=JSON.parse(storage.getItem(key)||'{}');if(!value||typeof value!=='object'||Array.isArray(value))return {};return testAnswers(Object.fromEntries(Object.entries(value).filter(([,v])=>typeof v==='string')) as Record<string,string>)}catch{return {}}}
+export function saveTestAnswers(storage:Pick<Storage,'setItem'>,source:string,identity:string|undefined,answers:Record<string,string>){const key=testStateKey(source,identity);if(key)storage.setItem(key,JSON.stringify(testAnswers(answers)))}
+export async function fileTestIdentity(texts:string[]){const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(texts)));return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('')}
+/** Unattributed legacy starts cannot safely be assigned to the current shop. */
+export function visibleShopTests<T extends {status:string;sourceScope?:string}>(tests:T[],scope:string|undefined){return tests.filter(t=>t.status==='planned'&&!t.sourceScope||!!scope&&t.sourceScope===scope)}

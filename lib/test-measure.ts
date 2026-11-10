@@ -1,0 +1,3 @@
+/** The main count or amount a seller can compare for each test. */
+const metrics:Record<string,string>={small_order_fees:'after-fee money from the selected items',items_stopped:'orders for this item',item_jumped:'orders for this item',best_month:'sales',refunds_one_item:'refunds for this item',cross_border_fees:'orders from abroad',sets:'orders with a set',one_time_buyers:'orders from returning buyers',lapsed_buyers:'orders from these regular buyers',unpaid_invoices:'invoices paid',held_money:'money on hold'};
+export function testMeasure(id:string,cardMetric?:string){const metric=metrics[id]||cardMetric?.trim().replace(/[.!?]+$/,'').toLowerCase()||'sales';return `${metric} in the 30 days after you start, compared with the 30 days before.`}

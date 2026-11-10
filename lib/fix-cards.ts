@@ -1,4 +1,5 @@
 import raw from '../playbook.json';
+import {testMeasure} from './test-measure';
 import {repeatBuyerTitle} from './display';
 import type { FixCard, Leak, Txn } from './types';
 
@@ -32,7 +33,7 @@ export function cardFor(leak:Leak,currency:string):FixCard|undefined {
   const fill=(s:string)=>s.replace(/\{top_pairs\}/g,String(leak.evidence.top_pairs||''));
   if(l.steps.some(s=>s.includes('{top_pairs}'))&&!leak.evidence.top_pairs)return undefined;
   const evidencePeriod=leak.evidence.card_period;
-  return {id:leak.id,title:leak.id==='one_time_buyers'?repeatBuyerTitle(Number(leak.evidence.once_buyers),Number(leak.evidence.buyers)):entry.name,money:{amount,currency,period:evidencePeriod==='year'?'year':evidencePeriod==='now'||leak.kind==='quick_win'?'now':'month',estimate:leak.kind!=='quick_win'},money_math:cardMath(leak,currency,amount,l.money_math),so_what:l.so_what,steps:l.steps.map(fill),help:l.help,check:{metric:l.check,how:'Compare this metric in 30 days.',days:30},sources:l.sources};
+  return {id:leak.id,title:leak.id==='one_time_buyers'?repeatBuyerTitle(Number(leak.evidence.once_buyers),Number(leak.evidence.buyers)):entry.name,money:{amount,currency,period:evidencePeriod==='year'?'year':evidencePeriod==='now'||leak.kind==='quick_win'?'now':'month',estimate:leak.kind!=='quick_win'},money_math:cardMath(leak,currency,amount,l.money_math),so_what:l.so_what,steps:l.steps.map(fill),help:l.help,check:{metric:l.check,how:testMeasure(leak.id,l.check),days:30},sources:l.sources};
 }
 export const SETS_SINGLE_SHARE=0.60, SETS_MIN_MONTHLY=20;
 export function micropaymentSaving(gross:number):number { return gross<26.67?Math.max(0,0.40-0.015*gross):0; }
