@@ -1,13 +1,6 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
-import {BlobPreconditionFailedError} from '@vercel/blob';
-import {reserveRefresh} from '../lib/demo-snapshot';
+import test from 'node:test';import assert from 'node:assert/strict';import {reserveRefresh,attemptRefresh} from '../lib/demo-snapshot';
+test('snapshot generation locks serialize concurrent attempts, respect the boundary and recover an interrupted worker',async()=>{const entries=new Map<string,number>();let clock=Date.parse('2026-11-10T19:00:00Z');const store={read:async(path:string)=>entries.get(path)??null,create:async(path:string)=>{if(entries.has(path))throw new Error('exists');entries.set(path,clock)}};const snapshot='2026-11-10T19:00:00Z';assert.equal(await reserveRefresh(snapshot,clock+899999,store),false);clock+=900000;const simultaneous=await Promise.all([reserveRefresh(snapshot,clock,store),reserveRefresh(snapshot,clock,store)]);assert.deepEqual(simultaneous.sort(),[false,true]);assert.equal(await reserveRefresh(snapshot,clock+959999,store),false);clock+=960000;assert.equal(await reserveRefresh(snapshot,clock,store),true);const next=new Date(clock).toISOString();assert.equal(await reserveRefresh(next,clock+899999,store),false);clock+=900000;assert.equal(await reserveRefresh(next,clock,store),true)});
+test('refresh rechecks generation and records lock failures without starting a read',async()=>{let reads=0,starts=0;const failures:Array<[string,string]>=[],base={current:async()=>({at:'old'}),reserve:async()=>false,refresh:async()=>{reads++},start:async()=>{starts++},record:async(stage:'lock'|'schedule'|'storage'|'status',code:string)=>{failures.push([stage,code])}};await attemptRefresh('https://example.test','new',base);assert.equal(reads,0);await attemptRefresh('https://example.test','old',base);assert.equal(starts,0);await attemptRefresh('https://example.test','old',{...base,reserve:async()=>{throw new Error('private provider payload')}});assert.deepEqual(failures,[['lock','storage_unavailable']]);assert.equal(reads,0)});
 
-test('overlapping immutable refresh locks guard boundary and concurrent attempts',async()=>{
- const seen=new Set<string>();const create=async(path:string)=>{if(seen.has(path))throw new BlobPreconditionFailedError();seen.add(path)};
- assert.equal(await reserveRefresh(899_999,create),true);
- assert.equal(await reserveRefresh(900_000,create),false);
- assert.equal(await reserveRefresh(1_800_000,create),true);
- const fresh=new Set<string>();const concurrent=async(path:string)=>{if(fresh.has(path))throw new BlobPreconditionFailedError();fresh.add(path)};
- assert.deepEqual((await Promise.all([reserveRefresh(1_000_000,concurrent),reserveRefresh(1_000_000,concurrent)])).sort(),[false,true]);
-});
+test('status distinguishes an active refresh from a lock left by an interrupted worker',async()=>{const {statusForLock}=await import('../lib/demo-snapshot');const locked=Date.parse('2026-11-10T19:00:00Z'),old={at:'2026-11-10T18:00:00Z',ok:true};assert.equal(statusForLock(old,locked,locked+1000).code,'in_progress');assert.equal(statusForLock(old,locked,locked+66000).code,'interrupted_or_timed_out');const started={at:'2026-11-10T19:00:01Z',ok:false,stage:'refresh',code:'in_progress'};assert.equal(statusForLock(started,locked,locked+67000).code,'interrupted_or_timed_out');const done={at:'2026-11-10T19:00:20Z',ok:true};assert.deepEqual(statusForLock(done,locked,locked+66000),done)});
+test('refresh deadline records a bounded, sanitized timeout',async()=>{const {withRefreshDeadline}=await import('../lib/demo-snapshot');await assert.rejects(()=>withRefreshDeadline(new Promise(()=>{}),5),/read_timeout/);assert.equal(await withRefreshDeadline(Promise.resolve('ok'),100),'ok')});
