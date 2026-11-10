@@ -17,7 +17,7 @@ const sale=isSettledSale;
 const refund=(t:Txn)=>['refund','reversal','dispute'].includes(t.kind)&&!/pending|failed|denied|refused|declined|cancel|unpaid|unrecognized/i.test(privateStatus(t.status)||'');
 const iso=(d:Date)=>d.toISOString().slice(0,10);
 function money(n:number,c:string){return new Intl.NumberFormat('en-US',{style:'currency',currency:c,minimumFractionDigits:2}).format(n);}
-function localPlan(question:string,lastDate:string):ChatPlan|null {
+export function localPlan(question:string,lastDate:string):ChatPlan|null {
  const q=question.toLowerCase(), last=new Date(`${lastDate}T00:00:00Z`), month=String(last.getUTCMonth()+1).padStart(2,'0'), year=last.getUTCFullYear();
  const metric=q.includes('refund')?'refunds':q.includes('fee')?'fees':q.includes('profit')||q.includes('after materials')||q.includes('kept')?'kept':q.includes('buyer')?'buyers':q.includes('unit')||q.includes('quantity')?'units':q.includes('order')?'orders':'sales';
  const group=q.includes('buyer')&&q.includes('back')?'buyer_status':q.includes('weekend')?'item':q.includes('last christmas')||/what do i sell most|which items?|product/.test(q)?'item':undefined;
