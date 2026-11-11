@@ -267,3 +267,5 @@ Deploy this repository only to Vercel project `willthiseverscale-app` (`prj_n9tz
 - 2026-11-10T21:51:18Z — Task 2b: `a16ddac` (parent `424eeb3`) deployed as `dpl_FUQQ3ZMQ9MLeattM6i5MP8EriAw8`; corrected confirmed per-order costs and row rounding, concrete test measures, and shop-scoped started tests.
 
 - 2026-11-10T22:16:32Z — Task 2c partial: `6401ebc` (parent `3a31108`) deployed as `dpl_D29X6eDsnVaVoFTsFGXUvQrdhgyS`; prompt PayPal approval responses with status polling and readable quiet-regular names and dates; reminders remain serialized.
+
+- 2026-11-11T04:59:20Z — Release R1: `1d59ff8` deployed as `dpl_8wgBcXP1bMeomAkmCnDEo1ekhD7U` to app.willthiseverscale.com.
