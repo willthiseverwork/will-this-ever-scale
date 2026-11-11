@@ -281,3 +281,5 @@ Deploy this repository only to Vercel project `willthiseverscale-app` (`prj_n9tz
 - 2026-11-11T17:34:50Z — Release R6: `af4d09d` deployed as `dpl_6njbFvEV9MeP9aMN5uqq8k5DJNj5` to app.willthiseverscale.com.
 
 - 2026-11-11T18:15:05.957Z — Release R7: `126ad6064b4fd117d94fd58b2be0f4593f05cbb1` deployed as `dpl_AeU81yuY6ft6vT51dyYdbYDd9RMz` to app.willthiseverscale.com. Cost ranges show both subtraction signs on the result card while Results retains one equation sign; bought-together gain identifies the analysis period. Linked checkout: npm ci, 575 tests passed / 2 skipped, TypeScript and production build passed. Canonical alias and five requested routes verified; demo snapshot refresh and browser seller check remain pending. Prior deployment: `dpl_6njbFvEV9MeP9aMN5uqq8k5DJNj5`.
+
+  R7 follow-up: demo snapshot `analysis.as_of` 2026-11-11T18:21:12.727Z is newer than READY; 153 orders, sales and grouping present, no `ASO AI listing` or `@` in the serialized snapshot. Browser seller check remains with Claude.
