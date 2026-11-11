@@ -51,7 +51,7 @@ for(const [date,oldest,quietAge,setAmount] of dates)test(`judge path ${date}`,()
  assert.equal(Math.floor((now.getTime()-Date.parse(quiet.map(x=>x.last).sort().at(-1)!))/86400000),quietAge);
  assert.equal(a.months.length,13);assert.equal(a.months[0].month,'2025-11');assert.equal(a.months.at(-1)?.month,'2026-11');
  const prior=date.startsWith('2026-11')?'2026-10':'2026-11',last=a.months.find(x=>x.month===prior);assert.equal(last?.orders,prior==='2026-10'?11:40);assert.equal(last?.cameIn,prior==='2026-10'?271:1440);
- const answers=questions.map(q=>judgeChat(q,a,rows,now)?.text);assert.equal(answers[0],'Earrings has the highest orders (81) from 7 November 2025 to 3 November 2026.');assert.equal(answers[4],customerAnswer);
+ const answers=questions.map(q=>judgeChat(q,a,rows,now)?.text);assert.equal(answers[0],'From November 2025 to November 2026, earrings appeared in the most orders: 81 orders. Necklaces had the most gross sales in orders containing it: $2,200.00.');assert.equal(answers[4],customerAnswer);
  if(prior==='2026-10'){
   assert.equal(answers[1],'No refunds in October 2026.');assert.equal(answers[2],'In October 2026, sales were $271.00. After PayPal fees ($14.19) and refunds ($0.00), $256.81 reached your account; costs are not counted yet.');assert.equal(answers[3],'Sales were $271.00 in October 2026 and $1,440.00 in November 2026 so far.');
  }else{

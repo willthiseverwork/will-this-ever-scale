@@ -20,8 +20,20 @@ test('cost readbacks describe singular products, batches, and waste clearly',()=
  const necklace={...shop,unitName:'necklaces'};
  assert.match(readback('',{value:8,basis:'unit',said:''},necklace,'buy'),/one necklace/);
  assert.equal(readback('',{value:20,basis:'batch',said:''},necklace,'pieces'),'So 20 pieces from a batch, is that right?');
- assert.equal(readback('',{value:.25,basis:'share',said:''},necklace,'waste'),'So about a quarter (25%) goes to waste, is that right?');
+ assert.equal(readback('',{value:.25,basis:'share',said:''},necklace,'waste'),'So 25% goes to waste, is that right?');
  const initial=confirmValue(proposeValue(newInterview('maker'),'batch',{value:40,basis:'batch',said:''},necklace).state,'batch');
  assert.match(proposeValue(initial,'pieces',{value:20,basis:'batch',said:''},{...necklace,pricePerUnit:30}).reason!,/£2 a piece is low for a necklace\. Does one £40 batch really make 20\?/);
 });
 test('fractional item quantities cannot be confirmed as whole pieces',()=>{const result=proposeValue(newInterview('reseller'),'units',{value:1.5,basis:'order',said:'one and a half'},shop).state;assert.equal(result.slots.units.status,'checking');assert.equal(confirmedAnswers(confirmValue(result,'units')).units,undefined)});
+
+test('typed and voice cost readback preserves the answer and lists every field',async()=>{
+ const {parseRoughAmount}=await import('../lib/cost-interview');const {interviewSummaryLines,skipValue,notApplicableValue}=await import('../lib/voice/interview-engine');
+ assert.equal(parseRoughAmount('Almost none',true),0);
+ assert.equal(readback('',{value:1,basis:'batch',said:'1'},shop,'pieces'),'So 1 piece from a batch, is that right?');
+ assert.equal(readback('',{value:2,basis:'batch',said:'2'},shop,'pieces'),'So 2 pieces from a batch, is that right?');
+ assert.equal(readback('',{value:0,basis:'share',said:'Almost none'},shop,'waste'),'So almost none goes to waste, is that right?');
+ assert.equal(readback('',{value:0,basis:'share',said:'0%'},shop,'waste'),'So 0% goes to waste, is that right?');
+ assert.equal(readback('',{value:.1,basis:'share',said:'About 10%'},shop,'waste'),'So about 10% goes to waste, is that right?');
+ let state=newInterview('maker');state=confirmValue(proposeValue(state,'pieces',{value:1,basis:'batch',said:'1'},shop).state,'pieces');state=confirmValue(proposeValue(state,'waste',{value:0,basis:'share',said:'Almost none'},shop).state,'waste');state=skipValue(state,'batch');state=notApplicableValue(state,'pay');
+ const lines=interviewSummaryLines(state,shop);assert.equal(lines.length,7);assert.ok(lines.includes('Pieces in a batch: 1 piece from a batch'));assert.ok(lines.includes('Waste: almost none goes to waste'));assert.ok(lines.includes('Materials for a batch: not counted'));assert.ok(lines.includes('Your time: not applicable'));assert.doesNotMatch(lines.join('\n'),/\(0%\)|;/);
+});
