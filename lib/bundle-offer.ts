@@ -1,6 +1,7 @@
 import type {ProductGroupingSummary,Txn} from './types';
 type Pair={a:string;b:string;coOrders:number;coBuyers:number;singleA:number;priceA:number;priceB:number;min:number;max:number;price:number;saving:number;gain:number};
 const median=(values:number[])=>{const a=[...values].sort((x,y)=>x-y),m=Math.floor(a.length/2);return a.length%2?a[m]:(a[m-1]+a[m])/2};
+export function bundlePeriod(months:number){return months>0?`in sales over ${months} ${months===1?'month':'months'}`:'in sales over the available data period'}
 export function bundleGain(singleA:number,price:number,priceA:number){return Math.max(1,Math.round(singleA/10))*(price-priceA)}
 export function bundleOffer(rows:Txn[],grouping?:ProductGroupingSummary,currency?:string):Pair|undefined{
  const group=(name:string)=>grouping?.groups.find(g=>g.titles.includes(name))?.name||name;

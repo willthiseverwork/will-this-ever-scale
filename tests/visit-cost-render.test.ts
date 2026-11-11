@@ -22,3 +22,11 @@ test('cost answer summary renders values and unknown time without relying on int
  const html=renderToStaticMarkup(React.createElement(CostAnswerSummary,{result,answers,item:'necklace',currency:'USD'}));
  for(const text of ['$18.00','$4.00','Your time','skipped'])assert.ok(html.includes(text),text);
 });
+
+test('range signs distinguish the cost card from the Results equation',async()=>{
+ const {default:ResultsNumbers}=await import('../components/results-numbers');const {analyze}=await import('../lib/engine');
+ const rows=Array.from({length:6},(_,i)=>({id:String(i),date:'2026-10-01',kind:'sale',gross:55,fee:-2.56,fee_known:true,net:52.44,currency:'USD',status:'completed',item_title:'silver hoops',cart_complete:true,cart_items:[{name:'silver hoops',quantity:1,unit_price:55}]} as Txn));
+ const answers={units:1,post:1,ranges:{buy:{min:2.42,max:3.42}},notApplicable:['pay','helpers'] as ('pay'|'helpers')[]};const value=visitCost({rows,title:'silver hoops',currency:'USD',kind:'reseller',answers,ordersPerMonth:6});assert.equal(value.status,'available');if(value.status!=='available')return;
+ const card=renderToStaticMarkup(React.createElement(VisitCostResult,{value,currency:'USD',item:'silver hoops'}));assert.match(card,/−\$3\.42 to −\$4\.42/);
+ const analysis=analyze(rows,{asOf:'2026-11-01T00:00:00Z'});const entry={item:'silver hoops',raw:'silver hoops',currency:'USD',kind:'reseller' as const,answers,value};const results=renderToStaticMarkup(React.createElement(ResultsNumbers,{analysis,source:'test',shop:'',demo:true,entry}));assert.match(results,/− your costs \$3\.42 to \$4\.42/);assert.doesNotMatch(results,/your costs.*−\$4\.42/);
+});
