@@ -12,5 +12,6 @@ export function hasInlineTest(leak:import('./types').Leak,analysis:import('./typ
 }
 export function fewerNewBuyersTest(leak:import('./types').Leak,analysis:import('./types').Analysis){
  const item=sentenceCaseItem(String(leak.evidence.best_seller||analysis.item_groups.find(x=>x.name!=='Unlabelled items')?.name||''));if(!item)return undefined;
- return {why:"Put your best seller in front of people who haven't bought yet.",title:`Show ${item} somewhere new`,steps:[`List or post ${item} in one place you don't sell yet: another marketplace, a local group, or a social post.`,"Add a line to every parcel this month: 'Know someone who'd like this? Send them this link.'",'Change nothing else for 30 days.'],metric:`New buyers in the 30 days after you start: you had about ${Math.round(Number(leak.evidence.recent_new)/3)} a month lately; aim for ${Math.round(Number(leak.evidence.previous_new)/3)}.`};
+ const lately=Math.round(Number(leak.evidence.recent_new)/3),aim=Math.max(Math.round(Number(leak.evidence.previous_new)/3),lately+1);
+ return {why:"Put your best seller in front of people who haven't bought yet.",title:`Show ${item} somewhere new`,steps:[`List or post ${item} in one place you don't sell yet: another marketplace, a local group, or a social post.`,"Add a line to every parcel this month: 'Know someone who'd like this? Send them this link.'",'Change nothing else for 30 days.'],metric:`how many new buyers came in those 30 days? Lately ${lately===0?'fewer than 1':`about ${lately}`} a month; aim for ${aim}.`};
 }
