@@ -44,3 +44,11 @@ test('Blob replacements explicitly permit an ETag-bound overwrite',async()=>{
   assert.match(source,/allowOverwrite:true,ifMatch:etag/);
   assert.match(source,/allowOverwrite:false/);
 });
+
+for(const [month,cap] of [['2026-11',2000],['2026-12',2000],['2027-01',500]] as const)test(`${month} uses its own cap`,async()=>{
+ const store=new MemoryStore(),path=`ai-budget/${month}.json`,now=new Date(`${month}-15T00:00:00Z`);
+ await store.create(path,JSON.stringify({version:1,month,count:cap-1}));
+ assert.deepEqual(await reserveAiBudget({store,now}),{allowed:true,reason:'reserved',used:cap});
+ assert.deepEqual(await reserveAiBudget({store,now}),{allowed:false,reason:'exhausted'});
+});
+test('November accepts an existing count of 1200',async()=>{const store=new MemoryStore();await store.create('ai-budget/2026-11.json',JSON.stringify({version:1,month:'2026-11',count:1200}));assert.deepEqual(await reserveAiBudget({store,now:november}),{allowed:true,reason:'reserved',used:1201});});

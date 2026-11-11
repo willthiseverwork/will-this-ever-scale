@@ -301,7 +301,7 @@
       "lesson": {
         "money": "That item's refunded sales per month.",
         "money_math": "",
-        "so_what": "One item causes most of the refunds, so fixing that item fixes most of the leak.",
+        "so_what": "One item has the most refunds. Check what buyers reported before making a change.",
         "steps": [
           "Read the refund reasons and buyer messages for that item.",
           "Fix the usual cause. For rings, add a size guide and a photo on a hand; for other pieces, a photo with something for scale and the exact materials.",
@@ -666,7 +666,7 @@
       "id": "held_money",
       "kind": "quick_win",
       "name": "Money on hold",
-      "why": "Tracking is the one step that releases held money fast. For items shipped with an approved carrier, PayPal releases the hold about 24 hours after the courier confirms delivery to the buyer's address. Tracking that shows delivery is also what Seller Protection asks for when a buyer says a parcel never came.",
+      "why": "Add tracking to the order. PayPal's help page says when it releases the money.",
       "questions": [],
       "tests": [],
       "who": "you",
@@ -674,7 +674,7 @@
       "lesson": {
         "money": "The total on hold right now.",
         "money_math": "",
-        "so_what": "Tracking is the one step that releases held money fast. For items shipped with an approved carrier, PayPal releases the hold about 24 hours after the courier confirms delivery to the buyer's address. Tracking that shows delivery is also what Seller Protection asks for when a buyer says a parcel never came.",
+        "so_what": "Add tracking to the order. PayPal's help page says when it releases the money.",
         "steps": [
           "Find the tracking number for each held order on your carrier receipt or label.",
           "In your PayPal Activity, open the payment, choose Get your money, and add the tracking number.",
@@ -689,7 +689,7 @@
         "sources": [
           {
             "title": "PayPal on payment holds",
-            "url": "https://www.paypal.com/us/smarthelp/article/FAQ3297"
+            "url": "https://www.paypal.com/us/cshelp/article/how-can-i-release-my-payments-on-hold-help129"
           },
           {
             "title": "PayPal on adding tracking",

@@ -6,7 +6,7 @@ export function findingPresentation(leak:Leak){
   const once=n('once_buyers'),back=n('people_back'),avg=n('average_order'),months=n('months'),small=back<3;
   const complete=typeof e.identified_orders==='number'&&typeof e.orders==='number'&&e.identified_orders===e.orders,people=complete?'buyers':'identified buyers';
   const period=small||months>=12?'a year in sales':'more in sales';
-  const condition=small?(once===1?`If that ${complete?'buyer':'identified buyer'} comes back every month, before costs.`:`If 1 of the ${once} ${people} who bought once comes back every month, before costs.`):`If ${back} of the ${once} ${people} who bought once ${back===1?'places':'place'} one more average order${months>=12?' in a year':''}, before costs.`;
+  const condition=small?(once===1?`If that ${complete?'buyer':'identified buyer'} comes back every month, before costs.`:`If 1 of the ${once} ${people} who bought once comes back every month, before costs.`):`if ${back} of your ${once} one-time ${people} order once more.`;
   return {amount:small?12*avg:back*avg,period,condition};
  }
  if(leak.id==='item_jumped')return {amount:n('last_90'),period:'in the latest 90 days',condition:leak.method};

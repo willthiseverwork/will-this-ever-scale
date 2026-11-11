@@ -1,7 +1,7 @@
 /** Shared model-call allowance. Each provider HTTP invocation must reserve first. */
 import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
 
-const MAX_MONTHLY_CALLS=500;
+const monthlyLimit=(month:string)=>month==='2026-11'||month==='2026-12'?2000:500;
 const MAX_BYTES=256;
 const TIMEOUT_MS=3000;
 type BudgetRecord={version:1;month:string;count:number};
@@ -41,20 +41,22 @@ function parseRecord(body:string,month:string):BudgetRecord {
   const r:unknown=JSON.parse(body);
   if(!r||typeof r!=='object'||Array.isArray(r))throw new Error('Invalid budget record');
   const x=r as Record<string,unknown>,keys=Object.keys(x).sort();
-  if(keys.join(',')!=='count,month,version'||x.version!==1||x.month!==month||!Number.isSafeInteger(x.count)||typeof x.count!=='number'||x.count<0||x.count>MAX_MONTHLY_CALLS)throw new Error('Invalid budget record');
+  if(keys.join(',')!=='count,month,version'||x.version!==1||x.month!==month||!Number.isSafeInteger(x.count)||typeof x.count!=='number'||x.count<0||x.count>monthlyLimit(month))throw new Error('Invalid budget record');
   return {version:1,month,count:x.count};
 }
 /**
  * Reserves one slot before one provider HTTP invocation. No reservation is refunded on
  * errors or timeouts: the provider may have received the call. The optional store,
- * clock and lower limit are injectable for tests; no caller can raise the 500 cap.
+ * clock and lower limit are injectable for tests; no caller can raise the monthly cap.
  */
 export async function reserveAiBudget(options:{store?:BudgetStore;now?:Date;limit?:number;token?:string}={}):Promise<BudgetResult>{
-  const limit=options.limit??MAX_MONTHLY_CALLS,now=options.now??new Date(),token=options.token??process.env.BLOB_READ_WRITE_TOKEN;
-  if(!Number.isSafeInteger(limit)||limit<0||limit>MAX_MONTHLY_CALLS||!Number.isFinite(now.getTime()))return {allowed:false,reason:'unavailable'};
+  const now=options.now??new Date(),token=options.token??process.env.BLOB_READ_WRITE_TOKEN;
+  if(!Number.isFinite(now.getTime()))return {allowed:false,reason:'unavailable'};
+  const month=now.toISOString().slice(0,7),cap=monthlyLimit(month),limit=options.limit??cap;
+  if(!Number.isSafeInteger(limit)||limit<0||limit>cap)return {allowed:false,reason:'unavailable'};
   if(limit===0)return {allowed:false,reason:'exhausted'};
   if(!options.store&&!token)return {allowed:false,reason:'unavailable'};
-  const store=options.store??blobStore(token!),month=now.toISOString().slice(0,7),path=`ai-budget/${month}.json`;
+  const store=options.store??blobStore(token!),path=`ai-budget/${month}.json`;
   for(let attempt=0;attempt<3;attempt++){
     try{
       const existing=await store.read(path);

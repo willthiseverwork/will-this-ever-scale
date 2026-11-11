@@ -132,3 +132,8 @@ export function calculationLines(leak:Leak,analysis:Analysis,costPerItem?:number
   if(leak.id==='subscription_failed_payments'&&n('failed_total')!==undefined) return [`Failed payments, last 3 months: ${n('n_failed')}`,`${exact(n('failed_total')!)} ÷ 3 ≈ ${result} a month`];
   return [leak.card?.money_math||leak.method,'The detailed inputs are not available in this data.'];
 }
+
+/** Label the currently unfinished calendar month in UTC. */
+export function chartMonthLabel(month:string,now=new Date()){return month===now.toISOString().slice(0,7)?`${new Intl.DateTimeFormat('en-GB',{month:'long',timeZone:'UTC'}).format(new Date(`${month}-01T00:00:00Z`))} so far`:new Intl.DateTimeFormat('en-GB',{month:'short',timeZone:'UTC'}).format(new Date(`${month}-01T00:00:00Z`));}
+
+export function mathEquation(costsKnown:boolean,adsKnown:boolean){return costsKnown?'You keep = came in − PayPal fees − refunds − your costs'+(adsKnown?' − ads':''):'Reached you = came in − PayPal fees − refunds. Your costs aren’t in yet.';}

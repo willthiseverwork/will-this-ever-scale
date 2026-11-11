@@ -59,10 +59,11 @@ for(const [date,oldest,quietAge,setAmount] of dates)test(`judge path ${date}`,()
  }
  assert.ok(answers.every(x=>x&&!/NaN|\$-/.test(x)));
 });
-// Product decision needed: choose wording that marks the current month as partial.
-// node:test uses TODO for an expected failing test; this repository does not use Vitest.
-test('current-month chart identifies its partial month',{todo:'Dasha: approve partial-month wording'},()=>{
+test('current-month chart identifies only the unfinished month',async()=>{
+ const {chartMonthLabel}=await import('../lib/display');
+ const now=new Date('2026-11-11T09:00:00Z');
+ assert.equal(chartMonthLabel('2026-11',now),'November so far');
+ assert.equal(chartMonthLabel('2026-10',now),'Oct');
  const source=readFileSync(new URL('../components/scale-tool.tsx',import.meta.url),'utf8');
- const chart=source.slice(source.indexOf('function MonthlyChart('),source.indexOf('function BestSellers('));
- assert.ok(/so far|partial month|month to date/i.test(chart),'Current month needs a visible partial-period label');
+ assert.match(source.slice(source.indexOf('function MonthlyChart('),source.indexOf('function BestSellers(')),/chartMonthLabel\(month.month\)/);
 });
