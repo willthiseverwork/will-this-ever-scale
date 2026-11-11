@@ -2,21 +2,21 @@
 
 Will This Ever Scale is a money tool for hobby sellers who take payments through PayPal. It builds a picture of the shop's numbers from PayPal or a sales file, asks for costs PayPal cannot know, and suggests what to do next and what it could mean in money. For supported actions, the seller reviews and approves the PayPal step. Built for the PayPal AI Hackathon; PayPal connections and actions use the sandbox only.
 
-## For judges (2 minutes)
+## For judges (about 3 minutes)
 
-1. Open https://app.willthiseverscale.com and choose **Open this demo shop**. No login is needed. It opens a shared snapshot of the demo seller's PayPal sandbox; if the snapshot is unavailable, a fictional sample opens instead.
-2. To unlock demo PayPal actions and chat, go to **Hackathon judge? Use your access code** on the access screen (or open [the judge page](https://app.willthiseverscale.com/judge)) and enter `PAYPAL-JUDGE-2026`.
-3. On the unpaid invoices finding, choose **Remind them in PayPal**, review the reminders and tap **Approve**. PayPal confirms the result when available. Demo actions have daily limits.
-4. On the bought-together finding, choose **Make the set in PayPal**, review it and approve the payment link.
-5. Open **Ask your data** and try **Most popular product** or **How much did I make in the latest completed month?**
-6. In **Ask your data**, choose **Check the real cost** and type your answers. Voice is available when enabled and your browser allows microphone access.
-7. Optional: on the start screen, open **Rather not log in? Upload your sales file**, download **No file handy? Try the sample file**, then choose that CSV. The file is also at [`public/sample-paypal-activity.csv`](public/sample-paypal-activity.csv).
 
-Connect PayPal works only with the demo seller's sandbox account; its sandbox login is listed below.
+1. Open https://app.willthiseverscale.com/judge, enter the access code `PAYPAL-JUDGE-2026` and choose **Unlock everything**. Judge access lasts until 15 December 2026. (On the start screen this is the **Judge? Enter your code** link.)
+2. Choose **Open the demo shop**. No PayPal login is needed. It opens a snapshot of the demo seller's PayPal sandbox: 153 orders from November 2025 to November 2026.
+3. At the top of the results, **Your shop's numbers** shows what PayPal filled in (sales, fees and refunds, what reached the seller, buyers) and what only the seller knows ("not yet"). Tap **Use example answers** to fill the seller's half in one tap: the result is about $30.65 kept on a necklace order.
+4. On **6 people haven't paid you yet** ($1,080), choose **Remind them in PayPal**, review the six invoices and what PayPal sends, then tap **Approve · send 6 reminders from PayPal**. The sandbox sends PayPal's standard invoice reminders. Demo actions have daily limits.
+5. On **Bought together** (Hoops and Rings), choose **Make the set in PayPal**, then **Approve** to create a sandbox payment link for the set.
+6. Open **Ask your data** (link at the bottom of the results page, or https://app.willthiseverscale.com/chat). Tap **Best seller** or **Sales last month**, or type a question such as "How much did I make in the latest completed month?".
+7. To answer the cost questions yourself, choose **Check the real cost** on the **Your best sellers** card, then **Type instead**. Every number is read back before it is used.
+8. Optional: on the start screen choose **Upload a sales file instead**, download **No file handy? Try the sample file**, then **Choose your CSV file**. The file is also at [`public/sample-paypal-activity.csv`](public/sample-paypal-activity.csv).
 
-## Sandbox login for Connect PayPal
+## Connect PayPal
 
-Email and password: added before submission on 12 Nov.
+**Connect PayPal** logs in with PayPal and reads the demo seller's sandbox account; the video shows it end to end. Reading another seller's PayPal needs PayPal partner permission, so the demo shop and the judge code above cover everything a judge can test.
 
 ## How PayPal is used
 
