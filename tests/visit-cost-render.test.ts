@@ -14,3 +14,11 @@ test('results numbers show both halves before and after visit costs',async()=>{
  const after=renderToStaticMarkup(React.createElement(ResultsNumbers,{...base,entry}));
  for(const text of ['From PayPal','From you','You keep on a silver hoops order','$30.44','this visit'])assert.ok(after.includes(text),text);
 });
+
+test('cost answer summary renders values and unknown time without relying on interview state',async()=>{
+ const {default:CostAnswerSummary}=await import('../components/cost-answer-summary');
+ const {costResult}=await import('../lib/cost-interview');
+ const answers={units:1,buy:18,post:4};const result=costResult({kind:'reseller',answers,cameIn:55,fee:2.56,units:1,ordersPerMonth:6,currency:'USD'});
+ const html=renderToStaticMarkup(React.createElement(CostAnswerSummary,{result,answers,item:'necklace',currency:'USD'}));
+ for(const text of ['$18.00','$4.00','Your time','skipped'])assert.ok(html.includes(text),text);
+});
