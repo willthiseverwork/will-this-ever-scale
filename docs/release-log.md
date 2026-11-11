@@ -277,3 +277,5 @@ Deploy this repository only to Vercel project `willthiseverscale-app` (`prj_n9tz
 - 2026-11-11T13:52:06Z — Release R4: `3bc0c4d` deployed as `dpl_8tJP15BEp9yccYJFVTKeSvncRNvL` to app.willthiseverscale.com.
 
 - 2026-11-11T16:50:28Z — Release R5: `f48b1a9` deployed as `dpl_5818ZmJRdkLmikYhH5gK75Zn2Dt4` to app.willthiseverscale.com.
+
+- 2026-11-11T17:34:50Z — Release R6: `af4d09d` deployed as `dpl_6njbFvEV9MeP9aMN5uqq8k5DJNj5` to app.willthiseverscale.com.
