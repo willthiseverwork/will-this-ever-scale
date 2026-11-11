@@ -50,7 +50,7 @@ export function costResult(input:{kind:SellerKind;answers:CostAnswers;cameIn:num
 }
 
 /** Turn common product-category plurals into a usable one-item label. */
-export function singularItem(label:string){return label.replace(/\b(earrings|necklaces|bracelets|rings|pouches|boxes|pieces)\b/gi, word=>{const lower=word.toLowerCase();return lower.endsWith('ches')||lower.endsWith('xes')?word.slice(0,-2):word.slice(0,-1)});}
+export function singularItem(label:string){return label.replace(/\b(earrings|necklaces|bracelets|rings|hoops|pouches|boxes|pieces)\b/gi, word=>{const lower=word.toLowerCase();return lower.endsWith('ches')||lower.endsWith('xes')?word.slice(0,-2):word.slice(0,-1)});}
 
 /** Match the sales counted in the analysis; refunds are not extra units sold. */
 export function averageItemUnits(rows:Txn[],item:string,currency:string,orders:number){return dedupeRows(rows).filter(row=>(row.item_group||row.item_title)===item&&row.currency===currency&&isSettledSale(row)).reduce((sum,row)=>sum+(row.quantity||1),0)/Math.max(1,orders)}

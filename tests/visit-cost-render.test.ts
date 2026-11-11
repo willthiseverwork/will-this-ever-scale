@@ -12,7 +12,7 @@ test('results numbers show both halves before and after visit costs',async()=>{
  const answers={units:1,buy:18,post:4,notApplicable:['pay','helpers'] as ('pay'|'helpers')[]};const value=visitCost({rows,title:'silver hoops',currency:'USD',kind:'reseller',answers,ordersPerMonth:6});assert.equal(value.status,'available');if(value.status!=='available')return;
  const entry={item:'silver hoops',raw:'silver hoops',currency:'USD',kind:'reseller' as const,answers,value};
  const after=renderToStaticMarkup(React.createElement(ResultsNumbers,{...base,entry}));
- for(const text of ['From PayPal','From you','You keep on a silver hoops order','$30.44','this visit'])assert.ok(after.includes(text),text);
+ for(const text of ['From PayPal','From you','You keep on a silver hoop order','$30.44','this visit'])assert.ok(after.includes(text),text);
 });
 
 test('cost answer summary renders values and unknown time without relying on interview state',async()=>{

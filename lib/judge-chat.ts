@@ -8,6 +8,19 @@ import {findingPresentation} from './finding-presentation';
 const money=(n:number,c:string)=>new Intl.NumberFormat('en-US',{style:'currency',currency:c}).format(n);
 const label=(m:string)=>new Intl.DateTimeFormat('en-GB',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(m+'-01T00:00:00Z'));
 const months=['january','february','march','april','may','june','july','august','september','october','november','december'];
+/** For the PayPal demo, count each grouped product once per order using the snapshot's cart grouping. */
+export function demoChatAnalysis(a:Analysis,rows:Txn[]):Analysis {
+ const grouping=a.product_grouping;if(!grouping)return a;
+ const names=new Map<string,string>();for(const group of grouping.groups)for(const title of group.titles)names.set(title.trim(),group.name);
+ const totals=new Map<string,{name:string;orders:number;gross:number;refunds:number}>();
+ for(const row of dedupeRows(rows)){
+  if(row.currency!==a.currency||!isSettledSale(row))continue;
+  const titles=row.cart_items?.length?row.cart_items.filter(item=>item.quantity>0).map(item=>item.name):row.item_title?[row.item_title]:[];
+  const groups=new Set(titles.map(title=>names.get(title.trim())||title.trim()).filter(Boolean));
+  for(const name of groups){const value=totals.get(name)||{name,orders:0,gross:0,refunds:0};value.orders++;value.gross+=row.gross;totals.set(name,value)}
+ }
+ return {...a,item_groups:totals.size?[...totals.values()]:a.item_groups};
+}
 export function judgeChat(q:string,a:Analysis,rows:Txn[],now=new Date()):{text:string;link?:string}|null{
  const lower=q.toLowerCase();
  const previous=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()-1,1)),last=previous.toISOString().slice(0,7),current=now.toISOString().slice(0,7);

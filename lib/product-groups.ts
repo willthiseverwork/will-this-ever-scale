@@ -21,3 +21,6 @@ export function groupingPrompt(items:ReadonlyArray<{title:string;orders:number}>
 
 /** Only show a description supplied by a successful grouping. */
 export function shopSellingDescription(grouping:Pick<ProductGrouping,'shop'|'source'>|undefined){if(!grouping||grouping.source!=='ai')return '';return grouping.shop.replace(/^\s*(?:this shop sells|(?:a |the |this )?shop sell(?:s|ing))\s*/i,'').replace(/[.\s]+$/,'').trim();}
+
+/** A description at the start of a sentence or standalone eyebrow. */
+export function capitalizeDescription(value:string){return value?value[0].toLocaleUpperCase()+value.slice(1):value;}

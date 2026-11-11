@@ -8,3 +8,5 @@ test('successful grouping yields a clean description; failed grouping stays sile
  assert.equal(shopSellingDescription({source:'fallback',shop:'This shop sells the items listed in its PayPal activity.'}),'');
  assert.equal(shopSellingDescription(undefined),'');
 });
+
+test('shop description is capitalized only where used as a standalone line',async()=>{const {capitalizeDescription}=await import('../lib/product-groups');assert.equal(capitalizeDescription('a variety of jewelry items'),'A variety of jewelry items');assert.equal(capitalizeDescription(''),'');});

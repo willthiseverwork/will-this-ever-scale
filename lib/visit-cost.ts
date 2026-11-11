@@ -1,6 +1,6 @@
 import {dedupeRows} from './engine';
 import {isObservedSettledSale,shopFeeEvidence,singleItemEvidence} from './order-fee';
-import {costResult,type CostAnswers,type SellerKind} from './cost-interview';
+import {costResult,singularItem,type CostAnswers,type SellerKind} from './cost-interview';
 import type {Txn} from './types';
 
 /** A temporary cost check only uses orders whose complete cart proves the item was alone. */
@@ -22,5 +22,5 @@ export function visitCost(input:{rows:Txn[];title:string;currency:string;kind:Se
 /** Build the same visible amounts for the result and later visit-only reuse. */
 export function visitCostLines(value:Extract<ReturnType<typeof visitCost>,{status:'available'}>,currency:string,item:string){
  const fmt=(n:number)=>new Intl.NumberFormat(currency==='GBP'?'en-GB':'en-US',{style:'currency',currency}).format(n),r=value.result,parts=r.parts.filter(p=>p.value!==undefined||p.range),unknown=r.parts.filter(p=>p.value===undefined&&!p.range).map(p=>p.label.toLowerCase()),sum=(end:'min'|'max')=>parts.reduce((n,p)=>n+(p.range?.[end]??p.value??0),0),cost=parts.length?(parts.some(p=>p.range)?`${fmt(sum('min'))} to ${fmt(sum('max'))}`:fmt(r.cost)):'not yet',keep=r.fee===null?'not yet':r.keepRange?`${fmt(r.keepRange.min)} to ${fmt(r.keepRange.max)}`:fmt(r.keep),detail=parts.map(p=>`${p.label==='Materials'?'making':p.label==='Posting'?'postage and packing':p.label.toLowerCase()} ${p.range?`${fmt(p.range.min)} to ${fmt(p.range.max)}`:fmt(p.value!)}`).join(' · ');
- return {buyerPays:fmt(r.cameIn),fee:r.fee===null?'not yet':`−${fmt(r.fee)}`,feeLabel:value.feeEstimated?'PayPal fee (estimated)':'PayPal fee',cost:cost==='not yet'?cost:`−${cost}`,detail,keep,unknown,coverage:`${value.paypalSource?`Based on ${value.orders} ${item} ${value.orders===1?'order':'orders'}, as PayPal listed them.`:`Based on ${value.orders} ${value.orders===1?'order':'orders'} of ${item}.`}${value.excluded?` ${value.excluded} ${value.excluded===1?'order was':'orders were'} left out because the contents were mixed or unconfirmed.`:''}`};
+ return {buyerPays:fmt(r.cameIn),fee:r.fee===null?'not yet':`−${fmt(r.fee)}`,feeLabel:value.feeEstimated?'PayPal fee (estimated)':'PayPal fee',cost:cost==='not yet'?cost:`−${cost}`,detail,keep,unknown,coverage:`${value.paypalSource?`Based on ${value.orders} ${singularItem(item.toLowerCase())} ${value.orders===1?'order':'orders'}, as PayPal listed them.`:`Based on ${value.orders} ${value.orders===1?'order':'orders'} of ${item}.`}${value.excluded?` ${value.excluded} ${value.excluded===1?'order was':'orders were'} left out because the contents were mixed or unconfirmed.`:''}`};
 }

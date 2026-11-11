@@ -10,3 +10,6 @@ export function removeVisitCost(storage:Pick<Storage,'getItem'|'setItem'>,scope:
 /** Match the named product group in a plain-language keep question. */
 export function keepQuestionItem(question:string,groups:Array<{name:string}>){if(!/\b(keep|kept|profit|left|remain|margin|earnings)\b/i.test(question))return undefined;const normalize=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().split(' ').map(w=>w.length>3&&w.endsWith('s')?w.slice(0,-1):w).join(' ');const q=` ${normalize(question)} `;return groups.find(g=>{const name=normalize(g.name);return name.length>=3&&q.includes(` ${name} `)})}
 export function demoExampleAvailable(scope:Scope,item:string,bestSeller:string|undefined){return scope.source==='sandbox'&&scope.sandboxMode==='demo'&&!!bestSeller&&item===bestSeller}
+
+/** Example only; never used for a seller's own cost answers. */
+export function demoExampleAnswers():CostAnswers{return {kind:'reseller',units:1,buy:18,post:4,notApplicable:['pay','helpers']}}

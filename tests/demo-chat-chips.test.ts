@@ -33,3 +33,14 @@ test('cached demo grouping drives both Results item names and the chat leaders',
  const noItems={...results,item_groups:[]};assert.equal(judgeChat('Most popular product',noItems,cached.rows,now)!.text,'There is no item data for this period.');
  const only={...results,item_groups:[popular]};assert.doesNotMatch(judgeChat('Most popular product',only,cached.rows,now)!.text,/most gross sales/);
 });
+
+test('PayPal snapshot grouping drives chat even when row-level grouping differs',async()=>{
+ const {demoChatAnalysis}=await import('../lib/judge-chat');
+ const snapshotRows=Array.from({length:4},(_,i)=>({id:`snapshot-${i}`,date:'2026-10-01',kind:'sale' as const,gross:55,fee:-2.35,net:52.65,currency:'USD',status:'completed',item_title:'Silver hoops',item_group:'Earrings',cart_items:[{name:'Silver hoops',quantity:1,unit_price:55}]}));
+ const base=analyze(snapshotRows,{asOf:now.toISOString()});
+ const snapshot={analysis:{...base,product_grouping:{shop:'This shop sells jewelry.',groups:[{name:'Hoops',titles:['Silver hoops']}],unplaced:[],source:'ai' as const}},reanalysisRows:snapshotRows};
+ assert.equal(snapshot.analysis.item_groups[0].name,'Earrings');
+ const chat=judgeChat('Most popular product',demoChatAnalysis(snapshot.analysis,snapshot.reanalysisRows),snapshot.reanalysisRows,now)!;
+ assert.match(chat.text,/Hoops appeared in the most orders: 4 orders/);assert.doesNotMatch(chat.text,/Earrings/);
+ assert.equal(demoChatAnalysis(base,snapshotRows),base);
+});
