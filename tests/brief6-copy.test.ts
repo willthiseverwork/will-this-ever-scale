@@ -28,5 +28,6 @@ test('PayPal demo lead and finding methods do not refer to a file',async()=>{
  const a=analyze(rows as Txn[],{asOf:'2026-11-11T09:00:00Z'}),lead=a.ranked_leaks.find(x=>x.id==='one_time_buyers')!;
  const html=renderToStaticMarkup(React.createElement(LeadCard,{analysis:a,leak:lead,answers:{},save:()=>{},paypalDemo:true}));
  assert.doesNotMatch(html,/\bfile\b/i);
+ assert.match(html,/>See your test<\/button>/);assert.match(html,/>How we got this<\/button>/);assert.doesNotMatch(html,/already came back\.<\/p>|Sales, before your costs\./);
  for(const f of [...a.ranked_leaks,...a.action_findings||[]]) assert.doesNotMatch(f.method,/\bfile\b/i);
 });
