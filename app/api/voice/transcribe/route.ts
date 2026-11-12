@@ -3,13 +3,14 @@ import {awsCredentialsProvider} from '@vercel/oidc-aws-credentials-provider';
 import {sameOrigin} from '../../../../lib/paypal-session';
 import {hasPaidOrJudgeAccess} from '../../../../lib/access';
 import {voiceIdentity} from '../../../../lib/voice-identity';
+import {voiceFailureReason} from '../../../../lib/voice/failure';
 import {reserveVoiceClip,voiceAvailable,voiceAvailabilityNotice} from '../../../../lib/voice-budget';
 
 export const runtime='nodejs';
 const maxBytes=60*16_000*2;
 const headers={'Cache-Control':'no-store'};
 
-export async function GET(request:Request){if((process.env.WTES_VOICE_ENABLED!=='true'||process.env.WTES_VOICE_TALKBACK_ENABLED!=='true')||!await hasPaidOrJudgeAccess(request))return Response.json({enabled:false},{headers});const identity=voiceIdentity(request);if(!identity)return Response.json({enabled:false,notice:'Voice is unavailable.'},{headers});const allowance=await voiceAvailable({identity});return Response.json({enabled:allowance.allowed,notice:voiceAvailabilityNotice(allowance)},{headers});}
+export async function GET(request:Request){if((process.env.WTES_VOICE_ENABLED!=='true'||process.env.WTES_VOICE_TALKBACK_ENABLED!=='true')||!await hasPaidOrJudgeAccess(request))return Response.json({enabled:false},{headers});const identity=voiceIdentity(request);if(!identity){console.error('voice_availability_failed','identity');return Response.json({enabled:false,notice:'Voice is unavailable.'},{headers});}const allowance=await voiceAvailable({identity});if(!allowance.allowed)console.info('voice_availability_failed',allowance.reason);return Response.json({enabled:allowance.allowed,notice:voiceAvailabilityNotice(allowance)},{headers});}
 
 /** Audio is streamed to Transcribe and discarded; this route never persists or logs it. */
 export async function POST(request:Request){const started=performance.now();
@@ -29,5 +30,5 @@ export async function POST(request:Request){const started=performance.now();
   let text='';
   for await(const event of response.TranscriptResultStream||[]){for(const result of event.TranscriptEvent?.Transcript?.Results||[])if(!result.IsPartial)text+=(result.Alternatives?.[0]?.Transcript||'')+' ';}
   return Response.json({text:text.trim()},{headers:{...headers,'Server-Timing':`transcribe;dur=${Math.round(performance.now()-started)}`}});
- }catch{return Response.json({error:'Voice input is temporarily unavailable.',hideMic:true},{status:503,headers});}
+ }catch(error){console.error('voice_transcription_failed',voiceFailureReason(error));return Response.json({error:'Voice input is temporarily unavailable.',hideMic:true},{status:503,headers});}
 }

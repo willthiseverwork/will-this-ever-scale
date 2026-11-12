@@ -1,5 +1,5 @@
-/** Voice controls remain available in code but are not offered to sellers yet. */
-export const VOICE_UI_ENABLED: boolean = false;
+/** Voice controls are available when the service and access checks permit them. */
+export const VOICE_UI_ENABLED: boolean = true;
 
 /** A reminder may be approved only after its actual subject and message are shown. */
 export function reminderPreviewReady(proposal: {input?: {subject?: unknown; note?: unknown}} | null | undefined): boolean {

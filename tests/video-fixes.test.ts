@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {latestAnalysisMonth,reminderPreviewReady,VOICE_UI_ENABLED} from '../lib/video-fixes';
 
-test('voice controls default off',()=>assert.equal(VOICE_UI_ENABLED,false));
+test('voice controls are available subject to service and access checks',()=>assert.equal(VOICE_UI_ENABLED,true));
 test('reminder review waits for both actual message and subject',()=>{
  assert.equal(reminderPreviewReady(null),false);
  assert.equal(reminderPreviewReady({input:{subject:'A friendly reminder'}}),false);

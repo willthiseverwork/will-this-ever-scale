@@ -32,9 +32,9 @@ Reading a real seller's PayPal requires PayPal partner permission and financial-
 
 ## How AI is used
 
-Amazon Bedrock uses Amazon Nova 2 Lite (`us.amazon.nova-2-lite-v1:0`) to group item names and describe what the shop sells, plan chat lookups, and interpret cost-interview answers. Voice input and spoken replies are currently hidden. Availability of AI features depends on configuration and limits; the app has non-AI fallbacks. Application code calculates the figures; AI output is validated and does not determine the calculations.
+Amazon Bedrock uses Amazon Nova 2 Lite (`us.amazon.nova-2-lite-v1:0`) to group item names and describe what the shop sells, plan chat lookups, and interpret cost-interview answers. Amazon Transcribe handles speech input and Amazon Polly provides spoken replies. Availability depends on configuration and limits; the app has non-AI fallbacks. Application code calculates the figures; AI output is validated and does not determine the calculations.
 
-For grouping, the model receives item titles and order counts. Chat planning receives the question, item titles and counts, and date capabilities. The cost interview can send the typed answer, the current question, item and cost context. These requests are designed not to include buyer names, emails or raw transaction rows. Avoid putting personal information in a question or answer.
+For grouping, the model receives item titles and order counts. Chat planning receives the question, item titles and counts, and date capabilities. The cost interview can send the spoken or typed answer, the current question, item and cost context; voice audio goes to Transcribe and reply text to Polly. These requests are designed not to include buyer names, emails or raw transaction rows. Avoid putting personal information in a question or answer.
 
 ## What's real and what's generated
 
