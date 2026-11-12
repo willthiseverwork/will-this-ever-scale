@@ -13,7 +13,10 @@ export function verifyLoginCookie(raw:string|undefined,purpose:'state'|'login'|'
 export const newLoginState=()=>randomBytes(32).toString('base64url');
 export function demoIdentityMatch(info:Record<string,unknown>,merchantId:string|undefined,merchantEmail:string|undefined){
  if(merchantId&&typeof info.payer_id==='string'&&info.payer_id===merchantId)return true;
- return !!(merchantEmail&&typeof info.email==='string'&&info.email_verified===true&&info.email.toLowerCase()===merchantEmail.toLowerCase());
+ if(!merchantEmail)return false;
+ const matches=(value:unknown)=>typeof value==='string'&&value.toLowerCase()===merchantEmail.toLowerCase();
+ if(info.email_verified===true&&matches(info.email))return true;
+ return Array.isArray(info.emails)&&info.emails.some((entry:unknown)=>!!entry&&typeof entry==='object'&&!Array.isArray(entry)&&(entry as Record<string,unknown>).confirmed===true&&matches((entry as Record<string,unknown>).value));
 }
 export function paypalLoginCookie(request:Request){
  const raw=request.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith('paypal_login='))?.slice('paypal_login='.length);
