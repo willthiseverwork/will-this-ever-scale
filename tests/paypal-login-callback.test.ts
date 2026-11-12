@@ -10,3 +10,14 @@ test('callback rechecks state and access and matches payer ID or verified email'
   info={email:'other@example.com',email_verified:true};response=await GET(request('state=abc&code=abc'));assert.match(response.headers.get('location')!,/paypal=no_match/);
  }finally{globalThis.fetch=original;for(const name of names){const value=previous[name];if(value===undefined)delete process.env[name];else process.env[name]=value}}
 });
+
+test('callback records safe reasons for invalid and failed provider responses',async()=>{
+ const names=['PAYPAL_ACTION_SIGNING_SECRET','PAYPAL_LOGIN_CLIENT_ID','PAYPAL_LOGIN_CLIENT_SECRET','WTES_BILLING_SECRET'];const previous=Object.fromEntries(names.map(n=>[n,process.env[n]]));Object.assign(process.env,{PAYPAL_ACTION_SIGNING_SECRET:'s'.repeat(32),PAYPAL_LOGIN_CLIENT_ID:'id',PAYPAL_LOGIN_CLIENT_SECRET:'secret',WTES_BILLING_SECRET:'b'.repeat(32)});
+ const state=signLoginCookie('state','abc',Date.now()+60000,process.env.PAYPAL_ACTION_SIGNING_SECRET!);const judge=judgeCookie().split(';')[0];const request=(q:string,includeState=true)=>new Request('https://app.willthiseverscale.com/api/paypal/login/callback?'+q,{headers:{cookie:`${includeState?'paypal_login_state='+state+'; ':''}${judge}`}});const originalFetch=globalThis.fetch,originalError=console.error;let reasons:string[]=[];console.error=(...args:unknown[])=>{reasons.push(args.join(' '))};
+ try{
+  for(const [q,reason,include] of [['state=abc&code=x','invalid_state',false],['state=abc','missing_code',true],['error=access_denied','provider_denied',true]] as const){reasons=[];const r=await GET(request(q,include));assert.match(r.headers.get('location')!,/paypal=error/);assert.match(reasons.join(),new RegExp(reason));}
+  delete process.env.PAYPAL_LOGIN_CLIENT_ID;reasons=[];await GET(request('state=abc&code=x'));assert.match(reasons.join(),/missing_configuration/);process.env.PAYPAL_LOGIN_CLIENT_ID='id';
+  globalThis.fetch=async()=>new Response('',{status:500});reasons=[];await GET(request('state=abc&code=x'));assert.match(reasons.join(),/token_exchange/);
+  let n=0;globalThis.fetch=async()=>++n===1?Response.json({access_token:'private-token'}):new Response('',{status:500});reasons=[];await GET(request('state=abc&code=x'));assert.match(reasons.join(),/userinfo/);assert.doesNotMatch(reasons.join(),/private-token|code=x/);
+ }finally{globalThis.fetch=originalFetch;console.error=originalError;for(const name of names){const value=previous[name];if(value===undefined)delete process.env[name];else process.env[name]=value}}
+});
